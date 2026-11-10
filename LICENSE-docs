@@ -1,0 +1,17 @@
+# 文档与图件的许可
+
+本仓库中的**文字、教学图件、知识图谱数据**（即 `docs/`、`cases/`、`knowledge-graph/graph.json`、
+`assets/figures/` 下的内容）采用
+[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.zh)
+许可。
+
+你可以自由地共享与改编，但必须：
+
+1. 保留出处（本仓库链接）与作者署名；
+2. 注明是否作了修改；
+3. 不得暗示原作者为你或你的使用背书。
+
+`tools/` 下的脚本代码另按 [MIT License](LICENSE) 授权。
+
+`assets/reference/` 中的三张参考插图来自 MDPI 开放获取期刊，同样按 CC BY 4.0 使用，
+版权归原作者，转载信息见 [`assets/reference/README.md`](assets/reference/README.md)。

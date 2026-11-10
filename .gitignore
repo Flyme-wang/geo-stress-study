@@ -1,0 +1,15 @@
+# 忽略 Python 与编辑器临时文件
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# 操作系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 本地渲染产物（图件由脚本生成，但仓库需要保留 assets/figures 下的成品）
+*.log
+~$*

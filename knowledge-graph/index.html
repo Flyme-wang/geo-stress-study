@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>geo-stress-study · 力学知识图谱</title>
+<style>
+  :root{
+    --ink:#22303A; --muted:#6B7A87; --faint:#8C99A5;
+    --line:#DCE3E9; --hair:#E7E3DA; --paper:#F7F5F0; --card:#FFFFFF;
+    --shadow:0 1px 2px rgba(34,48,58,.05), 0 8px 24px rgba(34,48,58,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC","Source Han Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  code,.mono{font-family:"Cascadia Code",Consolas,"SFMono-Regular",ui-monospace,monospace}
+
+  header{
+    padding:26px 34px 20px; border-bottom:1px solid var(--hair);
+    background:linear-gradient(180deg,#FFFFFF 0%,#FBFAF6 100%);
+  }
+  .eyebrow{font-size:11px;letter-spacing:.2em;color:var(--faint);text-transform:uppercase}
+  h1{margin:6px 0 4px;font-size:22px;font-weight:650;letter-spacing:.01em}
+  .sub{margin:0;color:var(--muted);font-size:13.5px}
+  .stats{margin-top:14px;display:flex;gap:22px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .stats b{color:var(--ink);font-weight:650;font-size:14px;margin-right:2px}
+
+  main{
+    display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:22px;
+    padding:22px 34px 46px;align-items:start;
+  }
+  @media (max-width:1080px){ main{grid-template-columns:minmax(0,1fr)} }
+
+  .stage{
+    background:var(--card);border:1px solid var(--hair);border-radius:14px;
+    padding:14px 16px 8px;box-shadow:var(--shadow);min-width:0;
+  }
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+  .seg button{
+    border:0;background:#fff;color:var(--muted);font:inherit;font-size:12.5px;
+    padding:7px 13px;cursor:pointer;border-right:1px solid var(--line);
+  }
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed="true"]{background:#22303A;color:#fff}
+  .seg button:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #1565C0;outline-offset:2px}
+  .search{
+    flex:1 1 190px;min-width:160px;max-width:280px;position:relative;
+  }
+  .search input{
+    width:100%;padding:7px 11px 7px 30px;border:1px solid var(--line);border-radius:9px;
+    font:inherit;font-size:12.5px;color:var(--ink);background:#FCFCFB;
+  }
+  .search svg{position:absolute;left:9px;top:8px;width:14px;height:14px;stroke:#8C99A5;fill:none;stroke-width:1.8}
+  .reset{
+    border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:9px;
+    padding:7px 12px;font:inherit;font-size:12.5px;cursor:pointer;
+  }
+  .reset:hover{color:var(--ink);border-color:#B9C4CE}
+
+  .canvas-wrap{overflow-x:auto;overflow-y:hidden;padding:2px 0 4px}
+  svg#graph{display:block;width:100%;height:auto;min-width:1120px}
+
+  .legend{
+    display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+    padding:10px 2px 6px;border-top:1px dashed var(--hair);margin-top:4px;
+    font-size:11.5px;color:var(--muted);
+  }
+  .legend .chip{display:inline-flex;align-items:center;gap:5px;margin-right:2px}
+  .legend .dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+  .legend .sample{display:inline-block;width:24px;height:0;border-top:2px solid #9AA7B2}
+  .legend .sample.dash{border-top-style:dashed;border-top-color:#C9A227}
+  .legend .sep{width:1px;height:14px;background:var(--hair)}
+
+  aside.panel{
+    position:sticky;top:18px;background:var(--card);border:1px solid var(--hair);
+    border-radius:14px;padding:20px 20px 18px;box-shadow:var(--shadow);
+  }
+  @media (max-width:1080px){ aside.panel{position:static} }
+  .panel .pid{font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+  .panel h2{margin:6px 0 8px;font-size:19px;line-height:1.35;font-weight:650}
+  .badge{
+    display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:999px;
+    border:1px solid var(--line);color:var(--muted);background:#FBFCFD;margin-right:6px;
+  }
+  .badge.done{color:#1B5E20;border-color:#C8E6C9;background:#F1F8F1}
+  .badge.planned{color:#8A6D1C;border-color:#EADFB8;background:#FBF7EA}
+  .badge.blue{color:#0D47A1;border-color:#C9DFF7;background:#F1F7FD}
+  .summary{margin:12px 0 4px;font-size:13.5px;line-height:1.72;color:#384854}
+  .sect{margin-top:16px}
+  .sect h3{margin:0 0 7px;font-size:11.5px;letter-spacing:.12em;color:var(--faint);font-weight:600}
+  .sect ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .sect li button{
+    border:1px solid var(--line);background:#FCFDFE;border-radius:7px;padding:4px 8px;
+    font:inherit;font-size:12px;color:#3C4C59;cursor:pointer;text-align:left;
+  }
+  .sect li button:hover{border-color:#9DB4C7;background:#F4F9FD}
+  .sect li .mono{font-size:11px;color:var(--faint);margin-right:4px}
+  .open{
+    display:inline-flex;align-items:center;gap:7px;margin-top:18px;
+    background:#22303A;color:#fff;text-decoration:none;border-radius:9px;
+    padding:9px 14px;font-size:13px;font-weight:600;
+  }
+  .open:hover{background:#0F1A22}
+  .docpath{margin-top:8px;font-size:11px;color:var(--faint);word-break:break-all}
+  .note{margin-top:14px;padding:10px 12px;border-left:2px solid #C9A227;background:#FCF9EF;
+    font-size:12px;line-height:1.65;color:#6B5A24;border-radius:0 6px 6px 0}
+  .intro h2{font-size:17px}
+  .intro p{font-size:13px;line-height:1.75;color:#4A5A66}
+  .kbd{font-family:inherit;font-size:11px;border:1px solid var(--line);border-bottom-width:2px;
+    border-radius:4px;padding:0 4px;color:var(--muted);background:#fff}
+  .foot{padding:0 34px 34px;color:var(--faint);font-size:11.5px;line-height:1.8}
+  .foot code{color:var(--muted)}
+
+  /* ---------- graph ---------- */
+  #graph text{user-select:none}
+  .node{cursor:pointer;transition:opacity .18s ease}
+  .node .hit{fill:transparent}
+  .node rect.card{transition:stroke-width .15s ease, filter .15s ease}
+  .node:hover rect.card{stroke-width:2.2}
+  .node:focus{outline:none}
+  .node:focus-visible rect.card{stroke-width:2.8;stroke-dasharray:none}
+  .node.dim{opacity:.15}
+  .node.sel rect.card{stroke-width:2.8;filter:drop-shadow(0 6px 14px rgba(34,48,58,.18))}
+  .edge{transition:opacity .18s ease}
+  .edge.dim{opacity:.08}
+  .edge.hot{opacity:1}
+  .edge.hot path{stroke-width:2.2}
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">geo-stress-study · knowledge map</div>
+  <h1>力学知识图谱</h1>
+  <p class="sub" id="subtitle"></p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<main>
+  <section class="stage" aria-label="知识图谱画布">
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="按状态筛选">
+        <button data-filter="all" aria-pressed="true">全部</button>
+        <button data-filter="done" aria-pressed="false">已完成</button>
+        <button data-filter="planned" aria-pressed="false">计划中</button>
+      </div>
+      <div class="search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/></svg>
+        <input id="q" type="search" placeholder="搜索节点，如 莫尔圆 / M1-04" aria-label="搜索节点">
+      </div>
+      <button class="reset" id="reset">重置高亮</button>
+    </div>
+
+    <div class="canvas-wrap">
+      <svg id="graph" role="img" aria-label="力学知识图谱：七个模块及其先修关系"></svg>
+    </div>
+
+    <div class="legend" id="legend">
+      <span class="chip"><span class="sample"></span>包含</span>
+      <span class="chip"><span class="sample" style="border-top-color:#1565C0"></span>先修（箭头指向后续）</span>
+      <span class="chip"><span class="sample dash"></span>案例来源</span>
+      <span class="sep"></span>
+      <span class="chip"><span class="dot" style="background:#1565C0"></span>已完成</span>
+      <span class="chip"><span class="dot" style="background:#fff;border:1.5px dashed #9AA7B2"></span>仅提纲</span>
+    </div>
+  </section>
+
+  <aside class="panel" id="panel" aria-live="polite"></aside>
+</main>
+
+<div class="foot">
+  单一数据源：<code>knowledge-graph/graph.json</code>；页面数据由
+  <code>py -3 tools/build_graph_data.py</code> 生成到 <code>graph-data.js</code>，因此双击本文件即可离线打开。<br>
+  节点的 <code>doc</code> 字段是相对仓库根目录的路径，页面会自动加上 <code>../</code> 前缀。
+</div>
+
+<noscript><p style="padding:20px 34px">本页需要启用 JavaScript 才能绘制图谱。</p></noscript>
+
+<script src="graph-data.js"></script>
+<script>
+(function () {
+  "use strict";
+  var G = window.GRAPH;
+  if (!G) { document.body.innerHTML = "<p style='padding:24px'>未找到 graph-data.js，请先运行 py -3 tools/build_graph_data.py。</p>"; return; }
+
+  var NS = "http://www.w3.org/2000/svg";
+  var COLW = 216, ROWH = 68, NW = 184, NH_T = 46, NH_M = 56, ROOTW = 214, ROOTH = 62;
+  var W = 1784, H = 744;
+  var COLOR = {
+    M0: "#64748B", M1: "#1565C0", M2: "#0E7C7B", M3: "#B26A00",
+    M4: "#C62828", M5: "#2E7D32", M6: "#6A3FA0", ROOT: "#22303A", CASE: "#9A7B12"
+  };
+  var TYPE_LABEL = { root: "框架", module: "模块", topic: "知识点", case: "案例" };
+
+  function el(name, attrs) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) { if (attrs[k] !== undefined) n.setAttribute(k, attrs[k]); }
+    return n;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function colorOf(node) {
+    if (node.type === "root") return COLOR.ROOT;
+    if (node.type === "case") return COLOR.CASE;
+    return COLOR[node.id.split("-")[0]] || COLOR.M0;
+  }
+
+  /* ---------- layout ---------- */
+  var pos = {};
+  G.nodes.forEach(function (n) {
+    var w = n.type === "root" ? ROOTW : NW;
+    var h = n.type === "root" ? ROOTH : (n.type === "module" ? NH_M : NH_T);
+    var left = 44 + n.col * COLW + (n.type === "root" ? (NW - ROOTW) / 2 : 0);
+    var cy = n.row < 0 ? 64 : 200 + n.row * ROWH;
+    pos[n.id] = {
+      x: left, y: cy - h / 2, w: w, h: h,
+      cx: left + w / 2, cy: cy,
+      left: left, right: left + w, top: cy - h / 2, bottom: cy + h / 2,
+      col: n.col, row: n.row, type: n.type
+    };
+  });
+
+  var svg = document.getElementById("graph");
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  svg.setAttribute("role", "img");
+
+  var defs = el("defs");
+  var markerColors = Object.keys(COLOR).filter(function (k) { return k !== "ROOT"; });
+  markerColors.forEach(function (key) {
+    var m = el("marker", {
+      id: "arw-" + key, viewBox: "0 0 8 8", refX: 7.2, refY: 4,
+      markerWidth: 6.4, markerHeight: 6.4, orient: "auto"
+    });
+    m.appendChild(el("path", { d: "M0,0.6 L8,4 L0,7.4 z", fill: COLOR[key] }));
+    defs.appendChild(m);
+  });
+  svg.appendChild(defs);
+
+  var gEdges = el("g", { id: "edges" });
+  var gNodes = el("g", { id: "nodes" });
+  svg.appendChild(gEdges);
+  svg.appendChild(gNodes);
+
+  /* ---------- edges ---------- */
+  var edgeEls = [];
+  var nodeById = {};
+  G.nodes.forEach(function (n) { nodeById[n.id] = n; });
+
+  function pathFor(a, b, kind, laneY) {
+    if (kind === "contains" && a.type === "root") {
+      return "M" + a.cx + "," + a.bottom +
+             " C" + a.cx + "," + (a.bottom + 26) + " " + b.cx + "," + (b.top - 26) +
+             " " + b.cx + "," + (b.top - 1);
+    }
+    if (kind === "contains") {
+      return "M" + a.cx + "," + a.bottom + " L" + b.cx + "," + (b.top - 1);
+    }
+    if (kind === "case") {
+      var outX = 22, ey = b.cy + Math.min(20, b.h * 0.32);
+      return "M" + (a.left - 1) + "," + a.cy +
+             " C" + outX + "," + a.cy + " " + outX + "," + ey + " " + (b.left - 1) + "," + ey;
+    }
+    if (Math.abs(a.cx - b.cx) < 4) {
+      // 同列跳级：绕到列的右侧空隙，避免从中间卡片背后穿过
+      if (b.top - a.bottom > 60) {
+        return "M" + a.right + "," + a.cy +
+               " C" + (a.right + 20) + "," + (a.cy + 6) + " " +
+               (b.right + 20) + "," + (b.cy - 6) + " " + (b.right + 1) + "," + b.cy;
+      }
+      return "M" + a.cx + "," + a.bottom + " L" + b.cx + "," + (b.top - 2);
+    }
+    if (b.col - a.col >= 2 && laneY) {
+      // 跨列跳级：先升到模块上方的走线带，再横移、下落到目标左缘
+      var sx = a.right + 7, tx = b.left - 13;
+      var ey2 = b.cy + (((laneY - 108) / 9) % 3 - 1) * 11;
+      return "M" + a.right + "," + a.cy + " L" + sx + "," + a.cy +
+             " L" + sx + "," + laneY + " L" + tx + "," + laneY +
+             " L" + tx + "," + ey2 + " L" + (b.left - 1) + "," + ey2;
+    }
+    if (b.cx >= a.cx) {
+      var dx = Math.max(40, (b.left - a.right) * 0.5);
+      return "M" + (a.right + 1) + "," + a.cy +
+             " C" + (a.right + dx) + "," + a.cy + " " + (b.left - dx) + "," + b.cy +
+             " " + (b.left - 2) + "," + b.cy;
+    }
+    var dx2 = Math.max(40, (a.left - b.right) * 0.5);
+    return "M" + (a.left - 1) + "," + a.cy +
+           " C" + (a.left - dx2) + "," + a.cy + " " + (b.right + dx2) + "," + b.cy +
+           " " + (b.right + 2) + "," + b.cy;
+  }
+
+  // 为跨列跳级边分配不同的走线高度，避免长横线重叠成一条
+  var laneOf = {}, laneN = 0;
+  G.edges.forEach(function (e) {
+    var a = nodeById[e.from], b = nodeById[e.to];
+    if (e.kind === "precedes" && b.col - a.col >= 2) {
+      laneOf[e.from + ">" + e.to] = 108 + (laneN % 6) * 9;
+      laneN++;
+    }
+  });
+
+  G.edges.forEach(function (e) {
+    var a = pos[e.from], b = pos[e.to];
+    var src = nodeById[e.from];
+    var col = colorOf(src);
+    var g = el("g", { "class": "edge edge-" + e.kind });
+    var attrs = {
+      d: pathFor(a, b, e.kind, laneOf[e.from + ">" + e.to]), fill: "none",
+      "stroke-linejoin": "round", "stroke-linecap": "round",
+      stroke: e.kind === "precedes" ? col : (e.kind === "case" ? COLOR.CASE : "#C9D2DA"),
+      "stroke-width": e.kind === "precedes" ? 1.5 : 1.2,
+      "stroke-opacity": e.kind === "contains" ? 0.85 : (e.kind === "case" ? 0.75 : 0.5)
+    };
+    if (e.kind === "precedes") {
+      attrs["marker-end"] = "url(#arw-" + (COLOR[src.id.split("-")[0]] ? src.id.split("-")[0] : "CASE") + ")";
+      if (src.type === "root") attrs["marker-end"] = "url(#arw-M0)";
+      if (laneOf[e.from + ">" + e.to]) {
+        attrs["stroke-opacity"] = 0.38;
+        attrs["stroke-dasharray"] = "4 4";
+      }
+    }
+    if (e.kind === "case") attrs["stroke-dasharray"] = "5 4";
+    if (e.kind === "contains" && src.type !== "root") attrs["stroke-opacity"] = 0.9;
+    var p = el("path", attrs);
+    var t = el("title");
+    t.textContent = src.label + " → " + nodeById[e.to].label;
+    p.appendChild(t);
+    g.appendChild(p);
+    g.dataset.from = e.from;
+    g.dataset.to = e.to;
+    gEdges.appendChild(g);
+    edgeEls.push({ g: g, from: e.from, to: e.to });
+  });
+
+  /* ---------- nodes ---------- */
+  var nodeEls = {};
+
+  function wrap(label, maxUnits) {
+    var total = 0, i;
+    for (i = 0; i < label.length; i++) total += label.charCodeAt(i) > 255 ? 1 : 0.56;
+    if (total <= maxUnits) return [label];
+    var mid = Math.floor(label.length / 2), best = mid, bestScore = 1e9;
+    for (i = 1; i < label.length - 1; i++) {
+      var ch = label[i];
+      if ("（( ·・：:、".indexOf(ch) >= 0) {
+        var s = Math.abs(i - mid);
+        if (s < bestScore) { bestScore = s; best = i + 1; }
+      }
+    }
+    return [label.slice(0, best).trim(), label.slice(best).trim()];
+  }
+
+  G.nodes.forEach(function (n) {
+    var p = pos[n.id], col = colorOf(n);
+    var done = n.status === "done";
+    var g = el("g", {
+      "class": "node", tabindex: 0, role: "button",
+      "aria-label": n.id + " " + n.label + (done ? "（已完成）" : "（仅提纲）")
+    });
+    g.dataset.id = n.id;
+
+    var isRoot = n.type === "root";
+    var isModule = n.type === "module";
+    var card = el("rect", {
+      "class": "card", x: p.x, y: p.y, width: p.w, height: p.h, rx: isRoot ? 12 : 10,
+      fill: isRoot ? COLOR.ROOT : (isModule ? tint(col, 0.09) : (n.type === "case" ? "#FDFAF0" : "#FFFFFF")),
+      stroke: done ? (isRoot ? COLOR.ROOT : col) : "#AAB6C1",
+      "stroke-width": isRoot ? 0 : (isModule ? 1.7 : 1.15),
+      "stroke-dasharray": done ? undefined : "5 4"
+    });
+    g.appendChild(card);
+
+    if (!isRoot) {
+      g.appendChild(el("rect", {
+        x: p.x, y: p.y, width: 4.5, height: p.h, rx: 2.2,
+        fill: col, "fill-opacity": done ? 0.95 : 0.35
+      }));
+    }
+
+    var fs = isRoot ? 16 : (isModule ? 14.2 : 12);
+    var weight = isRoot ? 600 : (isModule ? 600 : 500);
+    var textColor = isRoot ? "#FFFFFF" : (done ? "#23323D" : "#7C8B98");
+    var lines = isRoot || isModule ? [n.label] : wrap(n.label, (p.w - 22) / (fs * 0.92));
+    var lh = fs + 3.5;
+    var startY = p.cy - (lines.length - 1) * lh / 2;
+    var text = el("text", {
+      x: p.cx, y: startY, "text-anchor": "middle", "dominant-baseline": "central",
+      "font-size": fs, "font-weight": weight, fill: textColor
+    });
+    lines.forEach(function (ln, i) {
+      var ts = el("tspan", { x: p.cx, y: startY + i * lh });
+      ts.textContent = ln;
+      text.appendChild(ts);
+    });
+    g.appendChild(text);
+
+    if (n.type === "case") {
+      var tag = el("text", {
+        x: p.right - 9, y: p.top + 11, "text-anchor": "end",
+        "font-size": 8.5, "letter-spacing": ".12em", fill: COLOR.CASE
+      });
+      tag.textContent = "CASE";
+      g.appendChild(tag);
+    }
+
+    var tt = el("title");
+    tt.textContent = n.id + " · " + n.label + (done ? "\n已完成" : "\n仅提纲");
+    g.appendChild(tt);
+
+    g.addEventListener("click", function () { select(n.id, true); });
+    g.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(n.id, true); }
+      if (ev.key === "o" || ev.key === "O") { ev.preventDefault(); window.open("../" + n.doc, "_blank"); }
+    });
+    gNodes.appendChild(g);
+    nodeEls[n.id] = g;
+  });
+
+  function tint(hex, a) {
+    var r = parseInt(hex.slice(1, 3), 16), gg = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    return "rgba(" + r + "," + gg + "," + b + "," + a + ")";
+  }
+
+  /* ---------- interactions ---------- */
+  var panel = document.getElementById("panel");
+  var selected = null, filter = "all", query = "";
+  var neighbors = {};
+  G.nodes.forEach(function (n) { neighbors[n.id] = {}; });
+  G.edges.forEach(function (e) {
+    neighbors[e.from][e.to] = true;
+    neighbors[e.to][e.from] = true;
+  });
+
+  function relations(id) {
+    var up = [], down = [], kids = [], cases = [], parent = null;
+    G.edges.forEach(function (e) {
+      if (e.kind === "precedes" && e.to === id) up.push(e.from);
+      if (e.kind === "precedes" && e.from === id) down.push(e.to);
+      if (e.kind === "contains" && e.from === id) kids.push(e.to);
+      if (e.kind === "contains" && e.to === id) parent = e.from;
+      if (e.kind === "case" && e.to === id) cases.push(e.from);
+    });
+    return { up: up, down: down, kids: kids, parent: parent, cases: cases };
+  }
+
+  function computeMatches() {
+    var q = query.trim().toLowerCase();
+    var out = {};
+    G.nodes.forEach(function (n) {
+      var okFilter = filter === "all" || n.status === filter;
+      var okQuery = !q || (n.id + " " + n.label + " " + n.summary).toLowerCase().indexOf(q) >= 0;
+      out[n.id] = okFilter && okQuery;
+    });
+    return out;
+  }
+
+  function paint() {
+    var m = computeMatches();
+    var anyFilter = filter !== "all" || query.trim() !== "";
+    G.nodes.forEach(function (n) {
+      var g = nodeEls[n.id];
+      var show = m[n.id];
+      var dim = !show;
+      if (selected && !anyFilter) {
+        dim = !(n.id === selected || neighbors[selected][n.id]);
+      }
+      g.classList.toggle("dim", dim);
+      g.classList.toggle("sel", n.id === selected);
+    });
+    edgeEls.forEach(function (e) {
+      var on = !!m[e.from] && !!m[e.to];
+      var hot = selected && (e.from === selected || e.to === selected);
+      e.g.classList.toggle("dim", selected && !hot ? true : !on);
+      e.g.classList.toggle("hot", !!hot);
+    });
+  }
+
+  function nodeButton(id, note) {
+    var n = nodeById[id];
+    return "<li><button data-goto=\"" + esc(id) + "\">" +
+      "<span class=\"mono\">" + esc(n.id) + "</span>" + esc(n.label) +
+      (note ? " <span class=\"mono\">" + esc(note) + "</span>" : "") +
+      "</button></li>";
+  }
+
+  function renderPanel() {
+    if (!selected) {
+      var done = G.nodes.filter(function (n) { return n.status === "done"; }).length;
+      panel.innerHTML =
+        "<div class=\"intro\">" +
+        "<div class=\"pid\">怎么读这张图</div>" +
+        "<h2>先看箭头，再看卡片</h2>" +
+        "<p>箭头表示<b>先修关系</b>：右边的内容默认左边的已经讲过。竖线表示同一模块的<b>包含关系</b>。</p>" +
+        "<p>点击任意节点查看摘要、前置与后续；再点“打开笔记”进入正文。悬停或键盘 <span class=\"kbd\">Tab</span> 可逐个浏览，选中后按 <span class=\"kbd\">O</span> 直接打开笔记。</p>" +
+        "<p>当前 <b>" + done + "</b> / " + G.nodes.length + " 个节点已有完整笔记，其余为提纲与关键结论。</p>" +
+        "<p style=\"margin-top:14px\"><a class=\"open\" href=\"../README.md\">返回仓库首页</a></p>" +
+        "</div>";
+      return;
+    }
+
+    var n = nodeById[selected];
+    var r = relations(selected);
+    var html = "<div class=\"pid\">" + esc(n.id) + " · " + esc(TYPE_LABEL[n.type] || n.type) + "</div>";
+    html += "<h2>" + esc(n.label) + "</h2>";
+    html += "<span class=\"badge " + (n.status === "done" ? "done" : "planned") + "\">" +
+            (n.status === "done" ? "已完成" : "仅提纲") + "</span>";
+    if (n.type === "case") html += "<span class=\"badge blue\">来源拆解</span>";
+    html += "<p class=\"summary\">" + esc(n.summary) + "</p>";
+
+    if (r.parent) {
+      html += "<div class=\"sect\"><h3>所属</h3><ul>" + nodeButton(r.parent) + "</ul></div>";
+    }
+    if (r.up.length) {
+      html += "<div class=\"sect\"><h3>前置知识</h3><ul>" +
+        r.up.map(function (id) { return nodeButton(id); }).join("") + "</ul></div>";
+    }
+    if (r.down.length) {
+      html += "<div class=\"sect\"><h3>学完可以进入</h3><ul>" +
+        r.down.map(function (id) { return nodeButton(id); }).join("") + "</ul></div>";
+    }
+    if (r.kids.length) {
+      html += "<div class=\"sect\"><h3>包含 " + r.kids.length + " 个知识点</h3><ul>" +
+        r.kids.map(function (id) { return nodeButton(id); }).join("") + "</ul></div>";
+    }
+    if (r.cases.length) {
+      html += "<div class=\"sect\"><h3>相关案例</h3><ul>" +
+        r.cases.map(function (id) { return nodeButton(id); }).join("") + "</ul></div>";
+    }
+
+    html += "<a class=\"open\" href=\"../" + esc(n.doc) + "\" target=\"_blank\" rel=\"noopener\">打开笔记 →</a>";
+    html += "<div class=\"docpath\">" + esc(n.doc) + "</div>";
+    if (n.status !== "done") {
+      html += "<div class=\"note\">该节点目前只有提纲与关键结论；链接进入模块首页，推导完成后会把 <code>status</code> 改为 <code>done</code>。</div>";
+    }
+    panel.innerHTML = html;
+  }
+
+  function select(id, scroll) {
+    selected = id || null;
+    // file:// 下 Chrome 可能禁止 replaceState，退回 hash 赋值
+    try {
+      history.replaceState(null, "", id ? "#" + id : location.pathname + location.search);
+    } catch (err) {
+      if (id) { location.hash = id; }
+    }
+    paint();
+    renderPanel();
+    if (scroll) {
+      var g = nodeEls[id];
+      if (g && g.scrollIntoView) g.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+  }
+
+  /* ---------- toolbar ---------- */
+  var segButtons = Array.prototype.slice.call(document.querySelectorAll(".seg button"));
+  segButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      filter = btn.dataset.filter;
+      segButtons.forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); });
+      paint();
+    });
+  });
+
+  var q = document.getElementById("q");
+  q.addEventListener("input", function () {
+    query = q.value;
+    paint();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    q.value = ""; query = "";
+    filter = "all";
+    segButtons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.filter === "all")); });
+    select(null, false);
+  });
+
+  panel.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-goto]");
+    if (b) { select(b.dataset.goto, true); }
+  });
+
+  /* ---------- header ---------- */
+  document.getElementById("subtitle").textContent = G.meta.subtitle;
+  var nDone = G.nodes.filter(function (n) { return n.status === "done"; }).length;
+  var nMod = G.nodes.filter(function (n) { return n.type === "module"; }).length;
+  document.getElementById("stats").innerHTML =
+    "<span><b>" + nMod + "</b>个模块</span>" +
+    "<span><b>" + G.nodes.length + "</b>个节点</span>" +
+    "<span><b>" + nDone + "</b>个已完成</span>" +
+    "<span><b>" + G.edges.length + "</b>条关系</span>" +
+    "<span style=\"color:#8C99A5\">v" + esc(G.meta.version) + " · " + esc(G.meta.updated) + "</span>";
+
+  var initial = location.hash ? location.hash.slice(1) : null;
+  select(initial && nodeById[initial] ? initial : null, false);
+})();
+</script>
+</body>
+</html>
