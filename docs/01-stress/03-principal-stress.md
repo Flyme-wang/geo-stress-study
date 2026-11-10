@@ -12,12 +12,14 @@
 2. 主方向是特征向量方向；三个主方向**互相垂直**（对称张量的谱定理）。
 3. 在任意截面上，正应力 $\sigma_n$ 的最大值就是 $\sigma_1$，最小值就是 $\sigma_3$，它们出现在主截面上。这就是"最大主应力"这个说法的严格含义。
 4. 三个主应力的组合
-   $$
-   I_1=\sigma_1+\sigma_2+\sigma_3,\quad
-   I_2=\sigma_1\sigma_2+\sigma_2\sigma_3+\sigma_3\sigma_1,\quad
-   I_3=\sigma_1\sigma_2\sigma_3
-   $$
-   与坐标系无关，称为**应力不变量**。
+
+$$
+I_1=\sigma_1+\sigma_2+\sigma_3,\quad
+I_2=\sigma_1\sigma_2+\sigma_2\sigma_3+\sigma_3\sigma_1,\quad
+I_3=\sigma_1\sigma_2\sigma_3
+$$
+
+与坐标系无关，称为**应力不变量**。
 
 适用范围：同前一篇（连续介质、小变形、无体力偶）。
 
@@ -26,9 +28,9 @@
 ## 1. 前提与符号
 
 - $\boldsymbol{\sigma}$ 为实对称二阶张量（对称性来自角动量守恒，见 [01](01-traction-and-stress-tensor.md) §2.6）。
-- $\mathbf{n}$ 为单位法向，$|\mathbf{n}|=1$。
+- $\mathbf{n}$ 为单位法向， $|\mathbf{n}|=1$。
 - 主应力 $\lambda$，主方向 $\mathbf{n}$，满足 $\mathbf{t}=\lambda\mathbf{n}$。
-- 排序约定：$\sigma_1\ge\sigma_2\ge\sigma_3$（**代数**大小，拉正）。
+- 排序约定： $\sigma_1\ge\sigma_2\ge\sigma_3$（**代数**大小，拉正）。
 
 ---
 
@@ -39,7 +41,7 @@
 "某截面上没有剪应力"等价于"面力矢量完全沿法向"：
 
 $$
-\mathbf{t}(\mathbf{n}) = \lambda\,\mathbf{n}
+\mathbf{t}(\mathbf{n}) = \lambda\ \mathbf{n}
 \qquad\text{其中}\ \lambda=\sigma_n
 $$
 
@@ -48,7 +50,7 @@ $$
 代入 $\mathbf{t}=\boldsymbol{\sigma}\mathbf{n}$：
 
 $$
-\boxed{\;\boldsymbol{\sigma}\mathbf{n}=\lambda\mathbf{n}\;}
+\boxed{\boldsymbol{\sigma}\mathbf{n}=\lambda\mathbf{n}}
 \qquad\Longleftrightarrow\qquad
 (\sigma_{ij}-\lambda\delta_{ij})n_j=0
 $$
@@ -79,7 +81,7 @@ $$
 按第一行展开并合并同类项，得到**特征方程**：
 
 $$
-\boxed{\;\lambda^3-I_1\lambda^2+I_2\lambda-I_3=0\;}
+\boxed{\lambda^3-I_1\lambda^2+I_2\lambda-I_3=0}
 $$
 
 其中
@@ -104,7 +106,7 @@ $$
 
 这里不做完整证明，但要说清逻辑链，避免"凭感觉"：
 
-**（a）$\sigma_n(\mathbf{n})$ 必有最大值与最小值。**
+**（a） $\sigma_n(\mathbf{n})$ 必有最大值与最小值。**
 $\sigma_n(n_i n_i=1)=n_i\sigma_{ij}n_j$ 是单位球面（有界闭集）上的连续函数，
 由**极值定理**必取到最大、最小值。
 
@@ -112,14 +114,14 @@ $\sigma_n(n_i n_i=1)=n_i\sigma_{ij}n_j$ 是单位球面（有界闭集）上的�
 用拉格朗日乘子处理约束 $n_in_i=1$：
 
 $$
-\frac{\partial}{\partial n_k}\Big[n_i\sigma_{ij}n_j-\lambda\,(n_in_i-1)\Big]=0
-\;\Longrightarrow\;
+\frac{\partial}{\partial n_k}\Big[n_i\sigma_{ij}n_j-\lambda\ (n_in_i-1)\Big]=0
+\quad\Longrightarrow\quad
 2\sigma_{kj}n_j-2\lambda n_k=0
 $$
 
 即 $\boldsymbol{\sigma}\mathbf{n}=\lambda\mathbf{n}$。**依据**：约束极值的必要条件。
 
-两边左乘 $n_k$ 并求和：$\lambda=n_k\sigma_{kj}n_j=\sigma_n(\mathbf{n})$，是**实数**。
+两边左乘 $n_k$ 并求和： $\lambda=n_k\sigma_{kj}n_j=\sigma_n(\mathbf{n})$，是**实数**。
 **依据**：实数的二次型是实数。于是至少有一个实特征值，且它就是正应力的极值。
 
 **（c）降维得到另外两个。**
@@ -132,14 +134,14 @@ $$
 
 ### 2.4 第四步：三个主方向互相垂直
 
-设 $\boldsymbol{\sigma}\mathbf{n}^{(1)}=\lambda_1\mathbf{n}^{(1)}$，$\boldsymbol{\sigma}\mathbf{n}^{(2)}=\lambda_2\mathbf{n}^{(2)}$，$\lambda_1\ne\lambda_2$。
+设 $\boldsymbol{\sigma}\mathbf{n}^{(1)}=\lambda_1\mathbf{n}^{(1)}$， $\boldsymbol{\sigma}\mathbf{n}^{(2)}=\lambda_2\mathbf{n}^{(2)}$， $\lambda_1\ne\lambda_2$。
 
 $$
-\lambda_1\,\mathbf{n}^{(1)}\!\cdot\mathbf{n}^{(2)}
-=(\boldsymbol{\sigma}\mathbf{n}^{(1)})\!\cdot\mathbf{n}^{(2)}
-=\mathbf{n}^{(1)}\!\cdot(\boldsymbol{\sigma}^{\mathsf T}\mathbf{n}^{(2)})
-=\mathbf{n}^{(1)}\!\cdot(\boldsymbol{\sigma}\mathbf{n}^{(2)})
-=\lambda_2\,\mathbf{n}^{(1)}\!\cdot\mathbf{n}^{(2)}
+\lambda_1\ \mathbf{n}^{(1)}\cdot\mathbf{n}^{(2)}
+=(\boldsymbol{\sigma}\mathbf{n}^{(1)})\cdot\mathbf{n}^{(2)}
+=\mathbf{n}^{(1)}\cdot(\boldsymbol{\sigma}^{\mathsf T}\mathbf{n}^{(2)})
+=\mathbf{n}^{(1)}\cdot(\boldsymbol{\sigma}\mathbf{n}^{(2)})
+=\lambda_2\ \mathbf{n}^{(1)}\cdot\mathbf{n}^{(2)}
 $$
 
 **依据**：点积的对称性 + 张量对称性 $\boldsymbol{\sigma}^{\mathsf T}=\boldsymbol{\sigma}$。
@@ -147,9 +149,9 @@ $$
 移项：
 
 $$
-(\lambda_1-\lambda_2)\,\mathbf{n}^{(1)}\!\cdot\mathbf{n}^{(2)}=0
-\;\Longrightarrow\;
-\mathbf{n}^{(1)}\!\cdot\mathbf{n}^{(2)}=0
+(\lambda_1-\lambda_2)\ \mathbf{n}^{(1)}\cdot\mathbf{n}^{(2)}=0
+\quad\Longrightarrow\quad
+\mathbf{n}^{(1)}\cdot\mathbf{n}^{(2)}=0
 $$
 
 **结论**：不同主应力对应的主方向正交。
@@ -169,7 +171,7 @@ $$
 
 这就是"最大主应力"的严格含义：**任意截面上正应力的最大值**，而不是"最大的那个外力"。
 
-> 注意：$\sigma_2$ 是鞍点，对应的是"次大值方向"，在三维中它既不是最大也不是最小。
+> 注意： $\sigma_2$ 是鞍点，对应的是"次大值方向"，在三维中它既不是最大也不是最小。
 
 ### 2.6 第六步：不变量为什么"不变"
 
@@ -208,10 +210,10 @@ $$
 $\sigma_{11}=100$，其余为 0。特征方程
 $\lambda^3-100\lambda^2=0\Rightarrow \lambda=100,0,0$。
 
-主应力 $(100,0,0)$ MPa。主方向：$x_1$（任意垂直于它的方向也是主方向，因为重根）。
+主应力 $(100,0,0)$ MPa。主方向： $x_1$（任意垂直于它的方向也是主方向，因为重根）。
 
-**交叉验证**：用 [02](02-stress-transformation.md) 的公式，$\theta=0$ 时 $\tau=0$、$\sigma_n=100$；
-$\theta=90^\circ$ 时 $\tau=0$、$\sigma_n=0$。✓
+**交叉验证**：用 [02](02-stress-transformation.md) 的公式， $\theta=0$ 时 $\tau=0$、 $\sigma_n=100$；
+$\theta=90^\circ$ 时 $\tau=0$、 $\sigma_n=0$。✓
 
 ### 3.2 纯剪 50 MPa
 
@@ -222,17 +224,17 @@ $$
 $$
 
 $$
-\lambda(\lambda^2-2500)=0\;\Longrightarrow\;\lambda=50,\ 0,\ -50
+\lambda(\lambda^2-2500)=0\quad\Longrightarrow\quad\lambda=50,\ 0,\ -50
 $$
 
 主应力 $(50,0,-50)$ MPa。主方向为 $x_1$ 与 $x_2$ 之间的 $45^\circ$ 方向。
 
-**交叉验证**：$\theta=45^\circ$ 时
-$\sigma_n=0+\frac{0-0}{2}\cos90^\circ+50\sin90^\circ=50$，$\tau=50\cos90^\circ=0$。✓
+**交叉验证**： $\theta=45^\circ$ 时
+$\sigma_n=0+\frac{0-0}{2}\cos90^\circ+50\sin90^\circ=50$， $\tau=50\cos90^\circ=0$。✓
 
 ### 3.3 一般二维状态
 
-$\sigma_x=80$，$\sigma_y=20$，$\tau_{xy}=40$ MPa。
+$\sigma_x=80$， $\sigma_y=20$， $\tau_{xy}=40$ MPa。
 
 二维特征值公式：
 
@@ -249,7 +251,7 @@ $$
 
 $$
 \tan 2\theta_p=\frac{2\tau_{xy}}{\sigma_x-\sigma_y}=\frac{80}{60}
-\;\Longrightarrow\;
+\quad\Longrightarrow\quad
 2\theta_p=53.13^\circ,\quad \theta_p=26.57^\circ
 $$
 
@@ -282,12 +284,12 @@ $$
 
 **误解 2："最大主应力就是最大剪应力所在的截面上的正应力。"**
 
-为什么错：最大剪应力出现在与 $\sigma_1$、$\sigma_3$ 都成 $45^\circ$ 的截面上，那里正应力是 $(\sigma_1+\sigma_3)/2$，
+为什么错：最大剪应力出现在与 $\sigma_1$、 $\sigma_3$ 都成 $45^\circ$ 的截面上，那里正应力是 $(\sigma_1+\sigma_3)/2$，
 **不是** $\sigma_1$。两个极值发生在不同截面上。
 
 **误解 3："三个主应力排序时，压应力大的排前面。"**
 
-为什么错：本库用拉正，$\sigma_1\ge\sigma_2\ge\sigma_3$ 是**代数**比较。
+为什么错：本库用拉正， $\sigma_1\ge\sigma_2\ge\sigma_3$ 是**代数**比较。
 在压正约定下顺序整体反转，见 [符号约定](../00-notation/symbols-and-conventions.md) §5。
 混用会导致莫尔圆画反、莫尔–库仑公式符号错。
 
@@ -309,15 +311,15 @@ $$
 <details>
 <summary>参考答案</summary>
 
-1. 对角矩阵，主应力即对角元：$(60,60,-20)$；$I_1=60+60-20=100$ MPa。
-2. $\lambda^2-2500=0\Rightarrow \lambda=\pm50$（纯剪，$\sigma_3=0$ 因平面应力）→ $(50,0,-50)$。
-   $\tan2\theta_p = 2(-50)/0\to\infty$，$2\theta_p=-90^\circ$，$\theta_p=-45^\circ$。
+1. 对角矩阵，主应力即对角元： $(60,60,-20)$； $I_1=60+60-20=100$ MPa。
+2. $\lambda^2-2500=0\Rightarrow \lambda=\pm50$（纯剪， $\sigma_3=0$ 因平面应力）→ $(50,0,-50)$。
+   $\tan2\theta_p = 2(-50)/0\to\infty$， $2\theta_p=-90^\circ$， $\theta_p=-45^\circ$。
 3. $\sigma_1=\sigma_2$ 时，垂直于 $\sigma_3$ 主方向的整个平面内任意方向都满足特征方程（退化）。
-   主方向集合 = 一个平面内的所有方向；$\sigma_3$ 方向仍唯一。
+   主方向集合 = 一个平面内的所有方向； $\sigma_3$ 方向仍唯一。
 4. 因为 $\sigma_1=\max_{\mathbf{n}}\sigma_n$：它就是在所有可能的截面上正应力的上限，
    所以云图上的 $\sigma_1$ 分布直接给出"最容易被拉裂"的位置与方向信息。
 5. 最大剪应力是 $(\sigma_1-\sigma_3)/2=(100-(-100))/2=100$ MPa，数值对，
-   但他把 $\sigma_1-\sigma_3$ 说成了"$\sigma_1$ 本身"。若状态是 $(100,0,0)$，最大剪应力是 50 而不是 100。
+   但他把 $\sigma_1-\sigma_3$ 说成了" $\sigma_1$ 本身"。若状态是 $(100,0,0)$，最大剪应力是 50 而不是 100。
 </details>
 
 ---

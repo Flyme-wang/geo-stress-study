@@ -7,7 +7,7 @@
 
 ## 学习目标
 
-1. 建立完整的原地应力剖面：$\sigma_v$、$S_{H\max}$、$S_{h\min}$、$p_p$ 随深度的分布。
+1. 建立完整的原地应力剖面： $\sigma_v$、 $S_{H\max}$、 $S_{h\min}$、 $p_p$ 随深度的分布。
 2. 用**应力多边形**判断一组应力数据是否自洽，并识别断层类型。
 3. 掌握三种主要的地应力测量/反演手段及其假设：
    - 井壁崩落（breakout）与诱导裂缝（DIF）→ 主应力方位；
@@ -32,7 +32,7 @@
 
 ## 关键结论（先记住）
 
-- $\sigma_v\approx24.5\ \mathrm{MPa/km}$（$\bar\rho=2500$）。
+- $\sigma_v\approx24.5\ \mathrm{MPa/km}$（ $\bar\rho=2500$）。
 - 正常压力梯度 $p_p\approx9.8\ \mathrm{kPa/m}$；压力系数 $p_p/(\rho_w g z)$。
 - 摩擦上限 $S_{H\max}'/S_{h\min}'\le(\sqrt{1+\mu^2}+\mu)^2$。
 - 滑移趋势越大越易滑动；注水提高 $p_p$ 会降低 $\sigma_n'$，从而提高 $T_s$。

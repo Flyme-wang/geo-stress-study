@@ -16,7 +16,7 @@
 3. 起作用的不是总应力，而是**有效应力**：
 
 $$
-\sigma'_{ij}=\sigma_{ij}-\alpha\,p_p\,\delta_{ij}\quad(\text{压正})
+\sigma'_{ij}=\sigma_{ij}-\alpha\ p_p\ \delta_{ij}\quad(\text{压正})
 $$
 
 4. 断层的类型（正断、走滑、逆冲）由**哪个主应力是竖直的**决定（Anderson 分类）。
@@ -31,7 +31,7 @@ $$
 | $\sigma_v$ | 垂向总应力 | 压正，正值 |
 | $S_{H\max},\ S_{h\min}$ | 最大/最小水平主应力 | 压正 |
 | $p_p$ | 孔隙压力 | 压正 |
-| $\alpha$ | Biot 系数 | $0<\alpha\le1$，砂岩常取 0.7–1.0 |
+| $\alpha$ | Biot 系数 | $0\lt \alpha\le1$，砂岩常取 0.7–1.0 |
 | $\mu$ | 摩擦系数 | $\mu=\tan\varphi$ |
 | $z$ | 埋深 | m |
 
@@ -47,16 +47,16 @@ $$
 取深度 $z$ 处一个水平面元，上方岩柱重量除以面积：
 
 $$
-\sigma_v(z)=\frac{1}{A}\int_0^z \rho(\zeta)\,g\,A\,\mathrm d\zeta=\int_0^z\rho(\zeta)g\,\mathrm d\zeta
-\approx \bar\rho\,g\,z
+\sigma_v(z)=\frac{1}{A}\int_0^z \rho(\zeta)\ g\ A\ \mathrm d\zeta=\int_0^z\rho(\zeta)g\ \mathrm d\zeta
+\approx \bar\rho\ g\ z
 $$
 
 **依据**：静力平衡（上覆岩柱自重由下伏岩层支撑）。
 
-取 $\bar\rho=2500\ \mathrm{kg/m^3}$，$g=9.81$：
+取 $\bar\rho=2500\ \mathrm{kg/m^3}$， $g=9.81$：
 
 $$
-\sigma_v\approx 0.0245\,z\ \ (\mathrm{MPa},\ z\ \text{以 m 计})
+\sigma_v\approx 0.0245\ z\ \ (\mathrm{MPa},\ z\ \text{以 m 计})
 \approx 24.5\ \mathrm{MPa/km}
 $$
 
@@ -77,10 +77,10 @@ $$
 \qquad \alpha=1-\frac{K_d}{K_s}
 $$
 
-其中 $K_d$ 为排水体积模量，$K_s$ 为矿物颗粒体积模量。
+其中 $K_d$ 为排水体积模量， $K_s$ 为矿物颗粒体积模量。
 
-**依据**：孔隙压力作用于孔隙壁，抵消掉一部分总应力；$\alpha$ 描述"有多少孔隙压力真正作用在骨架上"。
-$\alpha=1$ 退化为 Terzaghi；$\alpha=0$ 表示孔隙压力完全不影响骨架（致密无孔）。
+**依据**：孔隙压力作用于孔隙壁，抵消掉一部分总应力； $\alpha$ 描述"有多少孔隙压力真正作用在骨架上"。
+$\alpha=1$ 退化为 Terzaghi； $\alpha=0$ 表示孔隙压力完全不影响骨架（致密无孔）。
 
 **有效应力决定**：变形、强度、渗透率、裂缝张开与否。
 **总应力决定**：与外部载荷的平衡。
@@ -91,12 +91,12 @@ $\alpha=1$ 退化为 Terzaghi；$\alpha=0$ 表示孔隙压力完全不影响骨�
 
 | 断层类型 | 竖直主应力 | 水平主应力关系 | 典型构造 |
 |---|---|---|---|
-| 正断层（normal） | $\sigma_1=\sigma_v$ | $S_{H\max}>\sigma_v>S_{h\min}$ | 伸展盆地、裂谷 |
-| 走滑断层（strike-slip） | $\sigma_2=\sigma_v$ | $S_{H\max}>\sigma_v>S_{h\min}$（两者都水平） | 转换断层 |
-| 逆冲断层（thrust） | $\sigma_3=\sigma_v$ | $S_{H\max}>S_{h\min}>\sigma_v$ | 造山带前缘 |
+| 正断层（normal） | $\sigma_1=\sigma_v$ | $S_{H\max}\gt \sigma_v\gt S_{h\min}$ | 伸展盆地、裂谷 |
+| 走滑断层（strike-slip） | $\sigma_2=\sigma_v$ | $S_{H\max}\gt \sigma_v\gt S_{h\min}$（两者都水平） | 转换断层 |
+| 逆冲断层（thrust） | $\sigma_3=\sigma_v$ | $S_{H\max}\gt S_{h\min}\gt \sigma_v$ | 造山带前缘 |
 
-**依据**：断层沿最大剪应力面滑动，而最大剪应力面与 $\sigma_1$、$\sigma_3$ 成 $45^\circ$
-（[04](04-mohr-circle.md) §2.5）。$\sigma_1$ 竖直 → 断层面倾角约 $60^\circ$（正断层）；
+**依据**：断层沿最大剪应力面滑动，而最大剪应力面与 $\sigma_1$、 $\sigma_3$ 成 $45^\circ$
+（[04](04-mohr-circle.md) §2.5）。 $\sigma_1$ 竖直 → 断层面倾角约 $60^\circ$（正断层）；
 $\sigma_3$ 竖直 → 断层面约 $30^\circ$（逆冲）。
 
 > 图 6：三类断层与主应力方位、断层面倾角示意。
@@ -104,7 +104,7 @@ $\sigma_3$ 竖直 → 断层面约 $30^\circ$（逆冲）。
 
 ### 2.4 第四步：摩擦平衡给出的应力上限
 
-对无黏聚力（$c=0$）的摩擦材料，破坏时莫尔圆与包络线 $\tau=\sigma'\tan\varphi$ 相切：
+对无黏聚力（ $c=0$）的摩擦材料，破坏时莫尔圆与包络线 $\tau=\sigma'\tan\varphi$ 相切：
 
 $$
 \frac{\sigma_1'-\sigma_3'}{2}=\frac{\sigma_1'+\sigma_3'}{2}\sin\varphi
@@ -122,8 +122,8 @@ $$
 
 **依据**：三角恒等式 $\dfrac{1+\sin\varphi}{\cos\varphi}=\sec\varphi+\tan\varphi$。
 
-对 $\mu=0.6$（$\varphi\approx31^\circ$）：上限比值 $\approx3.1$。
-即 $S_{H\max}'/S_{h\min}'\lesssim3.1$。这个上限加上"$\sigma_v$ 已知"，围出的区域就是**应力多边形**。
+对 $\mu=0.6$（ $\varphi\approx31^\circ$）：上限比值 $\approx3.1$。
+即 $S_{H\max}'/S_{h\min}'\lesssim3.1$。这个上限加上" $\sigma_v$ 已知"，围出的区域就是**应力多边形**。
 
 **工程含义**：如果你反演出的水平应力比超过 3，而该处没有强胶结或逆冲构造，
 那这个结果是**不可信**的——地壳早就剪断了。
@@ -142,14 +142,14 @@ $$
 
 ## 3. 数值检验
 
-**算例**：$z=2000$ m，$\bar\rho=2400\ \mathrm{kg/m^3}$，$p_p=19.6$ MPa（正常压力梯度 9.8 kPa/m），
-$\alpha=0.9$，$S_{h\min}=35$ MPa。
+**算例**： $z=2000$ m， $\bar\rho=2400\ \mathrm{kg/m^3}$， $p_p=19.6$ MPa（正常压力梯度 9.8 kPa/m），
+$\alpha=0.9$， $S_{h\min}=35$ MPa。
 
 1. $\sigma_v=2400\times9.81\times2000=47.1$ MPa。
-2. 有效垂向应力：$\sigma_v'=47.1-0.9\times19.6=47.1-17.6=29.5$ MPa。
-3. 有效最小水平应力：$S_{h\min}'=35-17.6=17.4$ MPa。
-4. 比值：$\sigma_v'/S_{h\min}'=1.70<3.1$，在摩擦上限内，合理。
-5. 因为 $\sigma_v=47.1>35=S_{h\min}$，若 $S_{H\max}<47.1$ 则为**正断层**环境。
+2. 有效垂向应力： $\sigma_v'=47.1-0.9\times19.6=47.1-17.6=29.5$ MPa。
+3. 有效最小水平应力： $S_{h\min}'=35-17.6=17.4$ MPa。
+4. 比值： $\sigma_v'/S_{h\min}'=1.70\lt 3.1$，在摩擦上限内，合理。
+5. 因为 $\sigma_v=47.1\gt 35=S_{h\min}$，若 $S_{H\max}\lt 47.1$ 则为**正断层**环境。
 
 ---
 
@@ -157,10 +157,10 @@ $\alpha=0.9$，$S_{h\min}=35$ MPa。
 
 **误解 1："压正和拉正只是符号习惯不同，不影响结果。"**
 
-为什么错：主应力排序、莫尔圆左右、$\sigma_1-\sigma_3$ 的具体值全部改变。
-若在压正公式里代入拉正的数，会得到"$\sigma_1<\sigma_3$"这类荒谬结果。
+为什么错：主应力排序、莫尔圆左右、 $\sigma_1-\sigma_3$ 的具体值全部改变。
+若在压正公式里代入拉正的数，会得到" $\sigma_1\lt \sigma_3$"这类荒谬结果。
 
-**误解 2："$\sigma_v$ 一定等于 $\sigma_1$。"**
+**误解 2：" $\sigma_v$ 一定等于 $\sigma_1$。"**
 
 为什么错：只有在正断层环境（伸展）下才成立。逆冲环境下 $\sigma_v=\sigma_3$（最小主应力）。
 
@@ -171,16 +171,16 @@ $\alpha=0.9$，$S_{h\min}=35$ MPa。
 
 **误解 4："有效应力就是总应力减去孔隙压力，与 $\alpha$ 无关。"**
 
-为什么错：$\sigma'=\sigma-\alpha p$ 中的 $\alpha$ 对致密岩石显著小于 1
+为什么错： $\sigma'=\sigma-\alpha p$ 中的 $\alpha$ 对致密岩石显著小于 1
 （例如 $K_d/K_s\approx0.5$ 时 $\alpha\approx0.5$），忽略会高估有效应力。
 
 ---
 
 ## 5. 自测
 
-1. 深度 3000 m、$\bar\rho=2450$，求 $\sigma_v$。
-2. 同上，$p_p=29.4$ MPa，$\alpha=0.8$，求 $\sigma_v'$。
-3. 某地 $S_{H\max}=90$，$S_{h\min}=40$，$\sigma_v=60$ MPa。判断断层类型。
+1. 深度 3000 m、 $\bar\rho=2450$，求 $\sigma_v$。
+2. 同上， $p_p=29.4$ MPa， $\alpha=0.8$，求 $\sigma_v'$。
+3. 某地 $S_{H\max}=90$， $S_{h\min}=40$， $\sigma_v=60$ MPa。判断断层类型。
 4. 用 $\mu=0.6$ 的摩擦上限，判断上题的水平应力比是否合理。
 5. 为什么水力压裂裂缝通常垂直于 $S_{h\min}$ 而不是 $S_{H\max}$？
 
@@ -189,10 +189,10 @@ $\alpha=0.9$，$S_{h\min}=35$ MPa。
 
 1. $\sigma_v=2450\times9.81\times3000=72.1$ MPa。
 2. $\sigma_v'=72.1-0.8\times29.4=72.1-23.5=48.6$ MPa。
-3. $\sigma_1=S_{H\max}=90$、$\sigma_2=\sigma_v=60$、$\sigma_3=S_{h\min}=40$。
+3. $\sigma_1=S_{H\max}=90$、 $\sigma_2=\sigma_v=60$、 $\sigma_3=S_{h\min}=40$。
    竖直方向是中间主应力 → **走滑断层**。
 4. $S_{H\max}'/S_{h\min}'=(90-\alpha p_p)/(40-\alpha p_p)$。
-   取 $\alpha p_p=20$：$70/20=3.5>3.1$，略超上限，需要更大的孔隙压力或存在胶结强度才合理。
+   取 $\alpha p_p=20$： $70/20=3.5\gt 3.1$，略超上限，需要更大的孔隙压力或存在胶结强度才合理。
 5. 裂缝张开需要克服法向压应力。法向为 $S_{h\min}$ 的面承受最小的压应力，
    张开做的功最小，因此裂缝沿该面扩展（垂直于 $S_{h\min}$）。
 </details>

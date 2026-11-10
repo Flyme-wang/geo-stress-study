@@ -11,7 +11,7 @@
 1. 任何应力张量都能唯一分解为**体积部分**（球张量）与**形状改变部分**（偏张量）：
 
 $$
-\sigma_{ij}=\underbrace{p\,\delta_{ij}}_{\text{球张量}}+\underbrace{s_{ij}}_{\text{偏张量}},
+\sigma_{ij}=\underbrace{p\ \delta_{ij}}_{\text{球张量}}+\underbrace{s_{ij}}_{\text{偏张量}},
 \qquad p=\frac{\sigma_{kk}}{3}=\frac{\sigma_1+\sigma_2+\sigma_3}{3}
 $$
 
@@ -41,8 +41,8 @@ $$
 
 - 各向同性材料；关注"屈服"这类由畸变驱动的过程。
 - $p$：平均正应力（**不是**孔隙压力）。地质文献中的孔隙压力记作 $p_p$ 或 $p_f$，务必区分。
-- $s_{ij}$：偏应力张量，$s_{kk}=0$（迹为零）。
-- $J_2$：偏应力第二不变量；工程上也记作 $q$、$\sigma_{\mathrm{eq}}$、$\sigma_{\mathrm{vM}}$。
+- $s_{ij}$：偏应力张量， $s_{kk}=0$（迹为零）。
+- $J_2$：偏应力第二不变量；工程上也记作 $q$、 $\sigma_{\mathrm{eq}}$、 $\sigma_{\mathrm{vM}}$。
 
 ---
 
@@ -53,15 +53,15 @@ $$
 先证明球张量与偏张量正交（在张量内积意义下）：
 
 $$
-p\,\delta_{ij}\,s_{ij}=p\,s_{ii}=p\cdot 0=0
+p\ \delta_{ij}\ s_{ij}=p\ s_{ii}=p\cdot 0=0
 $$
 
-**依据**：$\delta_{ij}s_{ij}=s_{ii}$，而 $s_{ii}=\sigma_{ii}-3p=3p-3p=0$。
+**依据**： $\delta_{ij}s_{ij}=s_{ii}$，而 $s_{ii}=\sigma_{ii}-3p=3p-3p=0$。
 
 正交意味着：**两部分互不影响**，可以分别讨论"体积效应"和"形状效应"。
 这是分解有意义的根本原因（否则拆了也不能独立分析）。
 
-### 2.2 第二步：$J_2$ 的三种写法
+### 2.2 第二步： $J_2$ 的三种写法
 
 **（a）定义式**
 
@@ -74,16 +74,16 @@ $$
 $$
 s_{ij}s_{ij}
 =(\sigma_{ij}-p\delta_{ij})(\sigma_{ij}-p\delta_{ij})
-=\sigma_{ij}\sigma_{ij}-2p\,\sigma_{ii}+p^2\delta_{ij}\delta_{ij}
+=\sigma_{ij}\sigma_{ij}-2p\ \sigma_{ii}+p^2\delta_{ij}\delta_{ij}
 $$
 
-其中 $\sigma_{ii}=3p$，$\delta_{ij}\delta_{ij}=3$：
+其中 $\sigma_{ii}=3p$， $\delta_{ij}\delta_{ij}=3$：
 
 $$
 s_{ij}s_{ij}=\sigma_{ij}\sigma_{ij}-6p^2+3p^2=\sigma_{ij}\sigma_{ij}-3p^2
 $$
 
-**依据**：$\delta_{ij}\delta_{ij}=\delta_{ii}=3$（三维）。
+**依据**： $\delta_{ij}\delta_{ij}=\delta_{ii}=3$（三维）。
 
 所以
 
@@ -92,7 +92,7 @@ J_2=\tfrac12\sigma_{ij}\sigma_{ij}-\tfrac32p^2
 =\tfrac12\sigma_{ij}\sigma_{ij}-\tfrac16(\sigma_{kk})^2
 $$
 
-**（c）用主应力表示。** 取主轴（$\sigma_{ij}$ 对角），$\sigma_{ij}\sigma_{ij}=\sigma_1^2+\sigma_2^2+\sigma_3^2$，
+**（c）用主应力表示。** 取主轴（ $\sigma_{ij}$ 对角）， $\sigma_{ij}\sigma_{ij}=\sigma_1^2+\sigma_2^2+\sigma_3^2$，
 $p^2=(\sigma_1+\sigma_2+\sigma_3)^2/9$：
 
 $$
@@ -108,7 +108,7 @@ $$
 **依据**：展开右侧得 $2(\sigma_1^2+\sigma_2^2+\sigma_3^2)-2(\sigma_1\sigma_2+\sigma_2\sigma_3+\sigma_3\sigma_1)$，
 再除以 6，与上式逐项相等。✓
 
-> 用另一种常见等价形式验算：$J_2=\frac13(\sigma_1^2+\sigma_2^2+\sigma_3^2-\sigma_1\sigma_2-\sigma_2\sigma_3-\sigma_3\sigma_1)$，两者相同。
+> 用另一种常见等价形式验算： $J_2=\frac13(\sigma_1^2+\sigma_2^2+\sigma_3^2-\sigma_1\sigma_2-\sigma_2\sigma_3-\sigma_3\sigma_1)$，两者相同。
 
 ### 2.3 第三步：为什么用 $\sqrt{3J_2}$ 作为"等效应力"
 
@@ -129,7 +129,7 @@ $$
 要 $\sigma_{\mathrm v}=\sigma$，则 $c\sqrt{\sigma^2/3}=\sigma\Rightarrow c=\sqrt3$。
 
 $$
-\boxed{\;\sigma_{\mathrm v}=\sqrt{3J_2}\;}
+\boxed{\sigma_{\mathrm v}=\sqrt{3J_2}}
 $$
 
 **依据**：标定常数 $c$ 的唯一途径就是"与单轴试验对齐"。
@@ -142,24 +142,24 @@ $$
 W=\tfrac12\sigma_{ij}\varepsilon_{ij}
 $$
 
-代入 $\sigma_{ij}=p\delta_{ij}+s_{ij}$ 与 $\varepsilon_{ij}=\frac{1}{3}\theta\delta_{ij}+e_{ij}$（$\theta=\varepsilon_{kk}$，$e_{ij}$ 为偏应变）：
+代入 $\sigma_{ij}=p\delta_{ij}+s_{ij}$ 与 $\varepsilon_{ij}=\frac{1}{3}\theta\delta_{ij}+e_{ij}$（ $\theta=\varepsilon_{kk}$， $e_{ij}$ 为偏应变）：
 
 $$
-W=\tfrac12 p\,\theta+\tfrac12 s_{ij}e_{ij}
+W=\tfrac12 p\ \theta+\tfrac12 s_{ij}e_{ij}
 $$
 
 **依据**：交叉项因正交而消失（与 2.1 同理）。
 
-再由 $p=K\theta$、$s_{ij}=2Ge_{ij}$：
+再由 $p=K\theta$、 $s_{ij}=2Ge_{ij}$：
 
 $$
 W=\underbrace{\frac{p^2}{2K}}_{\text{体积改变}}+\underbrace{\frac{J_2}{2G}}_{\text{形状改变}}
 $$
 
-**依据**：各向同性线弹性，$K$ 体积模量、$G$ 剪切模量；$e_{ij}=s_{ij}/(2G)$。
+**依据**：各向同性线弹性， $K$ 体积模量、 $G$ 剪切模量； $e_{ij}=s_{ij}/(2G)$。
 
-**结论**：$\sigma_{\mathrm v}$ 相同 ⟺ $J_2$ 相同 ⟺ **畸变能相同**。
-von Mises 准则"畸变能密度达到临界值即屈服"，本质就是"$\sigma_{\mathrm v}$ 达到单轴屈服强度"。
+**结论**： $\sigma_{\mathrm v}$ 相同 ⟺ $J_2$ 相同 ⟺ **畸变能相同**。
+von Mises 准则"畸变能密度达到临界值即屈服"，本质就是" $\sigma_{\mathrm v}$ 达到单轴屈服强度"。
 
 ### 2.5 第五步：三个经典算例（务必背下来）
 
@@ -170,7 +170,7 @@ von Mises 准则"畸变能密度达到临界值即屈服"，本质就是"$\sigma
 | 静水压缩 | $(-100,-100,-100)$ | $0$ | **0** |
 | 等双轴拉伸 | $(100,100,0)$ | $100^2/3=3333$ | **100** |
 
-**纯剪验算**：$\frac16[(50-0)^2+(0+50)^2+(-50-50)^2]=\frac16[2500+2500+10000]=2500$，
+**纯剪验算**： $\frac16[(50-0)^2+(0+50)^2+(-50-50)^2]=\frac16[2500+2500+10000]=2500$，
 $\sqrt{3\times2500}=86.6$。✓
 
 **两个反直觉的结论**：
@@ -179,7 +179,7 @@ $\sqrt{3\times2500}=86.6$。✓
 - **静水 100 MPa 的等效应力是 0**——材料内部仍有 100 MPa 正应力，但不会因畸变而屈服。
   这就是为什么深海里的金属球不会被"压扁"。
 
-> 图 4：平面应力下三种准则的屈服边界（无量纲化，$\sigma_{a,\mathrm{eq}}=1$）。
+> 图 4：平面应力下三种准则的屈服边界（无量纲化， $\sigma_{a,\mathrm{eq}}=1$）。
 > 文件：`assets/figures/fig04-yield-criteria.png`
 
 ---
@@ -187,19 +187,19 @@ $\sqrt{3\times2500}=86.6$。✓
 ## 3. 数值检验
 
 **检验 1｜不变量自洽**
-对 $(100,40,-20)$：$J_2=\frac16[60^2+60^2+(-120)^2]=\frac16[3600+3600+14400]=3600$。
+对 $(100,40,-20)$： $J_2=\frac16[60^2+60^2+(-120)^2]=\frac16[3600+3600+14400]=3600$。
 $\sigma_{\mathrm v}=\sqrt{10800}=103.9$ MPa。
 
-用另一种写法：$\sigma_{ij}\sigma_{ij}=100^2+40^2+20^2=12000$，
-$p=40$，$J_2=\frac12(12000)-\frac16(120)^2=6000-2400=3600$。✓
+用另一种写法： $\sigma_{ij}\sigma_{ij}=100^2+40^2+20^2=12000$，
+$p=40$， $J_2=\frac12(12000)-\frac16(120)^2=6000-2400=3600$。✓
 
 **检验 2｜与莫尔圆一致**
 $\tau_{\max}=(\sigma_1-\sigma_3)/2=60$ MPa（见 [04](04-mohr-circle.md) §3.4）。
-$\sigma_{\mathrm v}=\sqrt3\,\tau_{\max}$ 仅在 $\sigma_2=(\sigma_1+\sigma_3)/2$ 时成立；
+$\sigma_{\mathrm v}=\sqrt3\ \tau_{\max}$ 仅在 $\sigma_2=(\sigma_1+\sigma_3)/2$ 时成立；
 本题 $\sigma_2=40$ 恰为中值，故 $\sigma_{\mathrm v}=\sqrt3\times60=103.9$。✓
 
 **检验 3｜单位**
-$J_2$ 的量纲是应力的平方，$\sigma_{\mathrm v}$ 才是应力。写"$J_2=3600$ MPa"是错的，
+$J_2$ 的量纲是应力的平方， $\sigma_{\mathrm v}$ 才是应力。写" $J_2=3600$ MPa"是错的，
 应写 $J_2=3600\ \mathrm{MPa^2}$。
 
 ---
@@ -232,9 +232,9 @@ $J_2$ 的量纲是应力的平方，$\sigma_{\mathrm v}$ 才是应力。写"$J_2
 
 ## 5. 自测
 
-1. 求 $(80,20,0)$ MPa 的 $p$、$J_2$、$\sigma_{\mathrm v}$。
-2. 证明：$\sigma_1=\sigma_2=\sigma_3$ 时 $J_2=0$。
-3. 纯剪状态下，$\sigma_{\mathrm v}/\tau_{\max}$ 是多少？单轴拉伸时又是多少？
+1. 求 $(80,20,0)$ MPa 的 $p$、 $J_2$、 $\sigma_{\mathrm v}$。
+2. 证明： $\sigma_1=\sigma_2=\sigma_3$ 时 $J_2=0$。
+3. 纯剪状态下， $\sigma_{\mathrm v}/\tau_{\max}$ 是多少？单轴拉伸时又是多少？
 4. 为什么"静水压力不引起屈服"对金属成立，对岩石却只是近似？（提示：摩擦、压硬、孔隙）
 5. 某砂岩三轴试验：围压 20 MPa，轴压 80 MPa（压为正）。用拉正约定写出主应力，并求 $\sigma_{\mathrm v}$。
 
@@ -245,15 +245,15 @@ $J_2$ 的量纲是应力的平方，$\sigma_{\mathrm v}$ 才是应力。写"$J_2
    $J_2=\frac16[(60)^2+(20)^2+(-80)^2]=\frac16(3600+400+6400)=1733.3\ \mathrm{MPa^2}$；
    $\sigma_{\mathrm v}=\sqrt{3\times1733.3}=72.1$ MPa。
 2. 令三者均为 $\sigma$：每个差值项为 0，故 $J_2=0$。
-3. 纯剪：$\sigma_{\mathrm v}=86.6$，$\tau_{\max}=50$，比值 $\sqrt3\approx1.732$。
-   单轴：$\sigma_{\mathrm v}=100$，$\tau_{\max}=50$，比值 2。
+3. 纯剪： $\sigma_{\mathrm v}=86.6$， $\tau_{\max}=50$，比值 $\sqrt3\approx1.732$。
+   单轴： $\sigma_{\mathrm v}=100$， $\tau_{\max}=50$，比值 2。
 4. 金属屈服由位错滑移驱动，对静水压力不敏感；
    岩石的强度来自摩擦与胶结，围压会压紧微裂隙、提高摩擦阻力，
    所以静水压力虽不直接"剪切"，却显著改变强度——需要用 $\sigma'=\sigma-\alpha p$ 与摩擦型准则。
-5. 拉正：$\sigma_1=-20$（围压为压、最小），$\sigma_3=-80$（轴压、最大压）。
+5. 拉正： $\sigma_1=-20$（围压为压、最小）， $\sigma_3=-80$（轴压、最大压）。
    $J_2=\frac16[(-20+80)^2+(-80+20)^2+0]=\frac16[3600+3600]=1200$；
    $\sigma_{\mathrm v}=\sqrt{3600}=60$ MPa。
-   （也可直接用差：$\sigma_1-\sigma_3=60$，单轴压缩时 $\sigma_{\mathrm v}=|\sigma_1-\sigma_3|$。）
+   （也可直接用差： $\sigma_1-\sigma_3=60$，单轴压缩时 $\sigma_{\mathrm v}=|\sigma_1-\sigma_3|$。）
 </details>
 
 ---

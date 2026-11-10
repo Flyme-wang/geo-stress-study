@@ -15,7 +15,7 @@
 3. **引用时标注**：在幻灯片或讲义中使用时写清文献 DOI 与 “CC BY 4.0”。
 4. **对照清单**：
    - `ref01` ↔ 自绘 [`fig01-stress-cube.png`](../figures/fig01-stress-cube.png)：核对三个可见面上的正应力方向与切应力下标。
-   - `ref02` ↔ 自绘 [`fig03-mohr-circles-3d.png`](../figures/fig03-mohr-circles-3d.png)：原文图把三个圆心到原点的距离标成 $(\sigma_i+\sigma_j)/2$，容易与“圆心坐标”混淆；自绘图直接标 $C_{12}$、$C_{23}$、$C_{13}$。
+   - `ref02` ↔ 自绘 [`fig03-mohr-circles-3d.png`](../figures/fig03-mohr-circles-3d.png)：原文图把三个圆心到原点的距离标成 $(\sigma_i+\sigma_j)/2$，容易与“圆心坐标”混淆；自绘图直接标 $C_{12}$、 $C_{23}$、 $C_{13}$。
    - `ref03` ↔ 自绘 [`fig04-yield-criteria.png`](../figures/fig04-yield-criteria.png)：原文图为归一化坐标 $\sigma_{a,1}/\sigma_{a,\mathrm{eq}}$，自绘图为 $\sigma/\sigma_y$，两者的形状相同、刻度含义不同。
 
 ## 版权说明

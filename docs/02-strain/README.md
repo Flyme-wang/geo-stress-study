@@ -19,7 +19,7 @@
 
 | 序 | 标题 | 关键推导 | 图件 |
 |---|---|---|---|
-| 02-1 | 位移梯度与应变张量 | $u_i$ 的梯度分解为对称+反对称；$\varepsilon_{ij}=\frac12(\partial_j u_i+\partial_i u_j)$ | 正方形微元的剪切/转动对比 |
+| 02-1 | 位移梯度与应变张量 | $u_i$ 的梯度分解为对称+反对称； $\varepsilon_{ij}=\frac12(\partial_j u_i+\partial_i u_j)$ | 正方形微元的剪切/转动对比 |
 | 02-2 | 主应变与应变不变量 | 与应力完全同构的特征值问题 | 应变莫尔圆 |
 | 02-3 | 体积应变与剪胀 | $\varepsilon_v=\varepsilon_{kk}$；岩石剪胀（dilatancy） | 密砂/松砂的体积曲线 |
 | 02-4 | 变形协调 | 二维协调方程 $\partial^2\varepsilon_x/\partial y^2+\dots=0$ | — |
@@ -30,7 +30,7 @@
 
 - 小应变张量对称，独立分量 6 个；反对称部分对应刚体转动 $\omega_{ij}=\frac12(\partial_j u_i-\partial_i u_j)$。
 - $\varepsilon_v=\varepsilon_{11}+\varepsilon_{22}+\varepsilon_{33}=\Delta V/V$（小变形）。
-- 各向同性线弹性下，$p=K\varepsilon_v$，$s_{ij}=2Ge_{ij}$——与应力分解一一对应。
+- 各向同性线弹性下， $p=K\varepsilon_v$， $s_{ij}=2Ge_{ij}$——与应力分解一一对应。
 - 岩石在三轴压缩中常先压缩后扩容（剪胀），这是压裂与巷道变形的重要机制。
 
 ---

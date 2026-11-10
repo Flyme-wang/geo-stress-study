@@ -14,7 +14,7 @@
    于是"这一点的应力"不能是一个矢量，只能是**一个把方向映射成矢量的线性算子**——这就是应力张量 $\boldsymbol{\sigma}$：
 
 $$
-\mathbf{t}(\mathbf{n}) = \boldsymbol{\sigma}\,\mathbf{n}
+\mathbf{t}(\mathbf{n}) = \boldsymbol{\sigma}\ \mathbf{n}
 \qquad\text{即}\qquad
 t_i = \sigma_{ij} n_j
 $$
@@ -37,10 +37,10 @@ $$
 
 符号：
 
-- $\Delta S$：截面面积；$\Delta \mathbf{F}$：该截面上的内力合力。
-- $\mathbf{n}$：截面单位法向量，$n_i n_i = 1$。
+- $\Delta S$：截面面积； $\Delta \mathbf{F}$：该截面上的内力合力。
+- $\mathbf{n}$：截面单位法向量， $n_i n_i = 1$。
 - $\mathbf{t}(\mathbf{n})$：法向为 $\mathbf{n}$ 的截面上的面力矢量，单位 Pa。
-- $\sigma_{ij}$：应力张量分量，$i$ 为**作用面法向**，$j$ 为**力的方向**。
+- $\sigma_{ij}$：应力张量分量， $i$ 为**作用面法向**， $j$ 为**力的方向**。
 
 ---
 
@@ -51,7 +51,7 @@ $$
 取过点 $P$、法向为 $\mathbf{n}$ 的一个小面元，面积为 $\Delta S$，面上的内力合力为 $\Delta \mathbf{F}$。定义
 
 $$
-\mathbf{t}(\mathbf{n}) \;=\; \lim_{\Delta S \to 0}\frac{\Delta \mathbf{F}}{\Delta S}
+\mathbf{t}(\mathbf{n}) \quad=\quad \lim_{\Delta S \to 0}\frac{\Delta \mathbf{F}}{\Delta S}
 $$
 
 **依据**：这是"应力"的唯一严格定义方式。极限存在依赖 H1。
@@ -61,23 +61,23 @@ $$
 1. 分母是**面积**，不是体积，也不是"物体总横截面积"。
 2. 面力是矢量，有三个分量；普通意义的"应力"往往指它的某个分量（正应力或剪应力）。
 
-> 单位：$1\ \mathrm{Pa} = 1\ \mathrm{N/m^2}$；$1\ \mathrm{MPa} = 1\ \mathrm{N/mm^2}$。
+> 单位： $1\ \mathrm{Pa} = 1\ \mathrm{N/m^2}$； $1\ \mathrm{MPa} = 1\ \mathrm{N/mm^2}$。
 
 ### 2.2 第二步：为什么必须给出 $\mathbf{n}$
 
 沿不同方向切同一个点，切出来的面承受的内力一般不同——因为两侧材料"拉住的面积分布"不同。
-所以 $\mathbf{t}$ 是 $\mathbf{n}$ 的函数：$\mathbf{t} = \mathbf{t}(\mathbf{n})$。
+所以 $\mathbf{t}$ 是 $\mathbf{n}$ 的函数： $\mathbf{t} = \mathbf{t}(\mathbf{n})$。
 
-若只写"$P$ 点应力是 100 MPa"，信息是不完整的：它没说这个 100 MPa 是哪个面上的、沿哪个方向。
+若只写" $P$ 点应力是 100 MPa"，信息是不完整的：它没说这个 100 MPa 是哪个面上的、沿哪个方向。
 
-### 2.3 第三步：反作用——$\mathbf{t}(-\mathbf{n}) = -\mathbf{t}(\mathbf{n})$
+### 2.3 第三步：反作用—— $\mathbf{t}(-\mathbf{n}) = -\mathbf{t}(\mathbf{n})$
 
 取一块极薄的"平板"微元，两个面法向分别为 $\mathbf{n}$ 与 $-\mathbf{n}$，面积均为 $\Delta S$，厚度 $h$。
 
 对这块板列力平衡：
 
 $$
-\mathbf{t}(\mathbf{n})\Delta S + \mathbf{t}(-\mathbf{n})\Delta S + \rho\mathbf{b}\,\Delta S\,h = \mathbf{0}
+\mathbf{t}(\mathbf{n})\Delta S + \mathbf{t}(-\mathbf{n})\Delta S + \rho\mathbf{b}\ \Delta S\ h = \mathbf{0}
 $$
 
 **依据**：牛顿第二定律（准静态，合力为零）。
@@ -85,7 +85,7 @@ $$
 两边除以 $\Delta S$，令 $h \to 0$：
 
 $$
-\mathbf{t}(-\mathbf{n}) = -\,\mathbf{t}(\mathbf{n})
+\mathbf{t}(-\mathbf{n}) = -\ \mathbf{t}(\mathbf{n})
 $$
 
 这一步只用到了**厚度趋于零时体积力是高阶小量**，是后面所有推导的关键技巧。
@@ -94,52 +94,52 @@ $$
 
 在点 $P$ 附近取一个四面体：
 
-- 三个面分别平行于三个坐标面，外法向为 $-\mathbf{e}_1, -\mathbf{e}_2, -\mathbf{e}_3$，面积记为 $\Delta S_1,\Delta S_2,\Delta S_3$；
+- 三个面分别平行于三个坐标面，外法向为 $-\mathbf{e}\_1, -\mathbf{e}\_2, -\mathbf{e}\_3$，面积记为 $\Delta S_1,\Delta S_2,\Delta S_3$；
 - 第四个斜面外法向为 $\mathbf{n}$，面积 $\Delta S$；
-- 四面体高 $h$（$P$ 到斜面的距离）。
+- 四面体高 $h$（ $P$ 到斜面的距离）。
 
 **几何关系（投影公式）**：斜面的面积投影到坐标面上，得到三个直角面：
 
 $$
-\Delta S_i = n_i\,\Delta S
+\Delta S_i = n_i\ \Delta S
 $$
 
-**依据**：面积投影定理——一个平面面积在法向为 $\mathbf{e}_i$ 的平面上的投影，等于原面积乘以两法向夹角余弦，而 $\cos\angle(\mathbf{n},\mathbf{e}_i)=n_i$。
-可自行验证：$n_i$ 满足 $n_1^2+n_2^2+n_3^2=1$，三个投影面积平方和等于 $\Delta S^2$，与几何一致。
+**依据**：面积投影定理——一个平面面积在法向为 $\mathbf{e}\_i$ 的平面上的投影，等于原面积乘以两法向夹角余弦，而 $\cos\angle(\mathbf{n},\mathbf{e}\_i)=n_i$。
+可自行验证： $n_i$ 满足 $n_1^2+n_2^2+n_3^2=1$，三个投影面积平方和等于 $\Delta S^2$，与几何一致。
 
 **力平衡**：
 
 $$
-\mathbf{t}(\mathbf{n})\,\Delta S
-+\sum_{i=1}^{3}\mathbf{t}(-\mathbf{e}_i)\,\Delta S_i
-+\rho\mathbf{b}\,\Delta V = \mathbf{0},
-\qquad \Delta V = \tfrac13 h\,\Delta S
+\mathbf{t}(\mathbf{n})\ \Delta S
++\sum_{i=1}^{3}\mathbf{t}(-\mathbf{e}_i)\ \Delta S_i
++\rho\mathbf{b}\ \Delta V = \mathbf{0},
+\qquad \Delta V = \tfrac13 h\ \Delta S
 $$
 
 **依据**：四面体整体静力平衡（H3）。
 
-用 2.3 步的结论 $\mathbf{t}(-\mathbf{e}_i) = -\mathbf{t}(\mathbf{e}_i)$ 替换，并代入 $\Delta S_i = n_i\Delta S$：
+用 2.3 步的结论 $\mathbf{t}(-\mathbf{e}\_i) = -\mathbf{t}(\mathbf{e}\_i)$ 替换，并代入 $\Delta S_i = n_i\Delta S$：
 
 $$
-\mathbf{t}(\mathbf{n})\,\Delta S
--\sum_{i=1}^{3}\mathbf{t}(\mathbf{e}_i)\,n_i\,\Delta S
-+\rho\mathbf{b}\,\tfrac13 h\,\Delta S = \mathbf{0}
+\mathbf{t}(\mathbf{n})\ \Delta S
+-\sum_{i=1}^{3}\mathbf{t}(\mathbf{e}_i)\ n_i\ \Delta S
++\rho\mathbf{b}\ \tfrac13 h\ \Delta S = \mathbf{0}
 $$
 
 两边除以 $\Delta S$：
 
 $$
-\mathbf{t}(\mathbf{n}) = \sum_{i=1}^{3} n_i\,\mathbf{t}(\mathbf{e}_i) \;-\; \tfrac13\rho h\,\mathbf{b}
+\mathbf{t}(\mathbf{n}) = \sum_{i=1}^{3} n_i\ \mathbf{t}(\mathbf{e}_i) \quad-\quad \tfrac13\rho h\ \mathbf{b}
 $$
 
 **令 $h\to 0$**（把四面体缩到点 $P$），体积力项消失：
 
 $$
-\boxed{\;\mathbf{t}(\mathbf{n}) = n_1\mathbf{t}(\mathbf{e}_1)+n_2\mathbf{t}(\mathbf{e}_2)+n_3\mathbf{t}(\mathbf{e}_3)\;}
+\boxed{\mathbf{t}(\mathbf{n}) = n_1\mathbf{t}(\mathbf{e}_1)+n_2\mathbf{t}(\mathbf{e}_2)+n_3\mathbf{t}(\mathbf{e}_3)}
 $$
 
 这一步的结论极其重要：**任意方向截面上的面力，都可以由三个坐标面上的面力线性组合得到，权重就是法向分量 $n_i$。**
-换句话说，$\mathbf{t}$ 对 $\mathbf{n}$ 是**线性**的。这不是假设，是由平衡推出的定理（Cauchy 应力定理）。
+换句话说， $\mathbf{t}$ 对 $\mathbf{n}$ 是**线性**的。这不是假设，是由平衡推出的定理（Cauchy 应力定理）。
 
 ### 2.5 第五步：引入应力张量
 
@@ -151,27 +151,34 @@ $$
 t_j(\mathbf{e}_i) = \sigma_{ij}
 $$
 
-即 $\sigma_{ij}$ = "法向为 $\mathbf{e}_i$ 的面上，沿 $\mathbf{e}_j$ 方向的面力分量"。
+即 $\sigma_{ij}$ = "法向为 $\mathbf{e}\_i$ 的面上，沿 $\mathbf{e}\_j$ 方向的面力分量"。
 
 代入 2.4 的结果：
 
 $$
-t_j(\mathbf{n}) = \sum_{i=1}^{3}\sigma_{ij}\,n_i
+t_j(\mathbf{n}) = \sum_{i=1}^{3}\sigma_{ij}\ n_i
 \qquad\Longleftrightarrow\qquad
-\boxed{\;t_i = \sigma_{ij}n_j\ \ \text{或}\ \ \mathbf{t} = \boldsymbol{\sigma}^{\mathsf T}\mathbf{n}\;}
+\boxed{t_i = \sigma_{ij}n_j\ \ \text{或}\ \ \mathbf{t} = \boldsymbol{\sigma}^{\mathsf T}\mathbf{n}}
 $$
 
 写成矩阵：
 
 $$
-\begin{bmatrix}t_1\\t_2\\t_3\end{bmatrix}
-=
+\begin{bmatrix}
+t_1\\
+t_2\\
+t_3
+\end{bmatrix} =
 \begin{bmatrix}
 \sigma_{11} & \sigma_{12} & \sigma_{13}\\
 \sigma_{21} & \sigma_{22} & \sigma_{23}\\
 \sigma_{31} & \sigma_{32} & \sigma_{33}
 \end{bmatrix}^{\mathsf T}
-\begin{bmatrix}n_1\\n_2\\n_3\end{bmatrix}
+\begin{bmatrix}
+n_1\\
+n_2\\
+n_3
+\end{bmatrix}
 $$
 
 **9 个分量的含义**（以图 1 的微元为例）：
@@ -193,7 +200,7 @@ $$
 作用在 $\pm x_2$ 面上的 $\sigma_{21}$ 同理。取矩（逆时针为正）：
 
 $$
-M_3 = \underbrace{\sigma_{12}\,a^2\cdot a}_{\text{一对力偶}} \;-\; \underbrace{\sigma_{21}\,a^2\cdot a}_{\text{反向一对}} \;+\; \underbrace{\rho b\,a^3\cdot \tfrac{a}{2}}_{\text{体积力}} \;=\; 0
+M_3 = \underbrace{\sigma_{12}\ a^2\cdot a}_{\text{一对力偶}} \quad-\quad \underbrace{\sigma_{21}\ a^2\cdot a}_{\text{反向一对}} \quad+\quad \underbrace{\rho b\ a^3\cdot \tfrac{a}{2}}_{\text{体积力}} \quad=\quad 0
 $$
 
 **依据**：角动量守恒（准静态，角加速度为零；H2 保证没有分布力偶）。
@@ -201,7 +208,7 @@ $$
 两边除以 $a^3$：
 
 $$
-\sigma_{12}-\sigma_{21} + \tfrac12\rho b\,a = 0
+\sigma_{12}-\sigma_{21} + \tfrac12\rho b\ a = 0
 $$
 
 令 $a\to 0$，体积力项消失：
@@ -210,10 +217,10 @@ $$
 \sigma_{12}=\sigma_{21}
 $$
 
-同理 $\sigma_{13}=\sigma_{31}$、$\sigma_{23}=\sigma_{32}$。
+同理 $\sigma_{13}=\sigma_{31}$、 $\sigma_{23}=\sigma_{32}$。
 
 $$
-\boxed{\;\sigma_{ij}=\sigma_{ji}\;}
+\boxed{\sigma_{ij}=\sigma_{ji}}
 $$
 
 于是独立分量从 9 个降为 **6 个**：
@@ -226,22 +233,22 @@ $$
 
 ### 2.7 第七步：为什么是"张量"——坐标变换
 
-设新坐标系 $\{\mathbf{e}'_i\}$ 由旧坐标系经正交旋转 $\mathbf{Q}$ 得到，$Q_{ij} = \mathbf{e}'_i\cdot\mathbf{e}_j$，满足 $\mathbf{Q}\mathbf{Q}^{\mathsf T}=\mathbf{I}$。
+设新坐标系 $\lbrace\mathbf{e}'\_i\rbrace$ 由旧坐标系经正交旋转 $\mathbf{Q}$ 得到， $Q_{ij} = \mathbf{e}'\_i\cdot\mathbf{e}\_j$，满足 $\mathbf{Q}\mathbf{Q}^{\mathsf T}=\mathbf{I}$。
 
-同一个面力矢量在两套坐标系下的分量关系为 $t'_i = Q_{ij}t_j$；同一个法向为 $n'_i = Q_{ij}n_j$。
+同一个面力矢量在两套坐标系下的分量关系为 $t'\_i = Q_{ij}t_j$；同一个法向为 $n'\_i = Q_{ij}n_j$。
 
-由 $t'_i = \sigma'_{ij}n'_j$ 与 $t_i=\sigma_{ij}n_j$：
+由 $t'\_i = \sigma'\_{ij}n'\_j$ 与 $t_i=\sigma_{ij}n_j$：
 
 $$
 \sigma'_{ij}n'_j = Q_{ij}t_j = Q_{ij}\sigma_{jk}n_k = Q_{ij}\sigma_{jk}Q_{lk}n'_l
 $$
 
-由于此式对任意 $\mathbf{n}'$ 成立，且 $Q_{lk} = (Q^{\mathsf T})_{kl}$：
+由于此式对任意 $\mathbf{n}'$ 成立，且 $Q_{lk} = (Q^{\mathsf T})\_{kl}$：
 
 $$
-\boxed{\;\sigma'_{ij} = Q_{ik}\,Q_{jl}\,\sigma_{kl}
+\boxed{\sigma'_{ij} = Q_{ik}\ Q_{jl}\ \sigma_{kl}
 \qquad\Longleftrightarrow\qquad
-\boldsymbol{\sigma}' = \mathbf{Q}\,\boldsymbol{\sigma}\,\mathbf{Q}^{\mathsf T}\;}
+\boldsymbol{\sigma}' = \mathbf{Q}\ \boldsymbol{\sigma}\ \mathbf{Q}^{\mathsf T}}
 $$
 
 **依据**：正交变换的定义与"矢量分量随坐标系旋转"的规则。
@@ -273,11 +280,11 @@ $100\times10^6 \times 10^{-4} = 10^4\ \mathrm{N} \approx 1\ \mathrm{ton}$ 力。
 取 $\sigma_{11}=100$ MPa，其余为 0。
 
 - 法向 $\mathbf{n}=(1,0,0)$（垂直于棒轴的截面）：
-  $t_1=\sigma_{11}n_1=100$ MPa，$t_2=t_3=0$。面力全为法向，正应力 100 MPa，剪应力 0。✓
+  $t_1=\sigma_{11}n_1=100$ MPa， $t_2=t_3=0$。面力全为法向，正应力 100 MPa，剪应力 0。✓
 - 法向 $\mathbf{n}=(0,1,0)$（平行于棒轴的截面）：
   $t_i=\sigma_{i2}n_2=0$。**自由表面，无面力**。✓
 - 法向 $\mathbf{n}=(1,1,0)/\sqrt2$（45° 斜截面）：
-  $t_1 = 100\times\tfrac{1}{\sqrt2} = 70.71$ MPa，$t_2=t_3=0$。
+  $t_1 = 100\times\tfrac{1}{\sqrt2} = 70.71$ MPa， $t_2=t_3=0$。
   面力大小 70.71 MPa，方向仍沿 $x_1$。
   正应力 $\sigma_n = n_i t_i = 70.71/\sqrt2 = 50$ MPa；
   剪应力 $\tau=\sqrt{70.71^2-50^2}=50$ MPa。✓
@@ -296,7 +303,7 @@ Pa·m³ = N/m²·m³ = N·m；kg/m³·m/s²·m⁴ = N·m。✓
 
 **误解 1："某点的应力 = 外力 / 截面积。"**
 
-为什么错：$\mathbf{F}/A$ 只有在**均匀受力且截面固定**时才等于该截面上的平均面力；
+为什么错： $\mathbf{F}/A$ 只有在**均匀受力且截面固定**时才等于该截面上的平均面力；
 一点处的应力是 $\Delta S\to0$ 的极限，与外载荷总量不是一一对应。同一根棒，同一点，不同方向的截面上面力不同。
 
 正确说法：外力决定**边界条件**，应力是内部逐点分布的场，靠平衡方程与边界条件求解。
@@ -313,7 +320,7 @@ Pa·m³ = N/m²·m³ = N·m；kg/m³·m/s²·m⁴ = N·m。✓
 为什么错：自重、温度、孔隙压力、相邻材料约束都会产生应力。
 地壳中一块"什么都没压"的岩石，在 2000 m 深处仍有约 49 MPa 的垂向压应力。
 
-**误解 4："$\sigma_{12}$ 和 $\sigma_{21}$ 是两个独立的剪应力。"**
+**误解 4：" $\sigma_{12}$ 和 $\sigma_{21}$ 是两个独立的剪应力。"**
 
 为什么错：角动量守恒要求它们相等。它们描述的是同一个"剪切对"的两个侧面。
 
@@ -321,8 +328,7 @@ Pa·m³ = N/m²·m³ = N·m；kg/m³·m/s²·m⁴ = N·m。✓
 
 ## 5. 自测
 
-1. 某点应力张量（MPa）为
-   $\begin{bmatrix}100&0&0\\0&0&0\\0&0&0\end{bmatrix}$。
+1. 某点应力张量（MPa）只有 $\sigma_{11}=100$，其余分量为零。
    求法向 $\mathbf{n}=(0,0,1)$ 的截面上的面力矢量。
 2. 接上题，求 $\mathbf{n}=(1,0,0)$ 面上沿 $x_1$ 的面力分量。
 3. 说明为什么"过一点有无穷多个截面"不意味着"无穷多个独立应力分量"。
@@ -332,13 +338,13 @@ Pa·m³ = N/m²·m³ = N·m；kg/m³·m/s²·m⁴ = N·m。✓
 <details>
 <summary>参考答案</summary>
 
-1. $t_i=\sigma_{ij}n_j$，只有 $n_3=1$：$t_1=0,t_2=0,t_3=0$。该面是自由面，无面力。
-2. $n_1=1$，$t_1=\sigma_{11}=100$ MPa，其余为 0。
+1. $t_i=\sigma_{ij}n_j$，只有 $n_3=1$： $t_1=0,t_2=0,t_3=0$。该面是自由面，无面力。
+2. $n_1=1$， $t_1=\sigma_{11}=100$ MPa，其余为 0。
 3. 每个截面上的面力都由同一组 9 个（对称后 6 个）张量分量**线性组合**得到：
    $t_i=\sigma_{ij}n_j$。无穷多个方向对应无穷多组 $(n_1,n_2,n_3)$，但底层的独立参数只有 6 个。
 4. 失效在"力矩平衡中体积力项趋于零"这一推理链上的前提：若存在分布力偶 $m$，
    平衡式变为 $\sigma_{12}-\sigma_{21}+m=0$，不再得到对称。此时张量非对称，需 9 个分量。
-5. 应力来自**自重与围压**。取 $\rho=2500\ \mathrm{kg/m^3}$，$z=1\ \mathrm{km}$：
+5. 应力来自**自重与围压**。取 $\rho=2500\ \mathrm{kg/m^3}$， $z=1\ \mathrm{km}$：
    $\sigma_v\approx 2500\times9.81\times1000 \approx 24.5$ MPa。深处岩石处于三向受压状态，
    只是"没有额外载荷"，不是"没有应力"。
 </details>

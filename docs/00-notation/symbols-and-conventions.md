@@ -11,7 +11,7 @@
 |---|---|---|
 | 正负号 | **拉为正**（固体力学） | 岩石力学/地质学常用**压为正** |
 | 主应力排序 | $\sigma_1 \ge \sigma_2 \ge \sigma_3$（代数值） | 有的教材按 $\sigma_1$ 为最大压应力排序 |
-| 张量指标顺序 | $\sigma_{ij}$：$i$ = 作用面法向，$j$ = 力方向 | 少数教材用相反顺序（不影响对称张量的数值） |
+| 张量指标顺序 | $\sigma_{ij}$： $i$ = 作用面法向， $j$ = 力方向 | 少数教材用相反顺序（不影响对称张量的数值） |
 
 换算规则见第 5 节。**在任何一页里，先确认这一页用的是哪套约定，再读公式。**
 
@@ -24,12 +24,12 @@
 | $\mathbf{t}(\mathbf{n})$ | 面力矢量（traction） | 单位面积上的内力，单位 Pa |
 | $n_i$ | 单位法向 | $n_i n_i = 1$ |
 | $\sigma_{ij}$ | 应力张量 | $\mathbf{t} = \boldsymbol{\sigma}\cdot\mathbf{n}$，即 $t_i = \sigma_{ij}n_j$ |
-| $\sigma_n$ | 正应力 | 面力沿法向的投影：$\sigma_n = n_i \sigma_{ij} n_j$ |
-| $\tau$ | 剪应力 | 面力在截面内的分量：$\tau^2 = |\mathbf{t}|^2 - \sigma_n^2$ |
+| $\sigma_n$ | 正应力 | 面力沿法向的投影： $\sigma_n = n_i \sigma_{ij} n_j$ |
+| $\tau$ | 剪应力 | 面力在截面内的分量： $\tau^2 = \vert\mathbf{t}\vert^2 - \sigma_n^2$ |
 | $\sigma_1,\sigma_2,\sigma_3$ | 主应力 | $\sigma_{ij}$ 的三个特征值 |
 | $I_1,I_2,I_3$ | 应力不变量 | 见主应力一页，与坐标系无关 |
 | $p$ | 平均正应力 | $p = I_1/3 = (\sigma_1+\sigma_2+\sigma_3)/3$ |
-| $s_{ij}$ | 偏应力张量 | $s_{ij} = \sigma_{ij} - p\,\delta_{ij}$ |
+| $s_{ij}$ | 偏应力张量 | $s_{ij} = \sigma_{ij} - p\ \delta_{ij}$ |
 | $J_2$ | 偏应力第二不变量 | $J_2 = \tfrac12 s_{ij}s_{ij}$ |
 | $\sigma_{\mathrm{v}}$ | von Mises 等效应力 | $\sigma_{\mathrm{v}} = \sqrt{3J_2}$ |
 | $\theta$ | 截面倾角 | 从 $x_1$ 轴逆时针量到截面**法线** |
@@ -73,12 +73,12 @@
 
 ## 5. 拉正 ↔ 压正 换算
 
-设 $\sigma^{\mathrm{T}}$ 为"拉为正"的应力张量，$\sigma^{\mathrm{C}}$ 为"压为正"的应力张量：
+设 $\sigma^{\mathrm{T}}$ 为"拉为正"的应力张量， $\sigma^{\mathrm{C}}$ 为"压为正"的应力张量：
 
 $$
-\sigma^{\mathrm{C}}_{ij} = -\,\sigma^{\mathrm{T}}_{ij}
+\sigma^{\mathrm{C}}_{ij} = -\ \sigma^{\mathrm{T}}_{ij}
 \qquad\Longleftrightarrow\qquad
-\sigma^{\mathrm{T}}_{ij} = -\,\sigma^{\mathrm{C}}_{ij}
+\sigma^{\mathrm{T}}_{ij} = -\ \sigma^{\mathrm{C}}_{ij}
 $$
 
 推论（**极易出错，务必记住**）：
@@ -121,11 +121,11 @@ $$
 
 读本库只需要下面这些，遇到不熟的可以跳回来看：
 
-- 矢量点积与投影：$\mathbf{a}\cdot\mathbf{b} = a_ib_i$
-- 矩阵乘法：$(\mathbf{A}\mathbf{b})_i = A_{ij}b_j$
-- 特征值问题：$\mathbf{A}\mathbf{x} = \lambda\mathbf{x}$，等价于 $\det(\mathbf{A}-\lambda\mathbf{I})=0$
+- 矢量点积与投影： $\mathbf{a}\cdot\mathbf{b} = a_ib_i$
+- 矩阵乘法： $(\mathbf{A}\mathbf{b})\_i = A_{ij}b_j$
+- 特征值问题： $\mathbf{A}\mathbf{x} = \lambda\mathbf{x}$，等价于 $\det(\mathbf{A}-\lambda\mathbf{I})=0$
 - 实对称矩阵：特征值全为实数，不同特征值的特征向量正交
-- 三角函数：$\cos 2\theta = \cos^2\theta - \sin^2\theta$，$\sin 2\theta = 2\sin\theta\cos\theta$
+- 三角函数： $\cos 2\theta = \cos^2\theta - \sin^2\theta$， $\sin 2\theta = 2\sin\theta\cos\theta$
 
 ---
 

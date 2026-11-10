@@ -54,7 +54,7 @@
 
 ### 2.2 "100 MPa 没有凭空分成两份"
 
-45° 斜截面上 $\sigma_n=50\ \mathrm{MPa}$、$\tau=50\ \mathrm{MPa}$，但面力大小是
+45° 斜截面上 $\sigma_n=50\ \mathrm{MPa}$、 $\tau=50\ \mathrm{MPa}$，但面力大小是
 
 $$
 |\mathbf{t}|=\sqrt{\sigma_n^2+\tau^2}=\sqrt{50^2+50^2}=70.71\ \mathrm{MPa},
@@ -71,7 +71,7 @@ $$
 \boldsymbol{\sigma}\mathbf{n}=\lambda\mathbf{n},
 $$
 
-$\lambda$ 是特征值（主应力），$\mathbf{n}$ 是特征向量（主方向）。
+$\lambda$ 是特征值（主应力）， $\mathbf{n}$ 是特征向量（主方向）。
 没有新的载荷，只是换了一组让剪应力为零的坐标轴。
 
 ### 2.4 "静水压力下等效应力为零，但材料仍受力"
@@ -133,7 +133,7 @@ $$
 
 ### 3.4 45° 的 50/50 要给出完整核对，而不只是结论
 
-单轴 $\sigma_x=100\ \mathrm{MPa}$、$\sigma_y=\tau_{xy}=0$，代入变换公式：
+单轴 $\sigma_x=100\ \mathrm{MPa}$、 $\sigma_y=\tau_{xy}=0$，代入变换公式：
 
 $$
 \sigma_n=\frac{100}{2}+\frac{100}{2}\cos2\theta,\qquad
@@ -177,15 +177,15 @@ $\tau_{\max}$ 始终是 60 MPa，莫尔圆的大小却变了。图见
 | 应力状态 | $\sigma_1,\sigma_2,\sigma_3$ / MPa | $\tau_{\max}$ / MPa | $\sigma_v$ / MPa | 要说明的点 |
 |---|---|---|---|---|
 | 单轴拉伸 100 | $100,\ 0,\ 0$ | 50 | 100 | 等效应力等于单轴应力，这是标定 $\sqrt3$ 的基准 |
-| 纯剪切 50 | $50,\ 0,\ -50$ | 50 | 86.6 | $\tau_{\max}$ 与单轴相同，$\sigma_v$ 却低 13.4% |
+| 纯剪切 50 | $50,\ 0,\ -50$ | 50 | 86.6 | $\tau_{\max}$ 与单轴相同， $\sigma_v$ 却低 13.4% |
 | 静水拉伸 100 | $100,\ 100,\ 100$ | 0 | 0 | 三个方向同增，只改变体积，不改变形状 |
 | 双轴拉伸 100/100 | $100,\ 100,\ 0$ | 50 | 100 | 与单轴 100 的 Mises 值相同，但莫尔圆不同 |
 | 一般三轴 | $100,\ 40,\ -20$ | 60 | 103.9 | $\tau_{\max}$ 只差 60，等效应力已超过 100 |
 
 计算细节：
 
-- 纯剪切：$\sigma_v=\sqrt{\tfrac12[(50-0)^2+(0+50)^2+(-50-50)^2]}=\sqrt{7500}=86.60$；
-- 一般三轴：$\sqrt{\tfrac12[60^2+60^2+120^2]}=\sqrt{10800}=103.92$。
+- 纯剪切： $\sigma_v=\sqrt{\tfrac12[(50-0)^2+(0+50)^2+(-50-50)^2]}=\sqrt{7500}=86.60$；
+- 一般三轴： $\sqrt{\tfrac12[60^2+60^2+120^2]}=\sqrt{10800}=103.92$。
 
 这张表回答了一个高频疑问：**"最大剪应力一样，为什么等效应力不一样？"**
 因为 $\tau_{\max}$ 只看两头，von Mises 把三个主应力差都算了进去。
@@ -197,16 +197,16 @@ $\tau_{\max}$ 始终是 60 MPa，莫尔圆的大小却变了。图见
 **问：三个主方向一定互相垂直吗？**
 
 答：实对称矩阵属于不同特征值的特征向量必正交。证明只用两步：
-$\mathbf{n}_1\cdot\boldsymbol\sigma\mathbf{n}_2=\lambda_2\mathbf{n}_1\cdot\mathbf{n}_2$，
-又由对称性等于 $\lambda_1\mathbf{n}_1\cdot\mathbf{n}_2$；
-若 $\lambda_1\ne\lambda_2$，只能 $\mathbf{n}_1\cdot\mathbf{n}_2=0$。
+$\mathbf{n}\_1\cdot\boldsymbol\sigma\mathbf{n}\_2=\lambda_2\mathbf{n}\_1\cdot\mathbf{n}\_2$，
+又由对称性等于 $\lambda_1\mathbf{n}\_1\cdot\mathbf{n}\_2$；
+若 $\lambda_1\ne\lambda_2$，只能 $\mathbf{n}\_1\cdot\mathbf{n}\_2=0$。
 若两个特征值相等（重根），主方向不唯一，可任取一组正交基；静水应力时三个特征值都相等，
 任意方向都是主方向。详见 [M1-03 §3](../docs/01-stress/03-principal-stress.md)。
 
 **问：单轴拉伸时，为什么最大剪应力在 45° 面，而不是在 90° 面？**
 
 答：90° 面（与棒轴平行）上正应力为 0，剪应力也为 0——那是自由面。
-45° 面正好把 100 MPa 均分给正应力与剪应力两个投影，$\tau=50$ 达到最大。
+45° 面正好把 100 MPa 均分给正应力与剪应力两个投影， $\tau=50$ 达到最大。
 这也是拉伸试件断口常呈 45° 斜面的原因（延性材料）；
 脆性材料则沿垂直于拉应力的面断开，因为受拉应力控制。
 
@@ -239,7 +239,7 @@ $\mathbf{n}_1\cdot\boldsymbol\sigma\mathbf{n}_2=\lambda_2\mathbf{n}_1\cdot\mathb
 | 时间 | 内容 | 动作 |
 |---|---|---|
 | 0–5 min | 抛问题 | "同一根棒，应力为什么会变？" 先让学生猜 |
-| 5–15 min | 面力与张量 | 板书 $\mathbf{t}=\boldsymbol\sigma\mathbf{n}$，用 45° 例子算 $|\mathbf{t}|$ |
+| 5–15 min | 面力与张量 | 板书 $\mathbf{t}=\boldsymbol\sigma\mathbf{n}$，用 45° 例子算 $\vert\mathbf{t}\vert$ |
 | 15–25 min | 主应力 | 写 $\boldsymbol\sigma\mathbf{n}=\lambda\mathbf{n}$，说明"没有新力" |
 | 25–35 min | 莫尔圆 | 画单轴 100 的圆，标 0/45/90 三个点 |
 | 35–42 min | 等效应力 | 三个 100 MPa 的例子，让学生自己算出 0 |

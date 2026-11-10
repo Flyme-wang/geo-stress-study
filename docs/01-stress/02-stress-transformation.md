@@ -11,20 +11,20 @@
 对二维应力状态 $(\sigma_x,\sigma_y,\tau_{xy})$，法线从 $x$ 轴逆时针量起角度为 $\theta$ 的斜截面上：
 
 $$
-\boxed{\;\sigma_n = \frac{\sigma_x+\sigma_y}{2}+\frac{\sigma_x-\sigma_y}{2}\cos 2\theta+\tau_{xy}\sin 2\theta\;}
+\boxed{\sigma_n = \frac{\sigma_x+\sigma_y}{2}+\frac{\sigma_x-\sigma_y}{2}\cos 2\theta+\tau_{xy}\sin 2\theta}
 $$
 
 $$
-\boxed{\;\tau = -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta+\tau_{xy}\cos 2\theta\;}
+\boxed{\tau = -\frac{\sigma_x-\sigma_y}{2}\sin 2\theta+\tau_{xy}\cos 2\theta}
 $$
 
 三点推论：
 
-1. **正应力 + 剪应力不是把原载荷"分掉"**。它们的平方和等于面力大小的平方：$\sigma_n^2+\tau^2=|\mathbf{t}|^2$。
+1. **正应力 + 剪应力不是把原载荷"分掉"**。它们的平方和等于面力大小的平方： $\sigma_n^2+\tau^2=|\mathbf{t}|^2$。
    投影不改变面力，只是把同一个矢量换了一个分解方式。
-2. **角度会翻倍**（$2\theta$）。这是后面莫尔圆能画成圆的根源。
-3. 单向拉伸 100 MPa 时，$\theta=45^\circ$ 的截面上正应力 50 MPa、剪应力 50 MPa。
-   这不是巧合：$\cos 90^\circ=0$，一半项消失，剩下 $100/2$。
+2. **角度会翻倍**（ $2\theta$）。这是后面莫尔圆能画成圆的根源。
+3. 单向拉伸 100 MPa 时， $\theta=45^\circ$ 的截面上正应力 50 MPa、剪应力 50 MPa。
+   这不是巧合： $\cos 90^\circ=0$，一半项消失，剩下 $100/2$。
 
 ---
 
@@ -68,10 +68,10 @@ $$
 \sigma_n=\sigma_x\cos^2\theta+2\tau_{xy}\sin\theta\cos\theta+\sigma_y\sin^2\theta
 $$
 
-**依据**：投影的坐标表达式；两个 $\tau$ 项合并（$\tau_{xy}=\tau_{yx}$）。
+**依据**：投影的坐标表达式；两个 $\tau$ 项合并（ $\tau_{xy}=\tau_{yx}$）。
 
 **步骤 3｜用倍角公式化简。**
-代入 $\cos^2\theta=\frac{1+\cos2\theta}{2}$，$\sin^2\theta=\frac{1-\cos2\theta}{2}$，$2\sin\theta\cos\theta=\sin2\theta$：
+代入 $\cos^2\theta=\frac{1+\cos2\theta}{2}$， $\sin^2\theta=\frac{1-\cos2\theta}{2}$， $2\sin\theta\cos\theta=\sin2\theta$：
 
 $$
 \sigma_n=\frac{\sigma_x+\sigma_y}{2}+\frac{\sigma_x-\sigma_y}{2}\cos2\theta+\tau_{xy}\sin2\theta
@@ -134,9 +134,9 @@ $$
 
 ## 3. 数值检验
 
-### 3.1 单轴拉伸 100 MPa，$\theta=45^\circ$
+### 3.1 单轴拉伸 100 MPa， $\theta=45^\circ$
 
-$\sigma_x=100$，$\sigma_y=0$，$\tau_{xy}=0$：
+$\sigma_x=100$， $\sigma_y=0$， $\tau_{xy}=0$：
 
 $$
 \sigma_n=50+50\cos90^\circ = 50\ \mathrm{MPa}
@@ -160,7 +160,7 @@ $$
 面力矢量始终沿 $x$ 方向、大小 70.71（因为它只是被"投影"到斜面上，分量 $t_1$ 被 $\cos\theta$ 缩放）。
 把它拆成"垂直于斜面"和"沿斜面"两个方向，正好各 50。
 
-> 图 2：左图为 45° 斜截面上的面力分解；右图为对应的莫尔圆位置（$\theta=45^\circ$ 对应圆心角 $90^\circ$）。
+> 图 2：左图为 45° 斜截面上的面力分解；右图为对应的莫尔圆位置（ $\theta=45^\circ$ 对应圆心角 $90^\circ$）。
 > 文件：`assets/figures/fig02-oblique-plane-45.png`
 
 ### 3.2 特殊角度自检表
@@ -173,17 +173,17 @@ $$
 | $60^\circ$ | 斜 60° | $25$ | $-43.3$ |
 | $90^\circ$ | 垂直 $y$ 轴（平行棒轴） | $0$ | $0$ |
 
-$\theta=90^\circ$ 时 $\sigma_n=0$、$\tau=0$：这正是"棒侧面是自由表面"的数学表达。✓
+$\theta=90^\circ$ 时 $\sigma_n=0$、 $\tau=0$：这正是"棒侧面是自由表面"的数学表达。✓
 
 ### 3.3 纯剪状态
 
-$\sigma_x=\sigma_y=0$，$\tau_{xy}=50$：
+$\sigma_x=\sigma_y=0$， $\tau_{xy}=50$：
 
 $$
 \sigma_n=50\sin2\theta,\qquad \tau=50\cos2\theta
 $$
 
-$\theta=0$：$\sigma_n=0,\tau=50$；$\theta=45^\circ$：$\sigma_n=50,\tau=0$。
+$\theta=0$： $\sigma_n=0,\tau=50$； $\theta=45^\circ$： $\sigma_n=50,\tau=0$。
 **纯剪的 45° 截面上没有剪应力**——这就是主方向。见下一篇。
 
 ---
@@ -192,20 +192,20 @@ $\theta=0$：$\sigma_n=0,\tau=50$；$\theta=45^\circ$：$\sigma_n=50,\tau=0$。
 
 **误解 1："100 MPa 被分成了 50 + 50 两份力。"**
 
-为什么错：$50^2+50^2=5000 < 100^2$。分量平方和小于合矢量平方，说明这是**同一矢量的两次投影**，不是"分成两份"。
+为什么错： $50^2+50^2=5000 \lt  100^2$。分量平方和小于合矢量平方，说明这是**同一矢量的两次投影**，不是"分成两份"。
 面力的法向分量与切向分量**不是**两个独立的力，而是同一个面力在两组正交方向上的坐标。
 
 正确说法：载荷没有变，变的是截面；50/50 是"70.71 MPa 面力"在两个方向上的投影。
 
 **误解 2："正应力一定小于原来的拉应力。"**
 
-为什么错：$\sigma_n$ 在 $\theta=0$ 处等于 100，在 $45^\circ$ 处等于 50，在 $90^\circ$ 处为 0。
-若存在双向应力，$\sigma_n$ 可能大于任一单向分量（例如 $\sigma_x=\sigma_y=100$ 时为 100，任何方向都是 100）。
+为什么错： $\sigma_n$ 在 $\theta=0$ 处等于 100，在 $45^\circ$ 处等于 50，在 $90^\circ$ 处为 0。
+若存在双向应力， $\sigma_n$ 可能大于任一单向分量（例如 $\sigma_x=\sigma_y=100$ 时为 100，任何方向都是 100）。
 
 **误解 3："平面应力与平面应变公式不同。"**
 
 为什么错：上述公式只依赖"某个方向上的应力分量为零"，与位移约束无关。
-平面应力（$\sigma_z=0$）与平面应变（$\varepsilon_z=0$，但 $\sigma_z\ne0$）在 $x$–$y$ 面内的**应力变换公式相同**，
+平面应力（ $\sigma_z=0$）与平面应变（ $\varepsilon_z=0$，但 $\sigma_z\ne0$）在 $x$– $y$ 面内的**应力变换公式相同**，
 区别只在 $\sigma_z$ 的取值和本构关系。
 
 ---
@@ -221,14 +221,14 @@ $\theta=0$：$\sigma_n=0,\tau=50$；$\theta=45^\circ$：$\sigma_n=50,\tau=0$。
 <details>
 <summary>参考答案</summary>
 
-1. $\sigma_n=50$，$\tau=0$。各向同性面内等双轴拉伸：任何方向都是主方向，无剪应力。
+1. $\sigma_n=50$， $\tau=0$。各向同性面内等双轴拉伸：任何方向都是主方向，无剪应力。
 2. $\sigma_n=50+30\cos60^\circ+40\sin60^\circ=50+15+34.64=99.64$ MPa；
    $\tau=-30\sin60^\circ+40\cos60^\circ=-25.98+20=-5.98$ MPa。
-3. 取 $\sigma_x=\sigma_y=0$：$\sigma_n=\tau_{xy}\sin2\theta$。令 $\theta=0$，则 $\sigma_n=0$ 而 $\tau=\tau_{xy}\ne0$。
+3. 取 $\sigma_x=\sigma_y=0$： $\sigma_n=\tau_{xy}\sin2\theta$。令 $\theta=0$，则 $\sigma_n=0$ 而 $\tau=\tau_{xy}\ne0$。
    这就是纯剪状态在原坐标面上的表现。
-4. 差 $90^\circ$，即 $\theta\to\theta+90^\circ$：$\cos2\theta$、$\sin2\theta$ 均反号，
-   相当于把 $\sigma_x$ 与 $\sigma_y$ 互换、$\tau$ 反号。数值会完全不同（例如 45° 时 50 vs 0）。
-5. $\theta=90^\circ$：$\sigma_n=\sigma_x\cos^2 90^\circ=0$，$\tau=-\tfrac{\sigma_x}{2}\sin180^\circ=0$。
+4. 差 $90^\circ$，即 $\theta\to\theta+90^\circ$： $\cos2\theta$、 $\sin2\theta$ 均反号，
+   相当于把 $\sigma_x$ 与 $\sigma_y$ 互换、 $\tau$ 反号。数值会完全不同（例如 45° 时 50 vs 0）。
+5. $\theta=90^\circ$： $\sigma_n=\sigma_x\cos^2 90^\circ=0$， $\tau=-\tfrac{\sigma_x}{2}\sin180^\circ=0$。
    纵向截面是自由表面，没有材料跨越它传递内力。
 </details>
 

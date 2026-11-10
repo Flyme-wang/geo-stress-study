@@ -97,7 +97,7 @@ graph LR
 3. **推导**：编号步骤，每一步只做一件事，并写清依据（平衡方程、几何关系、张量变换律）。
 4. **数值检验**：用可手算的算例核对结论（例如单轴 100 MPa 的 45° 斜截面）。
 5. **常见误解**：明确写出"错的读法"和"为什么错"。
-6. **自测**：3–5 题，答案折叠在文末。
+6. **自测**：3–5 题，答案放在文末。
 
 写作规范细则见 [`docs/00-notation/writing-style.md`](docs/00-notation/writing-style.md)。
 
@@ -109,9 +109,9 @@ graph LR
 
 - **拉为正**（固体力学约定）：拉应力为正，压应力为负。地质学/岩石力学常反过来（压为正），
   在 [`06-from-solid-to-geomechanics.md`](docs/01-stress/06-from-solid-to-geomechanics.md) 给出完整换算表。
-- 应力张量 $\sigma_{ij}$：$i$ 表示**作用面法向**，$j$ 表示**力的方向**。
-- 主应力排序：$\sigma_1 \ge \sigma_2 \ge \sigma_3$（代数大小，考虑正负号）。
-- 单位：SI 为 Pa；工程常用 MPa（$1\ \mathrm{MPa} = 10^6\ \mathrm{Pa}$）。
+- 应力张量 $\sigma_{ij}$： $i$ 表示**作用面法向**， $j$ 表示**力的方向**。
+- 主应力排序： $\sigma_1 \ge \sigma_2 \ge \sigma_3$（代数大小，考虑正负号）。
+- 单位：SI 为 Pa；工程常用 MPa（ $1\ \mathrm{MPa} = 10^6\ \mathrm{Pa}$）。
 
 ---
 
