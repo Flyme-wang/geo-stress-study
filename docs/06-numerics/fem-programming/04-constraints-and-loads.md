@@ -51,8 +51,7 @@
 $$
 \begin{bmatrix}K_{ff} & K_{fc}\\ K_{cf} & K_{cc}\end{bmatrix}
 \begin{bmatrix}u_f\\ u_c\end{bmatrix}
-=
-\begin{bmatrix}F_f\\ F_c\end{bmatrix}
+= \begin{bmatrix}F_f\\ F_c\end{bmatrix}
 $$
 
 **依据**：这只是把方程按未知/已知分组，没有做任何近似。
@@ -125,8 +124,7 @@ $$
 
 $$
 \left(K+\alpha \mathbf{e}_i\mathbf{e}_i^{\mathrm{T}}\right)u_\alpha
-=
-F+\alpha \bar u_i \mathbf{e}_i \qquad (6)
+= F+\alpha \bar u_i \mathbf{e}_i \qquad (6)
 $$
 
 其中 $\mathbf{e}_i$ 是第 $i$ 个单位向量。矩阵只在 $(i,i)$ 位置加了 $\alpha$，右端只改了第 $i$ 项。
@@ -149,8 +147,7 @@ $$
 
 $$
 \left(K+\alpha\mathbf{e}_i\mathbf{e}_i^{\mathrm{T}}\right)^{-1}
-=
-K^{-1}-\frac{\alpha K^{-1}\mathbf{e}_i\mathbf{e}_i^{\mathrm{T}}K^{-1}}
+= K^{-1}-\frac{\alpha K^{-1}\mathbf{e}_i\mathbf{e}_i^{\mathrm{T}}K^{-1}}
 {1+\alpha (K^{-1})_{ii}}
 $$
 
@@ -246,12 +243,9 @@ $$
 $$
 \begin{bmatrix}2&0\\0&2\end{bmatrix}
 \begin{bmatrix}u_1\\u_3\end{bmatrix}
-=
-\begin{bmatrix}1\\0\end{bmatrix}
--
+= \begin{bmatrix}1\\0\end{bmatrix} -
 \begin{bmatrix}-1\\0\end{bmatrix}\times0.25
-=
-\begin{bmatrix}1.25\\0.25\end{bmatrix}
+= \begin{bmatrix}1.25\\0.25\end{bmatrix}
 $$
 
 解得 $u_1=0.625$、 $u_3=0.125$。
@@ -286,15 +280,17 @@ $$
 
 ### 3.3 三类荷载的装配
 
-![图 12　同一约束的三种写法：消元、改行列与罚法](../../../assets/figures/fig12-constraint-methods.png)
+![图 12 同一约束的三种写法：消元、改行列与罚法](../../../assets/figures/fig12-constraint-methods.png)
 
-*图 12　同一个约束，三种写法。左一为原方程；中间两幅只改矩阵与右端项；
-最右的罚法保留矩阵结构，但对角被 $\alpha$ 支配。*
+> 图 12：同一个约束，三种写法。左一为原方程；中间两幅只改矩阵与右端项；
+> 最右的罚法保留矩阵结构，但对角被 $\alpha$ 支配。
+> 文件：`assets/figures/fig12-constraint-methods.png`
 
-![图 13　三类荷载的等效节点力与组装后的 F](../../../assets/figures/fig13-load-vector.png)
+![图 13 三类荷载的等效节点力与组装后的 F](../../../assets/figures/fig13-load-vector.png)
 
-*图 13　2 m × 1 m × 0.1 m 的 Q4，同时受体力、右边界面力与节点集中力。
-左：物理分布；右：组装后的 8 个节点分量。*
+> 图 13：2 m × 1 m × 0.1 m 的 Q4，同时受体力、右边界面力与节点集中力。
+> 左：物理分布；右：组装后的 8 个节点分量。
+> 文件：`assets/figures/fig13-load-vector.png`
 
 算例参数： $E=300\ \mathrm{GPa}$、 $\nu=0.3$、 $t=0.1\ \mathrm{m}$。
 

@@ -72,11 +72,11 @@ $$
 **依据**：双线性插值。四个角点的坐标确定一个双线性映射；
 当四边形退化为平行四边形时，它进一步退化为仿射映射。
 
+![图 9 等参映射：同一组形函数既插值坐标，也插值位移](../../../assets/figures/fig09-isoparametric-jacobian.png)
+
 > 图 9：左边是母单元，右边是由四个物理节点围成的实际单元。
 > 同一个 $(\xi,\eta)$ 在两边的位置由上式对应。
 > 文件：`assets/figures/fig09-isoparametric-jacobian.png`
-
-![图 9 等参映射：同一组形函数既插值坐标，也插值位移](../../../assets/figures/fig09-isoparametric-jacobian.png)
 
 ### 2.3 雅可比矩阵与面积元
 
@@ -138,8 +138,7 @@ $$
 \dfrac{\partial N_i}{\partial \xi}\\[6pt]
 \dfrac{\partial N_i}{\partial \eta}
 \end{bmatrix}
-=
-J
+= J
 \begin{bmatrix}
 \dfrac{\partial N_i}{\partial x}\\[6pt]
 \dfrac{\partial N_i}{\partial y}
@@ -154,8 +153,7 @@ $$
 N_{i,x}\\
 N_{i,y}
 \end{bmatrix}
-=
-J^{-1}
+= J^{-1}
 \begin{bmatrix}
 N_{i,\xi}\\
 N_{i,\eta}
@@ -220,11 +218,11 @@ $+0.1443$、 $-0.1443$。**同一个单元，一半高斯点正、一半负，�
 母单元整条中线被压到物理平面上的一点 $(0.5,0.5)$。映射不再是一一对应，
 这就是"折叠"。
 
+![图 8 同一个单元、同一组坐标：节点顺序改变的是形函数与物理节点的对应](../../../assets/figures/fig08-node-ordering-detj.png)
+
 > 图 8：三种顺序的连线与 detJ。右图的红色区域是映射折叠区，
 > 虚线 $\eta=0$ 上 detJ 为零。
 > 文件：`assets/figures/fig08-node-ordering-detj.png`
-
-![图 8 同一个单元、同一组坐标：节点顺序改变的是形函数与物理节点的对应](../../../assets/figures/fig08-node-ordering-detj.png)
 
 ### 2.6 程序里怎么检查
 
@@ -344,7 +342,7 @@ py -3 tools/verify_fem_notes.py
 
 1. $x=\tfrac12(1+\xi)$、 $y=\tfrac12(1+\eta)$，故 $J=\mathrm{diag}(0.5,0.5)$， $\det J=0.25$。
    母单元面积是 4，物理面积是 1，面积缩放因子就是 $1/4$，所以 detJ 是 0.25，不是 1。
-2. $J=\begin{bmatrix}-\eta/2 & 0\\ -\xi/2 & 1/2\end{bmatrix}$， $\det J=-\eta/4$。
+2. 该单元的雅可比第一行为 $(-\eta/2,\ 0)$、第二行为 $(-\xi/2,\ 1/2)$，故 $\det J=-\eta/4$。
    在 $\eta=0$（母单元水平中线）上为零，整条线映到同一点 $(0.5,0.5)$。
 3. 不能用。有一个高斯点 detJ 为负，说明该区域映射翻转；积分会把正负贡献抵消，
    得到的刚度没有物理意义。必须改节点顺序或修网格。

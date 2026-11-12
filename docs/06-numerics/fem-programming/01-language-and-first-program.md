@@ -54,9 +54,7 @@
 
 $$
 \int_\Omega \delta\boldsymbol\varepsilon^{\mathrm{T}}\boldsymbol\sigma\ \mathrm{d}\Omega
-=
-\int_\Omega \delta\mathbf{u}^{\mathrm{T}}\mathbf{b}\ \mathrm{d}\Omega
-+
+= \int_\Omega \delta\mathbf{u}^{\mathrm{T}}\mathbf{b}\ \mathrm{d}\Omega +
 \int_{\Gamma_t}\delta\mathbf{u}^{\mathrm{T}}\mathbf{t}\ \mathrm{d}\Gamma
 $$
 
@@ -79,8 +77,7 @@ $$
 
 $$
 \delta d_e^{\mathrm{T}}\left(\int_\Omega B^{\mathrm{T}}D B\ \mathrm{d}\Omega\right)d_e
-=
-\delta d_e^{\mathrm{T}}\left(\int_\Omega N^{\mathrm{T}}\mathbf{b}\ \mathrm{d}\Omega
+= \delta d_e^{\mathrm{T}}\left(\int_\Omega N^{\mathrm{T}}\mathbf{b}\ \mathrm{d}\Omega
 +\int_{\Gamma_t}N^{\mathrm{T}}\mathbf{t}\ \mathrm{d}\Gamma\right)
 $$
 
@@ -287,10 +284,10 @@ py -3 tools/verify_fem_notes.py
 脚本对本篇的 $K_{11}$、四个位移、反力合力、3% 偏差逐项断言；
 任何一项不通过都会以非零状态退出。
 
+![图 7 有限元的四步流程](../../../assets/figures/fig07-fem-workflow.png)
+
 > 图 7：有限元的四步流程。注意"后处理"不在求解链上——它只改变"怎么看结果"，不改变 $u$。
 > 文件：`assets/figures/fig07-fem-workflow.png`
-
-![图 7 有限元的四步流程](../../../assets/figures/fig07-fem-workflow.png)
 
 ---
 
