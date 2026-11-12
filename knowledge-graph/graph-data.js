@@ -434,6 +434,76 @@ window.GRAPH = {
       "summary": "读 .msg、判断增量塌缩的物理原因、确定调参优先级。"
     },
     {
+      "id": "M6-P",
+      "label": "P 有限元编程基础",
+      "type": "module",
+      "status": "done",
+      "col": 8,
+      "row": 0,
+      "doc": "docs/06-numerics/fem-programming/README.md",
+      "summary": "11 篇公众号系列整理为 5 章：从 Ku=F 的四步流程，到手写 Q4、组装、约束荷载与求解器。"
+    },
+    {
+      "id": "M6-P1",
+      "label": "语言与第一个程序",
+      "type": "topic",
+      "status": "done",
+      "col": 8,
+      "row": 1,
+      "doc": "docs/06-numerics/fem-programming/01-language-and-first-program.md",
+      "summary": "离散、单元刚度、组装、求解四步；单 Q4 算例手算出位移与反力。"
+    },
+    {
+      "id": "M6-P2",
+      "label": "节点顺序与雅可比",
+      "type": "topic",
+      "status": "done",
+      "col": 8,
+      "row": 2,
+      "doc": "docs/06-numerics/fem-programming/02-node-ordering-and-jacobian.md",
+      "summary": "形函数配错角点会让 detJ 变号；J 与 dA=detJ dξdη 的完整推导。"
+    },
+    {
+      "id": "M6-P3",
+      "label": "组装与稀疏存储",
+      "type": "topic",
+      "status": "done",
+      "col": 8,
+      "row": 3,
+      "doc": "docs/06-numerics/fem-programming/03-assembly-and-sparse-storage.md",
+      "summary": "K(I,J)+=Ke(a,b)；Skyline / COO / CSR 的存储账与查找过程。"
+    },
+    {
+      "id": "M6-P4",
+      "label": "约束与荷载",
+      "type": "topic",
+      "status": "done",
+      "col": 8,
+      "row": 4,
+      "doc": "docs/06-numerics/fem-programming/04-constraints-and-loads.md",
+      "summary": "消元/改行列/罚法三法对比；罚法残差 ~ 反力/α；三类荷载的积分公式。"
+    },
+    {
+      "id": "M6-P5",
+      "label": "线性方程组解法",
+      "type": "topic",
+      "status": "done",
+      "col": 8,
+      "row": 5,
+      "doc": "docs/06-numerics/fem-programming/05-linear-solvers.md",
+      "summary": "Cholesky 与 O(N³)/O(Nb²) 代价；CG/PCG 与条件数；残差判据不单调。"
+    },
+    {
+      "id": "C2",
+      "label": "案例：FEM 编程系列",
+      "type": "case",
+      "status": "done",
+      "col": 8,
+      "row": 6,
+      "doc": "cases/2026-11-12-fem-programming-series.md",
+      "summary": "11 篇推文的逐篇拆解：论证链、需要补强的五处、三处订正与课堂用法。"
+    },
+    {
       "id": "C1",
       "label": "案例：五种应力概念",
       "type": "case",
@@ -649,6 +719,66 @@ window.GRAPH = {
       "from": "M6",
       "to": "M6-05",
       "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-P",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P1",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P2",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P3",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P4",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P5",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P1",
+      "to": "M6-P2",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P2",
+      "to": "M6-P3",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P3",
+      "to": "M6-P4",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P4",
+      "to": "M6-P5",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P5",
+      "to": "M6-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "C2",
+      "to": "M6-P",
+      "kind": "case"
     },
     {
       "from": "M0",
