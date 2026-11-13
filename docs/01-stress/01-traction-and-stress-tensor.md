@@ -94,7 +94,7 @@ $$
 
 在点 $P$ 附近取一个四面体：
 
-- 三个面分别平行于三个坐标面，外法向为 $-\mathbf{e}\_1, -\mathbf{e}\_2, -\mathbf{e}\_3$，面积记为 $\Delta S_1,\Delta S_2,\Delta S_3$；
+- 三个面分别平行于三个坐标面，外法向为 $-\mathbf{e}_1, -\mathbf{e}_2, -\mathbf{e}_3$，面积记为 $\Delta S_1,\Delta S_2,\Delta S_3$；
 - 第四个斜面外法向为 $\mathbf{n}$，面积 $\Delta S$；
 - 四面体高 $h$（ $P$ 到斜面的距离）。
 
@@ -104,7 +104,7 @@ $$
 \Delta S_i = n_i\ \Delta S
 $$
 
-**依据**：面积投影定理——一个平面面积在法向为 $\mathbf{e}\_i$ 的平面上的投影，等于原面积乘以两法向夹角余弦，而 $\cos\angle(\mathbf{n},\mathbf{e}\_i)=n_i$。
+**依据**：面积投影定理——一个平面面积在法向为 $\mathbf{e}_i$ 的平面上的投影，等于原面积乘以两法向夹角余弦，而 $\cos\angle(\mathbf{n},\mathbf{e}_i)=n_i$。
 可自行验证： $n_i$ 满足 $n_1^2+n_2^2+n_3^2=1$，三个投影面积平方和等于 $\Delta S^2$，与几何一致。
 
 **力平衡**：
@@ -118,7 +118,7 @@ $$
 
 **依据**：四面体整体静力平衡（H3）。
 
-用 2.3 步的结论 $\mathbf{t}(-\mathbf{e}\_i) = -\mathbf{t}(\mathbf{e}\_i)$ 替换，并代入 $\Delta S_i = n_i\Delta S$：
+用 2.3 步的结论 $\mathbf{t}(-\mathbf{e}_i) = -\mathbf{t}(\mathbf{e}_i)$ 替换，并代入 $\Delta S_i = n_i\Delta S$：
 
 $$
 \mathbf{t}(\mathbf{n})\ \Delta S
@@ -151,7 +151,7 @@ $$
 t_j(\mathbf{e}_i) = \sigma_{ij}
 $$
 
-即 $\sigma_{ij}$ = "法向为 $\mathbf{e}\_i$ 的面上，沿 $\mathbf{e}\_j$ 方向的面力分量"。
+即 $\sigma_{ij}$ = "法向为 $\mathbf{e}_i$ 的面上，沿 $\mathbf{e}_j$ 方向的面力分量"。
 
 代入 2.4 的结果：
 
@@ -233,17 +233,17 @@ $$
 
 ### 2.7 第七步：为什么是"张量"——坐标变换
 
-设新坐标系 $\lbrace\mathbf{e}'\_i\rbrace$ 由旧坐标系经正交旋转 $\mathbf{Q}$ 得到， $Q_{ij} = \mathbf{e}'\_i\cdot\mathbf{e}\_j$，满足 $\mathbf{Q}\mathbf{Q}^{\mathsf T}=\mathbf{I}$。
+设新坐标系 $\lbrace\mathbf{e}'_i\rbrace$ 由旧坐标系经正交旋转 $\mathbf{Q}$ 得到， $Q_{ij} = \mathbf{e}'_i\cdot\mathbf{e}_j$，满足 $\mathbf{Q}\mathbf{Q}^{\mathsf T}=\mathbf{I}$。
 
-同一个面力矢量在两套坐标系下的分量关系为 $t'\_i = Q_{ij}t_j$；同一个法向为 $n'\_i = Q_{ij}n_j$。
+同一个面力矢量在两套坐标系下的分量关系为 $t'_i = Q_{ij}t_j$；同一个法向为 $n'_i = Q_{ij}n_j$。
 
-由 $t'\_i = \sigma'\_{ij}n'\_j$ 与 $t_i=\sigma_{ij}n_j$：
+由 $t'_i = \sigma'_{ij}n'_j$ 与 $t_i=\sigma_{ij}n_j$：
 
 $$
 \sigma'_{ij}n'_j = Q_{ij}t_j = Q_{ij}\sigma_{jk}n_k = Q_{ij}\sigma_{jk}Q_{lk}n'_l
 $$
 
-由于此式对任意 $\mathbf{n}'$ 成立，且 $Q_{lk} = (Q^{\mathsf T})\_{kl}$：
+由于此式对任意 $\mathbf{n}'$ 成立，且 $Q_{lk} = (Q^{\mathsf T})_{kl}$：
 
 $$
 \boxed{\sigma'_{ij} = Q_{ik}\ Q_{jl}\ \sigma_{kl}
