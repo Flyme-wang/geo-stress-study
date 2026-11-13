@@ -3,7 +3,7 @@
 window.GRAPH = {
   "meta": {
     "title": "geo-stress-study 力学知识图谱",
-    "subtitle": "从一个点的应力，到地应力场与数值实现",
+    "subtitle": "从一个点的应力，到地应力场、数值实现与流体流动",
     "version": "0.1.0",
     "updated": "2026-11-13",
     "convention": "拉为正；应力分量用指标记法 σ_ij（i 为面法向，j 为力方向）",
@@ -532,6 +532,66 @@ window.GRAPH = {
       "row": 7,
       "doc": "cases/2026-11-10-five-stress-concepts.md",
       "summary": "公众号科普文章的逐条拆解：原文结论、对应章节、补充推导、课堂提问清单。"
+    },
+    {
+      "id": "M7",
+      "label": "M7 流体力学与 CFD",
+      "type": "module",
+      "status": "done",
+      "col": 9,
+      "row": 0,
+      "doc": "docs/07-fluid/README.md",
+      "summary": "可压缩 N–S 与有限体积：守恒形式、状态与边界、面通量与时间推进、Sod 校验；附石油系统接口。"
+    },
+    {
+      "id": "M7-01",
+      "label": "M7-01 控制方程与封闭",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 1,
+      "doc": "docs/07-fluid/01-governing-equations.md",
+      "summary": "质量、动量、总能量的守恒形式；Stokes 假设；5 方程 7 未知量与两条状态关系；声速与不可压缩极限。"
+    },
+    {
+      "id": "M7-02",
+      "label": "M7-02 状态与边界",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 2,
+      "doc": "docs/07-fluid/02-states-and-boundaries.md",
+      "summary": "守恒量与原始量的恢复顺序、单元平均的非线性偏差、四类边界的特征线计数、总静参数、亚声速出口构造。"
+    },
+    {
+      "id": "M7-03",
+      "label": "M7-03 面通量与时间推进",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 3,
+      "doc": "docs/07-fluid/03-fluxes-and-time-stepping.md",
+      "summary": "半离散守恒、Rusanov 通量、黏性通量、CFL 与扩散步长、隐式与双时间、密度基/压力基、正性保持。"
+    },
+    {
+      "id": "M7-04",
+      "label": "M7-04 Sod 激波管",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 4,
+      "doc": "docs/07-fluid/04-sod-shocktube.md",
+      "summary": "精确黎曼解、三道波的位置、200/400/800 单元的误差与观测阶、守恒审计、激波速度与气体速度。"
+    },
+    {
+      "id": "C3",
+      "label": "案例：可压缩 N–S 求解流程",
+      "type": "case",
+      "status": "done",
+      "col": 9,
+      "row": 6,
+      "doc": "cases/2026-11-13-compressible-ns.md",
+      "summary": "长文拆解：从控制方程到 Sod 校验的完整链路、30 张原图的远程登记与 10 张重绘、补算与课堂用法。"
     }
   ],
   "edges": [
@@ -968,6 +1028,56 @@ window.GRAPH = {
     {
       "from": "C1",
       "to": "M1",
+      "kind": "case"
+    },
+    {
+      "from": "N0",
+      "to": "M7",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M7-01",
+      "to": "M7-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "M7-02",
+      "to": "M7-03",
+      "kind": "precedes"
+    },
+    {
+      "from": "M7-03",
+      "to": "M7-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6",
+      "to": "M7",
+      "kind": "precedes"
+    },
+    {
+      "from": "C3",
+      "to": "M7",
       "kind": "case"
     }
   ]

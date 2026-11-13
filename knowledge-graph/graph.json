@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "geo-stress-study 力学知识图谱",
-    "subtitle": "从一个点的应力，到地应力场与数值实现",
+    "subtitle": "从一个点的应力，到地应力场、数值实现与流体流动",
     "version": "0.1.0",
     "updated": "2026-11-13",
     "convention": "拉为正；应力分量用指标记法 σ_ij（i 为面法向，j 为力方向）",
@@ -21,7 +21,6 @@
       "doc": "README.md",
       "summary": "全库总入口：力 → 面力 → 应力张量 → 变换 → 主应力/不变量 → 强度准则 → 断裂 → 地应力场 → 数值实现。"
     },
-
     {
       "id": "M0",
       "label": "M0 数学与约定",
@@ -62,7 +61,6 @@
       "doc": "docs/00-notation/symbols-and-conventions.md#7-数学工具清单",
       "summary": "后续反复用到：特征值问题、正交变换、拉格朗日乘子、能量法、量纲核对。"
     },
-
     {
       "id": "M1",
       "label": "M1 应力状态",
@@ -133,7 +131,6 @@
       "doc": "docs/01-stress/06-from-solid-to-geomechanics.md",
       "summary": "压正换算、σ_v ≈ ρgz、Terzaghi/Biot 有效应力、Anderson 断层分类、摩擦上限——通往 M5 的桥。"
     },
-
     {
       "id": "M2",
       "label": "M2 应变与变形",
@@ -184,7 +181,6 @@
       "doc": "docs/02-strain/README.md#计划章节",
       "summary": "六个应变分量不能任意给，必须满足协调方程才能由连续位移场积分得到。"
     },
-
     {
       "id": "M3",
       "label": "M3 本构与强度",
@@ -255,7 +251,6 @@
       "doc": "docs/03-constitutive/README.md#计划章节",
       "summary": "关联/非关联流动、剪胀角 ψ、软化——数值模型里最容易调错的几个参数。"
     },
-
     {
       "id": "M4",
       "label": "M4 断裂与破坏",
@@ -316,7 +311,6 @@
       "doc": "docs/04-fracture/README.md#计划章节",
       "summary": "穿层、止裂、转向的判据；本项目实验数据可作案例。"
     },
-
     {
       "id": "M5",
       "label": "M5 地质力学",
@@ -377,7 +371,6 @@
       "doc": "docs/05-geomechanics/README.md#计划章节",
       "summary": "滑移趋势 T_s = τ/σ′_n；库仑破坏 T_s ≥ μ；注水如何改变有效应力。"
     },
-
     {
       "id": "M6",
       "label": "M6 数值方法",
@@ -458,7 +451,6 @@
       "doc": "docs/06-numerics/variational-approximation.md",
       "summary": "弱形式 A(u,v)=F(v) 与泛函 J(v)=½A(v,v)−F(v) 的极小等价；Ritz 与 Galerkin 在对称情形同解、非对称情形不等价；离散解是能量正交投影 ⇒ 最佳逼近与能量恒等式；分片线性收敛 O(h)/O(h²)；全域基稠密病态 vs 分片基带状良态。"
     },
-
     {
       "id": "M6-P",
       "label": "P 有限元编程基础",
@@ -529,7 +521,6 @@
       "doc": "cases/2026-11-12-fem-programming-series.md",
       "summary": "11 篇推文的逐篇拆解：论证链、需要补强的五处、三处订正与课堂用法。"
     },
-
     {
       "id": "C1",
       "label": "案例：五种应力概念",
@@ -539,108 +530,553 @@
       "row": 7,
       "doc": "cases/2026-11-10-five-stress-concepts.md",
       "summary": "公众号科普文章的逐条拆解：原文结论、对应章节、补充推导、课堂提问清单。"
+    },
+    {
+      "id": "M7",
+      "label": "M7 流体力学与 CFD",
+      "type": "module",
+      "status": "done",
+      "col": 9,
+      "row": 0,
+      "doc": "docs/07-fluid/README.md",
+      "summary": "可压缩 N–S 与有限体积：守恒形式、状态与边界、面通量与时间推进、Sod 校验；附石油系统接口。"
+    },
+    {
+      "id": "M7-01",
+      "label": "M7-01 控制方程与封闭",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 1,
+      "doc": "docs/07-fluid/01-governing-equations.md",
+      "summary": "质量、动量、总能量的守恒形式；Stokes 假设；5 方程 7 未知量与两条状态关系；声速与不可压缩极限。"
+    },
+    {
+      "id": "M7-02",
+      "label": "M7-02 状态与边界",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 2,
+      "doc": "docs/07-fluid/02-states-and-boundaries.md",
+      "summary": "守恒量与原始量的恢复顺序、单元平均的非线性偏差、四类边界的特征线计数、总静参数、亚声速出口构造。"
+    },
+    {
+      "id": "M7-03",
+      "label": "M7-03 面通量与时间推进",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 3,
+      "doc": "docs/07-fluid/03-fluxes-and-time-stepping.md",
+      "summary": "半离散守恒、Rusanov 通量、黏性通量、CFL 与扩散步长、隐式与双时间、密度基/压力基、正性保持。"
+    },
+    {
+      "id": "M7-04",
+      "label": "M7-04 Sod 激波管",
+      "type": "topic",
+      "status": "done",
+      "col": 9,
+      "row": 4,
+      "doc": "docs/07-fluid/04-sod-shocktube.md",
+      "summary": "精确黎曼解、三道波的位置、200/400/800 单元的误差与观测阶、守恒审计、激波速度与气体速度。"
+    },
+    {
+      "id": "C3",
+      "label": "案例：可压缩 N–S 求解流程",
+      "type": "case",
+      "status": "done",
+      "col": 9,
+      "row": 6,
+      "doc": "cases/2026-11-13-compressible-ns.md",
+      "summary": "长文拆解：从控制方程到 Sod 校验的完整链路、30 张原图的远程登记与 10 张重绘、补算与课堂用法。"
     }
   ],
   "edges": [
-    { "from": "N0", "to": "M0", "kind": "contains" },
-    { "from": "N0", "to": "M1", "kind": "contains" },
-    { "from": "N0", "to": "M2", "kind": "contains" },
-    { "from": "N0", "to": "M3", "kind": "contains" },
-    { "from": "N0", "to": "M4", "kind": "contains" },
-    { "from": "N0", "to": "M5", "kind": "contains" },
-    { "from": "N0", "to": "M6", "kind": "contains" },
-
-    { "from": "M0", "to": "M0-01", "kind": "contains" },
-    { "from": "M0", "to": "M0-02", "kind": "contains" },
-    { "from": "M0", "to": "M0-03", "kind": "contains" },
-
-    { "from": "M1", "to": "M1-01", "kind": "contains" },
-    { "from": "M1", "to": "M1-02", "kind": "contains" },
-    { "from": "M1", "to": "M1-03", "kind": "contains" },
-    { "from": "M1", "to": "M1-04", "kind": "contains" },
-    { "from": "M1", "to": "M1-05", "kind": "contains" },
-    { "from": "M1", "to": "M1-06", "kind": "contains" },
-
-    { "from": "M2", "to": "M2-01", "kind": "contains" },
-    { "from": "M2", "to": "M2-02", "kind": "contains" },
-    { "from": "M2", "to": "M2-03", "kind": "contains" },
-    { "from": "M2", "to": "M2-04", "kind": "contains" },
-
-    { "from": "M3", "to": "M3-01", "kind": "contains" },
-    { "from": "M3", "to": "M3-02", "kind": "contains" },
-    { "from": "M3", "to": "M3-03", "kind": "contains" },
-    { "from": "M3", "to": "M3-04", "kind": "contains" },
-    { "from": "M3", "to": "M3-05", "kind": "contains" },
-    { "from": "M3", "to": "M3-06", "kind": "contains" },
-
-    { "from": "M4", "to": "M4-01", "kind": "contains" },
-    { "from": "M4", "to": "M4-02", "kind": "contains" },
-    { "from": "M4", "to": "M4-03", "kind": "contains" },
-    { "from": "M4", "to": "M4-04", "kind": "contains" },
-    { "from": "M4", "to": "M4-05", "kind": "contains" },
-
-    { "from": "M5", "to": "M5-01", "kind": "contains" },
-    { "from": "M5", "to": "M5-02", "kind": "contains" },
-    { "from": "M5", "to": "M5-03", "kind": "contains" },
-    { "from": "M5", "to": "M5-04", "kind": "contains" },
-    { "from": "M5", "to": "M5-05", "kind": "contains" },
-
-    { "from": "M6", "to": "M6-01", "kind": "contains" },
-    { "from": "M6", "to": "M6-02", "kind": "contains" },
-    { "from": "M6", "to": "M6-03", "kind": "contains" },
-    { "from": "M6", "to": "M6-04", "kind": "contains" },
-    { "from": "M6", "to": "M6-05", "kind": "contains" },
-    { "from": "M6", "to": "M6-06", "kind": "contains" },
-    { "from": "M6", "to": "M6-07", "kind": "contains" },
-    { "from": "M6-06", "to": "M6-07", "kind": "precedes" },
-    { "from": "M6-06", "to": "M6-P2", "kind": "precedes" },
-    { "from": "M6-07", "to": "M6-01", "kind": "precedes" },
-    { "from": "M6-07", "to": "M6-P1", "kind": "precedes" },
-    { "from": "M6", "to": "M6-P", "kind": "contains" },
-    { "from": "M6-P", "to": "M6-P1", "kind": "contains" },
-    { "from": "M6-P", "to": "M6-P2", "kind": "contains" },
-    { "from": "M6-P", "to": "M6-P3", "kind": "contains" },
-    { "from": "M6-P", "to": "M6-P4", "kind": "contains" },
-    { "from": "M6-P", "to": "M6-P5", "kind": "contains" },
-
-    { "from": "M6-P1", "to": "M6-P2", "kind": "precedes" },
-    { "from": "M6-P2", "to": "M6-P3", "kind": "precedes" },
-    { "from": "M6-P3", "to": "M6-P4", "kind": "precedes" },
-    { "from": "M6-P4", "to": "M6-P5", "kind": "precedes" },
-    { "from": "M6-P5", "to": "M6-02", "kind": "precedes" },
-
-    { "from": "C2", "to": "M6-P", "kind": "case" },
-
-    { "from": "M0", "to": "M1", "kind": "precedes" },
-    { "from": "M1", "to": "M2", "kind": "precedes" },
-    { "from": "M1", "to": "M3", "kind": "precedes" },
-    { "from": "M2", "to": "M3", "kind": "precedes" },
-    { "from": "M3", "to": "M4", "kind": "precedes" },
-    { "from": "M1", "to": "M5", "kind": "precedes" },
-    { "from": "M3", "to": "M5", "kind": "precedes" },
-    { "from": "M4", "to": "M6", "kind": "precedes" },
-    { "from": "M3", "to": "M6", "kind": "precedes" },
-
-    { "from": "M1-01", "to": "M1-02", "kind": "precedes" },
-    { "from": "M1-02", "to": "M1-03", "kind": "precedes" },
-    { "from": "M1-03", "to": "M1-04", "kind": "precedes" },
-    { "from": "M1-03", "to": "M1-05", "kind": "precedes" },
-    { "from": "M1-02", "to": "M1-06", "kind": "precedes" },
-    { "from": "M1-06", "to": "M5-01", "kind": "precedes" },
-
-    { "from": "M2-01", "to": "M2-02", "kind": "precedes" },
-    { "from": "M2-02", "to": "M2-03", "kind": "precedes" },
-    { "from": "M3-01", "to": "M3-03", "kind": "precedes" },
-    { "from": "M3-03", "to": "M3-04", "kind": "precedes" },
-    { "from": "M3-04", "to": "M3-05", "kind": "precedes" },
-    { "from": "M4-01", "to": "M4-02", "kind": "precedes" },
-    { "from": "M4-02", "to": "M4-03", "kind": "precedes" },
-    { "from": "M4-02", "to": "M4-04", "kind": "precedes" },
-    { "from": "M4-04", "to": "M4-05", "kind": "precedes" },
-    { "from": "M5-01", "to": "M5-02", "kind": "precedes" },
-    { "from": "M5-01", "to": "M5-04", "kind": "precedes" },
-    { "from": "M5-02", "to": "M5-05", "kind": "precedes" },
-
-    { "from": "C1", "to": "M1", "kind": "case" }
+    {
+      "from": "N0",
+      "to": "M0",
+      "kind": "contains"
+    },
+    {
+      "from": "N0",
+      "to": "M1",
+      "kind": "contains"
+    },
+    {
+      "from": "N0",
+      "to": "M2",
+      "kind": "contains"
+    },
+    {
+      "from": "N0",
+      "to": "M3",
+      "kind": "contains"
+    },
+    {
+      "from": "N0",
+      "to": "M4",
+      "kind": "contains"
+    },
+    {
+      "from": "N0",
+      "to": "M5",
+      "kind": "contains"
+    },
+    {
+      "from": "N0",
+      "to": "M6",
+      "kind": "contains"
+    },
+    {
+      "from": "M0",
+      "to": "M0-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M0",
+      "to": "M0-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M0",
+      "to": "M0-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M1",
+      "to": "M1-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M1",
+      "to": "M1-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M1",
+      "to": "M1-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M1",
+      "to": "M1-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M1",
+      "to": "M1-05",
+      "kind": "contains"
+    },
+    {
+      "from": "M1",
+      "to": "M1-06",
+      "kind": "contains"
+    },
+    {
+      "from": "M2",
+      "to": "M2-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M2",
+      "to": "M2-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M2",
+      "to": "M2-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M2",
+      "to": "M2-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M3",
+      "to": "M3-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M3",
+      "to": "M3-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M3",
+      "to": "M3-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M3",
+      "to": "M3-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M3",
+      "to": "M3-05",
+      "kind": "contains"
+    },
+    {
+      "from": "M3",
+      "to": "M3-06",
+      "kind": "contains"
+    },
+    {
+      "from": "M4",
+      "to": "M4-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M4",
+      "to": "M4-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M4",
+      "to": "M4-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M4",
+      "to": "M4-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M4",
+      "to": "M4-05",
+      "kind": "contains"
+    },
+    {
+      "from": "M5",
+      "to": "M5-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M5",
+      "to": "M5-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M5",
+      "to": "M5-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M5",
+      "to": "M5-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M5",
+      "to": "M5-05",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-05",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-06",
+      "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-07",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-06",
+      "to": "M6-07",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-06",
+      "to": "M6-P2",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-07",
+      "to": "M6-01",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-07",
+      "to": "M6-P1",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6",
+      "to": "M6-P",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P1",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P2",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P3",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P4",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P",
+      "to": "M6-P5",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-P1",
+      "to": "M6-P2",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P2",
+      "to": "M6-P3",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P3",
+      "to": "M6-P4",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P4",
+      "to": "M6-P5",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-P5",
+      "to": "M6-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "C2",
+      "to": "M6-P",
+      "kind": "case"
+    },
+    {
+      "from": "M0",
+      "to": "M1",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1",
+      "to": "M2",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1",
+      "to": "M3",
+      "kind": "precedes"
+    },
+    {
+      "from": "M2",
+      "to": "M3",
+      "kind": "precedes"
+    },
+    {
+      "from": "M3",
+      "to": "M4",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1",
+      "to": "M5",
+      "kind": "precedes"
+    },
+    {
+      "from": "M3",
+      "to": "M5",
+      "kind": "precedes"
+    },
+    {
+      "from": "M4",
+      "to": "M6",
+      "kind": "precedes"
+    },
+    {
+      "from": "M3",
+      "to": "M6",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1-01",
+      "to": "M1-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1-02",
+      "to": "M1-03",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1-03",
+      "to": "M1-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1-03",
+      "to": "M1-05",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1-02",
+      "to": "M1-06",
+      "kind": "precedes"
+    },
+    {
+      "from": "M1-06",
+      "to": "M5-01",
+      "kind": "precedes"
+    },
+    {
+      "from": "M2-01",
+      "to": "M2-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "M2-02",
+      "to": "M2-03",
+      "kind": "precedes"
+    },
+    {
+      "from": "M3-01",
+      "to": "M3-03",
+      "kind": "precedes"
+    },
+    {
+      "from": "M3-03",
+      "to": "M3-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "M3-04",
+      "to": "M3-05",
+      "kind": "precedes"
+    },
+    {
+      "from": "M4-01",
+      "to": "M4-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "M4-02",
+      "to": "M4-03",
+      "kind": "precedes"
+    },
+    {
+      "from": "M4-02",
+      "to": "M4-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "M4-04",
+      "to": "M4-05",
+      "kind": "precedes"
+    },
+    {
+      "from": "M5-01",
+      "to": "M5-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "M5-01",
+      "to": "M5-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "M5-02",
+      "to": "M5-05",
+      "kind": "precedes"
+    },
+    {
+      "from": "C1",
+      "to": "M1",
+      "kind": "case"
+    },
+    {
+      "from": "N0",
+      "to": "M7",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-01",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-02",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-03",
+      "kind": "contains"
+    },
+    {
+      "from": "M7",
+      "to": "M7-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M7-01",
+      "to": "M7-02",
+      "kind": "precedes"
+    },
+    {
+      "from": "M7-02",
+      "to": "M7-03",
+      "kind": "precedes"
+    },
+    {
+      "from": "M7-03",
+      "to": "M7-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6",
+      "to": "M7",
+      "kind": "precedes"
+    },
+    {
+      "from": "C3",
+      "to": "M7",
+      "kind": "case"
+    }
   ]
 }

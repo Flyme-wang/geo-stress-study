@@ -1747,6 +1747,509 @@ def fig23():
     save(fig, "fig23-dense-vs-banded-stiffness.png")
 
 
+# ============================================ 图 24 可压缩控制体收支
+def fig24():
+    fig, ax = plt.subplots(figsize=(11.2, 5.4))
+    ax.set_xlim(0, 11.2)
+    ax.set_ylim(0, 5.4)
+    ax.axis("off")
+
+    cv = FancyBboxPatch((3.7, 1.35), 4.4, 2.9,
+                        boxstyle="round,pad=0.06", fc="#E3F2FD",
+                        ec=BLUE, lw=2.0)
+    ax.add_patch(cv)
+    ax.text(5.9, 3.55, "固定控制体 $V_i$", fontsize=15, ha="center",
+            color="#0D2A4A")
+    ax.text(5.9, 2.9, "保存的是平均值", fontsize=12.5, ha="center",
+            color=GRAY)
+    ax.text(5.9, 2.25,
+            r"$\bar{\mathbf{U}}_i=(\rho,\ \rho u,\ \mathcal{E})^{\mathsf{T}}$",
+            fontsize=15, ha="center")
+
+    rows = [(4.35, r"质量：$\rho u$", RED),
+            (3.05, r"动量：$\rho u^2+p$", "#6A1B9A"),
+            (1.8, r"总能量：$(\mathcal{E}+p)u$", GREEN)]
+    for y, lab, col in rows:
+        arrow(ax, (1.55, y), (3.62, y), col, lw=2.6)
+        arrow(ax, (8.1, y), (10.2, y), col, lw=2.6)
+        ax.text(1.42, y, lab, fontsize=12.5, ha="right", va="center",
+                color=col)
+        ax.text(9.15, y + 0.22, "流出", fontsize=10.5, ha="center",
+                color=col)
+
+    ax.text(0.85, 5.0, "单位时间、单位面积的交换 $\\mathbf{F}_n$",
+            fontsize=12.5, ha="center", color="#22303A")
+    ax.text(10.4, 5.0, "五分量：$1+3+1$", fontsize=12, ha="center",
+            color="#22303A")
+
+    ax.text(5.9, 0.66,
+            r"$\frac{\mathrm{d}\bar{\mathbf{U}}_i}{\mathrm{d}t}"
+            r"=-\frac{1}{V_i}\sum_f\widehat{\mathbf{F}}_{n,f}S_f$",
+            fontsize=18, ha="center")
+    ax.text(5.9, 0.12, "面收支汇总 → 守恒量变化率", fontsize=11.5,
+            ha="center", color=GRAY)
+
+    fig.suptitle("可压缩有限体积：单元里存多少，面上就交换多少",
+                 fontsize=15.5, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    save(fig, "fig24-compressible-control-volume.png")
+
+
+# ============================================ 图 25 N-S 模型封闭关系
+def fig25():
+    fig, ax = plt.subplots(figsize=(11.4, 5.8))
+    ax.set_xlim(0, 11.4)
+    ax.set_ylim(0, 5.8)
+    ax.axis("off")
+
+    def box(x, y, w, h, title, body, fc, ec):
+        ax.add_patch(FancyBboxPatch((x, y), w, h,
+                                    boxstyle="round,pad=0.08", fc=fc,
+                                    ec=ec, lw=1.6))
+        ax.text(x + w / 2, y + h - 0.28, title, fontsize=12.5,
+                ha="center", va="top", color=ec, weight="bold")
+        ax.text(x + w / 2, y + h / 2 - 0.15, body, fontsize=11.2,
+                ha="center", va="center", color="#22303A")
+
+    box(0.35, 3.4, 2.7, 1.85, "质量守恒",
+        r"$\partial_t\rho+\nabla\cdot(\rho\mathbf{u})=0$",
+        "#E3F2FD", BLUE)
+    box(0.35, 1.85, 2.7, 1.4, "动量守恒（3 条）",
+        r"$\partial_t(\rho\mathbf{u})+\nabla\cdot(\rho\mathbf{u}\otimes\mathbf{u})$"
+        "\n" r"$=-\nabla p+\nabla\cdot\boldsymbol{\tau}$",
+        "#E3F2FD", BLUE)
+    box(0.35, 0.3, 2.7, 1.4, "总能量守恒",
+        r"$\partial_t\mathcal{E}+\nabla\cdot[(\mathcal{E}+p)\mathbf{u}]$"
+        "\n" r"$=\nabla\cdot(\boldsymbol{\tau}\cdot\mathbf{u})-\nabla\cdot\mathbf{q}$",
+        "#E3F2FD", BLUE)
+
+    box(4.15, 3.55, 3.0, 1.7, "热力学封闭",
+        r"$p=\rho RT$" "\n" r"$e=c_vT$",
+        "#FFF3E0", "#EF6C00")
+    box(4.15, 0.4, 3.0, 1.55, "应力与热流",
+        r"$\boldsymbol{\tau}=\mu[\nabla\mathbf{u}+(\nabla\mathbf{u})^{\mathsf{T}}"
+        r"-\frac{2}{3}(\nabla\cdot\mathbf{u})\mathbf{I}]$"
+        "\n" r"$\mathbf{q}=-\kappa\nabla T$",
+        "#E8F5E9", GREEN)
+
+    ax.add_patch(FancyBboxPatch((8.0, 2.0), 3.0, 1.7,
+                                boxstyle="round,pad=0.08", fc="#F3E5F5",
+                                ec="#6A1B9A", lw=2.0))
+    ax.text(9.5, 3.25, "封闭的黏性 N–S", fontsize=14, ha="center",
+            color="#6A1B9A", weight="bold")
+    ax.text(9.5, 2.6, "7 个标量场 = 5 条守恒\n+ 2 条热力学关系", fontsize=11,
+            ha="center", color="#22303A")
+
+    arrow(ax, (3.12, 3.9), (4.08, 4.25), "#EF6C00", lw=2)
+    arrow(ax, (3.12, 1.35), (4.08, 1.2), GREEN, lw=2)
+    arrow(ax, (7.22, 4.2), (7.95, 3.15), "#EF6C00", lw=2)
+    arrow(ax, (7.22, 1.2), (7.95, 2.45), GREEN, lw=2)
+
+    ax.text(9.5, 0.8, "黏度 $\\mu$、导热系数 $\\kappa$\n由物性给定，不再另立方程",
+            fontsize=10.8, ha="center", color=GRAY)
+
+    fig.suptitle("封闭 = 每一个出现的量都有关系可以确定",
+                 fontsize=15.5, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    save(fig, "fig25-ns-closure-map.png")
+
+
+# ============================================ 图 26 边界特征方向
+def fig26():
+    cases = [
+        ("超声速入口：3 条进入", -2.0, 1.0, "inlet"),
+        ("亚声速入口：2 条进入", -0.5, 1.0, "inlet"),
+        ("亚声速出口：1 条进入", 0.5, 1.0, "outlet"),
+        ("超声速出口：0 条进入", 2.0, 1.0, "outlet"),
+    ]
+    fig, axes = plt.subplots(2, 2, figsize=(12.2, 6.2))
+    for ax, (title, un, c, kind) in zip(axes.ravel(), cases):
+        ax.set_xlim(-1.15, 1.15)
+        ax.set_ylim(-0.34, 1.15)
+        ax.axis("off")
+        dom = (0, 1.15) if kind == "inlet" else (-1.15, 0)
+        ax.add_patch(Rectangle((dom[0], -0.06), dom[1] - dom[0],
+                               1.18, fc="#E3F2FD", ec="none", zorder=0))
+        ax.plot([0, 0], [-0.06, 1.13], color="#22303A", lw=1.4, ls="--")
+        ax.text(0, 1.08, "边界", fontsize=10.5, ha="center",
+                color="#22303A")
+        ax.text(dom[0] + (dom[1] - dom[0]) / 2, 1.08, "计算域",
+                fontsize=10.5, ha="center", color=BLUE)
+        speeds = [un - c, un, un + c]
+        colors = [RED, "#6A1B9A", GREEN]
+        labels = [r"$u_n-c$", r"$u_n$", r"$u_n+c$"]
+        # 外法向在左侧入口指向 -x、右侧出口指向 +x，
+        # 物理传播方向 = 特征速度 s 乘以外法向
+        orient = -1.0 if kind == "inlet" else 1.0
+        for k, (s, col, lab) in enumerate(zip(speeds, colors, labels)):
+            y = 0.78 - 0.26 * k
+            dx = orient * np.sign(s) if s else 0.0
+            ax.annotate("", xy=(0.38 * dx, y), xytext=(0, y),
+                        arrowprops=dict(arrowstyle="-|>", color=col,
+                                        lw=2.2, mutation_scale=13))
+            ax.text(0.45 * dx if dx else 0.05, y,
+                    "%s = %.1f" % (lab, s), fontsize=10.2, color=col,
+                    va="center", ha="left" if dx >= 0 else "right")
+        # 外法向为正，s<0 即朝区域内部传播，入口与出口同判据
+        nin = sum(1 for s in speeds if s < 0)
+        ax.set_title(title, fontsize=12.5, color="#22303A")
+        note = ("进入 $%d$ 条 → 需给定 $%d$ 条外部关系" % (nin, nin)
+                if nin else "进入 $0$ 条 → 无需外部条件，由内点外推")
+        ax.text(0, -0.21, note, fontsize=10.5, ha="center",
+                va="center", color=RED)
+
+    fig.suptitle("边界给几个条件，由信息传播方向决定（一维无黏 Euler）",
+                 fontsize=15, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig26-characteristic-boundaries.png")
+
+
+# ============================================ 图 27 亚声速出口构造
+def fig27():
+    fig, ax = plt.subplots(figsize=(12.4, 5.6))
+    ax.set_xlim(0, 12.4)
+    ax.set_ylim(0, 5.6)
+    ax.axis("off")
+
+    def box(x, y, w, h, text, fc, ec, fs=11.2):
+        ax.add_patch(FancyBboxPatch((x, y), w, h,
+                                    boxstyle="round,pad=0.07", fc=fc,
+                                    ec=ec, lw=1.5))
+        ax.text(x + w / 2, y + h / 2, text, fontsize=fs,
+                ha="center", va="center", color="#22303A")
+
+    box(0.3, 3.75, 2.5, 1.1,
+        "内侧状态\n" r"$\rho_{\mathrm{in}},\ u_{\mathrm{in}},\ p_{\mathrm{in}}$",
+        "#E3F2FD", BLUE)
+    box(0.3, 1.55, 2.5, 1.0, "外部给定\n" r"$p_b$", "#FFF3E0", "#EF6C00")
+    box(3.35, 3.75, 2.6, 1.1,
+        "熵关系\n" r"$\rho_b=\rho_{\mathrm{in}}(p_b/p_{\mathrm{in}})^{1/\gamma}$",
+        "#E8F5E9", GREEN)
+    box(3.35, 1.55, 2.6, 1.0,
+        "声速\n" r"$c_b=\sqrt{\gamma p_b/\rho_b}$",
+        "#E8F5E9", GREEN)
+    box(6.45, 3.75, 2.7, 1.1,
+        "声学组合\n" r"$J_+=u+2c/(\gamma-1)$",
+        "#F3E5F5", "#6A1B9A")
+    box(6.45, 1.55, 2.7, 1.0,
+        "边界速度\n" r"$u_b=u_{\mathrm{in}}+\frac{2(c_{\mathrm{in}}-c_b)}{\gamma-1}$",
+        "#F3E5F5", "#6A1B9A")
+    box(9.65, 2.55, 2.45, 1.35,
+        "守恒变量\n" r"$\mathbf{U}_b=(\rho_b,\rho_bu_b,\mathcal{E}_b)^{\mathsf{T}}$"
+        "\n" "→ 边界数值通量", "#E3F2FD", BLUE)
+
+    arrow(ax, (2.85, 4.3), (3.3, 4.3), GRAY, lw=1.8)
+    arrow(ax, (2.85, 2.05), (3.3, 2.05), GRAY, lw=1.8)
+    arrow(ax, (5.98, 4.3), (6.4, 4.3), GRAY, lw=1.8)
+    arrow(ax, (4.65, 3.7), (4.65, 2.6), GRAY, lw=1.8)
+    arrow(ax, (5.98, 2.05), (6.4, 2.05), GRAY, lw=1.8)
+    arrow(ax, (8.1, 3.7), (8.1, 2.6), GRAY, lw=1.8)
+    arrow(ax, (9.15, 2.05), (9.6, 2.9), GRAY, lw=1.8)
+
+    ax.text(6.2, 0.85,
+            "三条特征信息：$u_n-c$ 传入给 $p_b$；$u_n$ 与 $u_n+c$ 由内部传出\n"
+            "数值示例：$u_{\\mathrm{in}}=10$ m/s， $c_{\\mathrm{in}}=300$ m/s，"
+            " $c_b=299$ m/s → $J_+=1510$ m/s， $u_b=15$ m/s",
+            fontsize=10.8, ha="center", color="#22303A",
+            bbox=dict(boxstyle="round,pad=0.4", fc="#FAFAFA",
+                      ec="#C9D2DA"))
+
+    fig.suptitle("亚声速出口：给静压，其余由内部传出的信息补齐",
+                 fontsize=15, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig27-subsonic-outlet-construction.png")
+
+
+# ============================================ 图 28 面通量与两侧收支
+def fig28():
+    fig = plt.figure(figsize=(11.2, 5.0))
+    ax = fig.add_axes([0.01, 0.02, 0.98, 0.845])
+    ax.set_xlim(0, 11.2)
+    ax.set_ylim(0, 4.35)
+    ax.axis("off")
+
+    ax.add_patch(Rectangle((1.2, 1.2), 3.6, 2.7, fc="#E3F2FD",
+                           ec=BLUE, lw=1.6))
+    ax.add_patch(Rectangle((6.4, 1.2), 3.6, 2.7, fc="#FFF3E0",
+                           ec="#EF6C00", lw=1.6))
+    ax.text(3.0, 3.0, "控制体 $L$", fontsize=14, ha="center")
+    ax.text(3.0, 2.25, r"$\bar{\mathbf{U}}_L$", fontsize=14, ha="center")
+    ax.text(8.2, 3.0, "控制体 $R$", fontsize=14, ha="center")
+    ax.text(8.2, 2.25, r"$\bar{\mathbf{U}}_R$", fontsize=14, ha="center")
+
+    ax.plot([5.6, 5.6], [1.05, 4.18], color="#22303A", lw=2.0)
+    ax.annotate("", xy=(6.25, 4.06), xytext=(5.6, 4.06),
+                arrowprops=dict(arrowstyle="-|>", color="#22303A",
+                                lw=1.4, mutation_scale=11))
+    ax.text(6.3, 4.16, r"$\mathbf{n}_f$（$L$ 的外法向）", fontsize=11,
+            color="#22303A", va="center")
+
+    arrow(ax, (5.1, 2.5), (6.15, 2.5), RED, lw=3.0, ms=16)
+    ax.text(5.62, 2.72, r"$\widehat{\mathbf{F}}_{n,f}$", fontsize=14,
+            color=RED, ha="center")
+    ax.text(5.6, 0.98, r"面积 $S_f$", fontsize=11.5, ha="center",
+            color=GRAY)
+
+    ax.text(3.0, 0.55, r"$-\widehat{\mathbf{F}}_{n,f}S_f$（流出）",
+            fontsize=12, ha="center", color=BLUE)
+    ax.text(8.2, 0.55, r"$+\widehat{\mathbf{F}}_{n,f}S_f$（流入）",
+            fontsize=12, ha="center", color="#EF6C00")
+
+    ax.text(5.6, 0.12,
+            "面法向从 $L$ 指向 $R$：对 $L$ 是流出，对 $R$ 是流入",
+            fontsize=10.8, ha="center", color=GRAY)
+
+    fig.text(0.5, 0.968, "一个面、一个通量、两个控制体",
+             fontsize=15, ha="center", va="center")
+    fig.text(0.5, 0.9,
+             "同一份共享通量，两侧符号相反；内部面求和时相互抵消",
+             fontsize=12, ha="center", va="center", color="#22303A")
+    save(fig, "fig28-face-flux-two-cells.png")
+
+
+# ============================================ 图 29 Rusanov 共享通量
+def fig29():
+    fig = plt.figure(figsize=(11.2, 5.4))
+    ax = fig.add_axes([0.005, 0.01, 0.99, 0.86])
+    ax.set_xlim(0, 11.2)
+    ax.set_ylim(0, 5.0)
+    ax.axis("off")
+
+    def box(x, y, w, h, text, fc, ec, fs=11.5):
+        ax.add_patch(FancyBboxPatch((x, y), w, h,
+                                    boxstyle="round,pad=0.06", fc=fc,
+                                    ec=ec, lw=1.5))
+        ax.text(x + w / 2, y + h / 2, text, fontsize=fs,
+                ha="center", va="center", color="#22303A")
+
+    box(0.30, 3.45, 2.35, 1.15,
+        "左侧状态\n" r"$\mathbf{U}_L$", "#E3F2FD", BLUE)
+    box(8.55, 3.45, 2.35, 1.15,
+        "右侧状态\n" r"$\mathbf{U}_R$", "#FFF3E0", "#EF6C00")
+    box(3.35, 3.45, 1.95, 1.15,
+        "物理通量\n" r"$\mathbf{F}(\mathbf{U}_L)$", "#E3F2FD", BLUE)
+    box(5.90, 3.45, 1.95, 1.15,
+        "物理通量\n" r"$\mathbf{F}(\mathbf{U}_R)$", "#FFF3E0", "#EF6C00")
+    box(3.35, 2.15, 4.50, 0.90,
+        r"中心平均 $\frac{1}{2}[\mathbf{F}_L+\mathbf{F}_R]$",
+        "#F5F5F5", GRAY)
+    box(3.35, 0.95, 4.50, 0.90,
+        r"耗散修正 $-\frac{1}{2} s_{\max}(\mathbf{U}_R-\mathbf{U}_L)$",
+        "#FFEBEE", RED)
+
+    ax.text(5.60, 4.88,
+            r"$s_{\max}=\max(|u_L|+c_L,\ |u_R|+c_R)$",
+            fontsize=13, ha="center", va="center", color="#22303A")
+
+    arrow(ax, (2.70, 4.02), (3.30, 4.02), GRAY, lw=1.8, ms=12)
+    arrow(ax, (8.50, 4.02), (7.90, 4.02), GRAY, lw=1.8, ms=12)
+    arrow(ax, (4.32, 3.40), (4.32, 3.08), GRAY, lw=1.8, ms=12)
+    arrow(ax, (6.88, 3.40), (6.88, 3.08), GRAY, lw=1.8, ms=12)
+    arrow(ax, (5.60, 2.10), (5.60, 1.88), GRAY, lw=1.8, ms=12)
+    arrow(ax, (5.60, 0.90), (5.60, 0.44), GRAY, lw=1.8, ms=12)
+
+    ax.text(5.60, 0.16, r"$\widehat{\mathbf{F}}=\frac{1}{2}(\mathbf{F}_L+\mathbf{F}_R)"
+            r"-\frac{1}{2} s_{\max}(\mathbf{U}_R-\mathbf{U}_L)$",
+            fontsize=17, ha="center", va="center", color="#22303A")
+    ax.text(0.30, 0.62, "中心平均：精度", fontsize=10.5, color=GRAY)
+    ax.text(0.30, 0.24, "耗散项：稳定", fontsize=10.5, color=RED)
+
+    fig.text(0.5, 0.965,
+             "Rusanov 通量：两侧信息各取一半，再加一份按波速的耗散",
+             fontsize=14.8, ha="center", va="center")
+    save(fig, "fig29-rusanov-flux.png")
+
+
+# ============================================ 图 30 显式与隐式
+def fig30():
+    fig, axes = plt.subplots(1, 2, figsize=(12.4, 5.0))
+
+    ax = axes[0]
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 5)
+    ax.axis("off")
+    ax.set_title("(a) 显式：用已知状态直接推进", fontsize=13)
+
+    def bx(x, y, w, h, text, fc, ec, fs=11.5):
+        ax.add_patch(FancyBboxPatch((x, y), w, h,
+                                    boxstyle="round,pad=0.08", fc=fc,
+                                    ec=ec, lw=1.5))
+        ax.text(x + w / 2, y + h / 2, text, fontsize=fs,
+                ha="center", va="center", color="#22303A")
+
+    bx(0.4, 3.0, 2.5, 1.0, r"$\bar{\mathbf{U}}^{\,n}$", "#E3F2FD", BLUE)
+    bx(3.7, 3.0, 2.8, 1.0, r"$L_h(\bar{\mathbf{U}}^{\,n})$", "#F5F5F5", GRAY)
+    bx(7.0, 3.0, 2.5, 1.0, r"$\bar{\mathbf{U}}^{\,n+1}$", "#E8F5E9", GREEN)
+    arrow(ax, (2.95, 3.5), (3.65, 3.5), GRAY, lw=1.8)
+    arrow(ax, (6.55, 3.5), (6.95, 3.5), GRAY, lw=1.8)
+    ax.text(5.1, 4.35, r"$\bar{\mathbf{U}}^{\,n+1}=\bar{\mathbf{U}}^{\,n}"
+            r"+\Delta t\,L_h(\bar{\mathbf{U}}^{\,n})$",
+            fontsize=13.5, ha="center")
+    ax.text(5.0, 2.25, "每个面只算一次；\n时间步受 CFL 限制",
+            fontsize=10.8, ha="center", color=GRAY)
+
+    ax = axes[1]
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 5)
+    ax.axis("off")
+    ax.set_title("(b) 隐式：新状态也参与，需迭代", fontsize=13)
+
+    bx(0.5, 3.0, 3.4, 1.0,
+       "候选 $\\bar{\\mathbf{U}}^{\\,n+1,(k)}$", "#FFF3E0", "#EF6C00")
+    bx(0.5, 1.3, 3.4, 1.0, "残差\n" r"$\mathbf{R}=\Delta\mathbf{U}-\Delta t\,L_h$",
+       "#FFEBEE", RED)
+    bx(5.6, 1.3, 3.6, 1.0, "线性子问题\n" r"$A\,\delta\mathbf{U}=-\mathbf{R}$",
+       "#F3E5F5", "#6A1B9A")
+    bx(5.6, 3.0, 3.6, 1.0, "更新\n" r"$\mathbf{U}^{(k+1)}=\mathbf{U}^{(k)}+\delta\mathbf{U}$",
+       "#E8F5E9", GREEN)
+
+    arrow(ax, (2.2, 2.95), (2.2, 2.35), GRAY, lw=1.8)
+    arrow(ax, (3.95, 1.8), (5.55, 1.8), GRAY, lw=1.8)
+    arrow(ax, (7.4, 2.35), (7.4, 2.95), GRAY, lw=1.8)
+    arrow(ax, (5.55, 3.5), (3.95, 3.5), GRAY, lw=1.8)
+    ax.text(4.75, 3.65, "迭代", fontsize=10.5, ha="center", color=GRAY)
+    ax.text(5.0, 0.55, r"收敛后保存为 $\bar{\mathbf{U}}^{\,n+1}$；"
+            "同一物理步内迭代", fontsize=10.8, ha="center", color=GRAY)
+
+    fig.suptitle("同一个空间算子 $L_h$，两种时间组织方式",
+                 fontsize=15, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig30-explicit-vs-implicit.png")
+
+
+# ============================================ 图 31 低马赫数时间尺度
+def fig31():
+    labels = [r"显式步长 $\Delta t$（$h=1$ cm）",
+              r"声学穿越 $L/c$（$L=1$ km）",
+              r"流动穿越 $L/u$（$L=1$ km）"]
+    vals = [8.6e-6, 2.0, 67.0]
+    cols = [RED, "#EF6C00", GREEN]
+
+    fig, ax = plt.subplots(figsize=(11.0, 4.6))
+    y = np.arange(len(vals))[::-1]
+    ax.barh(y, vals, color=cols, height=0.5, alpha=0.9)
+    ax.set_xscale("log")
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels, fontsize=11.5)
+    ax.set_xlabel("时间尺度 [s]（对数轴）", fontsize=12)
+    for yi, v in zip(y, vals):
+        if v < 1e-3:
+            expo = int(np.floor(np.log10(v)))
+            mant = v / 10.0 ** expo
+            txt = r"$%.1f\times10^{%d}$ s" % (mant, expo)
+        else:
+            txt = "%.0f s" % v
+        ax.text(v * 1.25, yi, txt, va="center", fontsize=11)
+    ax.set_xlim(1e-6, 300)
+    ax.grid(True, axis="x", which="both", color="#EEF2F5", lw=0.8)
+    ax.set_axisbelow(True)
+    ax.text(0.97, 0.96,
+            "甲烷：30 MPa、380 K， $c\\approx508$ m/s； $u=15$ m/s，"
+            " $\\mathrm{Ma}\\approx0.03$\n"
+            "声学步长比流动时间小 4 个量级 → 显式可压缩在低马赫数下很慢",
+            transform=ax.transAxes, fontsize=10.8, va="top", ha="right",
+            bbox=dict(boxstyle="round,pad=0.35", fc="white",
+                      ec="#C9D2DA"))
+    fig.suptitle("低马赫数：慢流动被快声波拖住", fontsize=15, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig31-low-mach-timescales.png")
+
+
+# ============================================ 图 32 Sod 数值 vs 精确解
+def fig32():
+    import sys
+    sys.path.insert(0, HERE)
+    import fluid_lib as fl
+
+    t = 0.2
+    runs = [(200, "#1E88E5", 1.4), (800, "#C62828", 1.4)]
+    data = []
+    for n, col, lw in runs:
+        r = fl.fv_sod(n, t, cfl=0.45)
+        U = r["U"]
+        prim = np.array([fl.primitive(u) for u in U])
+        data.append((r["x"], prim, col, n))
+
+    xf = np.linspace(0, 1, 1200)
+    rex, uex, pex = fl.sod_exact(xf, t)
+
+    fig, axes = plt.subplots(3, 1, figsize=(10.6, 8.2), sharex=True)
+    fields = [(0, r"密度 $\rho$"), (1, r"速度 $u$"), (2, r"压力 $p$")]
+    exact = [rex, uex, pex]
+    for ax, (k, lab), ex in zip(axes, fields, exact):
+        ax.plot(xf, ex, "-", color="#22303A", lw=2.0,
+                label="精确解")
+        for x, prim, col, n in data:
+            ax.plot(x, prim[:, k], "-", color=col, lw=1.3,
+                    label="%d 个单元" % n)
+        ax.set_ylabel(lab, fontsize=12)
+        ax.grid(True, color="#EEF2F5", lw=0.8)
+        ax.set_axisbelow(True)
+        ax.legend(loc="best", fontsize=9.5)
+
+    ps, us, cL, cR = fl.sod_star_state()
+    cstar = cL * (ps / 1.0) ** (0.4 / 2.8)
+    S = cR * np.sqrt(2.4 / 2.8 * ps / 0.1 + 0.4 / 2.8)
+    axes[0].axvline(0.5 + (us - cstar) * t, color=GRAY, ls=":", lw=1.0)
+    axes[0].axvline(0.5 + us * t, color=GRAY, ls=":", lw=1.0)
+    axes[0].axvline(0.5 + S * t, color=GRAY, ls=":", lw=1.0)
+    axes[0].text(0.42, 0.88, "稀疏波", fontsize=9.5, color=GRAY)
+    axes[0].text(0.64, 0.88, "接触", fontsize=9.5, color=GRAY)
+    axes[0].text(0.79, 0.88, "激波", fontsize=9.5, color=GRAY)
+    axes[0].set_ylim(0, 1.05)
+    axes[2].set_xlabel("位置 $x$", fontsize=12)
+    fig.suptitle("Sod 激波管：一阶 Rusanov 也能抓住三道结构，代价是抹宽",
+                 fontsize=14.5, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    save(fig, "fig32-sod-shocktube.png")
+
+
+# ============================================ 图 33 激波跃变控制体
+def fig33():
+    fig = plt.figure(figsize=(11.2, 4.9))
+    ax = fig.add_axes([0.005, 0.01, 0.99, 0.855])
+    ax.set_xlim(0, 11.2)
+    ax.set_ylim(0, 4.7)
+    ax.axis("off")
+
+    ax.add_patch(Rectangle((0.4, 1.5), 5.1, 2.6, fc="#E3F2FD",
+                           ec=BLUE, lw=1.4))
+    ax.add_patch(Rectangle((5.5, 1.5), 5.3, 2.6, fc="#FFF3E0",
+                           ec="#EF6C00", lw=1.4))
+    ax.text(2.6, 3.35, "波前 1\n" r"$\rho_1,\ u_1,\ p_1$", fontsize=13,
+            ha="center", va="center")
+    ax.text(8.4, 3.35, "波后 2\n" r"$\rho_2,\ u_2,\ p_2$", fontsize=13,
+            ha="center", va="center")
+
+    ax.add_patch(Rectangle((5.15, 1.15), 0.5, 3.1, fc="#FFEBEE",
+                           ec=RED, lw=2.0))
+    ax.annotate("", xy=(7.2, 4.5), xytext=(5.4, 4.5),
+                arrowprops=dict(arrowstyle="-|>", color=RED, lw=2.2,
+                                mutation_scale=14))
+    ax.text(7.35, 4.5, r"激波速度 $S$（固定坐标）", fontsize=12,
+            color=RED, va="center")
+
+    arrow(ax, (3.9, 1.95), (5.1, 1.95), GREEN, lw=2.2, ms=12)
+    ax.text(4.5, 2.14, r"相对流入 $S-u_1$", fontsize=10.8,
+            color=GREEN, ha="center")
+    arrow(ax, (5.75, 1.95), (6.95, 1.95), "#6A1B9A", lw=2.2, ms=12)
+    ax.text(6.35, 2.14, r"相对流出 $S-u_2$", fontsize=10.8,
+            color="#6A1B9A", ha="center")
+
+    ax.text(5.6, 0.62,
+            r"$\rho_1(S-u_1)=\rho_2(S-u_2)$"
+            r"$\qquad$ 每单位面积的质量通过率相同",
+            fontsize=14.5, ha="center", color="#22303A")
+    ax.text(5.6, 0.18,
+            "动量与能量同理：把压力、内能与动能一并计入，得到 Rankine–Hugoniot 条件",
+            fontsize=10.5, ha="center", color=GRAY)
+
+    fig.text(0.5, 0.965,
+             "随激波移动的控制体：状态可以跳，收支不能断",
+             fontsize=15, ha="center", va="center")
+    save(fig, "fig33-shock-jump-control-volume.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -1771,3 +2274,13 @@ if __name__ == "__main__":
     fig21()
     fig22()
     fig23()
+    fig24()
+    fig25()
+    fig26()
+    fig27()
+    fig28()
+    fig29()
+    fig30()
+    fig31()
+    fig32()
+    fig33()

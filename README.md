@@ -42,6 +42,7 @@ graph LR
   N0 --> M4[M4 断裂与破坏]
   N0 --> M5[M5 地质力学]
   N0 --> M6[M6 数值方法]
+  N0 --> M7[M7 流体力学与 CFD]
 
   M0 --> M1
   M1 --> M2
@@ -52,6 +53,7 @@ graph LR
   M3 --> M5
   M4 --> M6
   M3 --> M6
+  M6 --> M7
 ```
 
 ---
@@ -70,14 +72,17 @@ graph LR
 | [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/) | 有限元编程基础：从 $Ku=F$ 到手写 Q4、组装、约束荷载与求解器 | ✅ 5 篇 + 导读 |
 | [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md) | 雅可比矩阵：多变量映射的局部线性化、 $\det J$ 的几何、秩与奇异位形 | ✅ 1 篇 |
 | [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md) | 变分近似：弱形式↔能量极小、Ritz 与 Galerkin、正交投影与最佳逼近 | ✅ 1 篇 |
-| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 52 节点 |
-| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 2 篇 |
+| [`docs/07-fluid/`](docs/07-fluid/) | 流体力学与 CFD：控制方程、状态与边界、面通量与时间推进、Sod 激波管 | ✅ 4 篇 + 导读 |
+| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 58 节点 |
+| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 3 篇 |
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
 | [`tools/verify_fem_notes.py`](tools/verify_fem_notes.py) | 复算 FEM 编程五章的全部数值（61 项断言） | ✅ |
 | [`tools/verify_jacobian_note.py`](tools/verify_jacobian_note.py) | 复算雅可比笔记的全部数值（面积比、一阶误差、两连杆） | ✅ |
 | [`tools/verify_variational_note.py`](tools/verify_variational_note.py) | 复算变分近似笔记的全部数值（能量极小、正交性、收敛阶、稀疏度） | ✅ |
+| [`tools/fluid_lib.py`](tools/fluid_lib.py) | 可压缩 Euler 参考实现：守恒量换算、Rusanov 通量、Sod 精确解与一维有限体积 | ✅ |
+| [`tools/verify_fluid_notes.py`](tools/verify_fluid_notes.py) | 复算 M7 四篇笔记的全部数值（通量、星区、波位置、收敛阶、守恒审计） | ✅ |
 
 ---
 
@@ -102,6 +107,13 @@ graph LR
 最后回到「刚度矩阵凭什么长这样」：弱形式与能量极小的等价、Ritz 与 Galerkin 两路同归，见
 [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md)
 （图 20–图 23，可用 `py -3 tools/verify_variational_note.py` 复算）。
+
+**第五阶段｜从固体到流体（约 6 学时）**
+流体不是"另一种固体"：未知量从位移换成守恒量，离散从单元积分换成面上通量，
+稳定性从锁定换成 CFL。入口见 [`docs/07-fluid/`](docs/07-fluid/)，
+按"控制方程 → 状态与边界 → 面通量与时间推进 → Sod 激波管"四篇顺序读；
+所有算例可用 `py -3 tools/verify_fluid_notes.py` 复算。
+石油系统的接口（井筒气侵、管线水击、裂缝内高速流、超临界 CO2）写在模块导读的对照表里。
 
 ---
 
@@ -166,6 +178,16 @@ python tools/make_figures.py
 | 图 21 | `assets/figures/fig21-energy-orthogonal-projection.png` | 子空间上的能量正交投影与勾股定理 |
 | 图 22 | `assets/figures/fig22-galerkin-convergence.png` | 能量逼近与 $L^2$ 逼近：误差曲线与收敛阶 |
 | 图 23 | `assets/figures/fig23-dense-vs-banded-stiffness.png` | 全域基（稠密、病态）vs 分片基（带状、良态） |
+| 图 24 | `assets/figures/fig24-compressible-control-volume.png` | 可压缩控制体：单元里存五个守恒量，面上交换三组通量 |
+| 图 25 | `assets/figures/fig25-ns-closure-map.png` | 封闭关系：守恒方程、状态方程与输运关系的依赖图 |
+| 图 26 | `assets/figures/fig26-characteristic-boundaries.png` | 外法向下的特征线方向与四类边界的进入条数 |
+| 图 27 | `assets/figures/fig27-subsonic-outlet-construction.png` | 亚声速出口：给静压，其余由内部信息补齐 |
+| 图 28 | `assets/figures/fig28-face-flux-two-cells.png` | 一个共享面通量同时更新两个控制体 |
+| 图 29 | `assets/figures/fig29-rusanov-flux.png` | Rusanov 通量：中心平均加数值扩散 |
+| 图 30 | `assets/figures/fig30-explicit-vs-implicit.png` | 同一个空间算子，显式推进与隐式迭代 |
+| 图 31 | `assets/figures/fig31-low-mach-timescales.png` | 低马赫数下声学与对流两个时间尺度 |
+| 图 32 | `assets/figures/fig32-sod-shocktube.png` | Sod 激波管在 t=0.2 的数值解与精确解 |
+| 图 33 | `assets/figures/fig33-shock-jump-control-volume.png` | 随激波移动的控制体与质量收支 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -192,6 +214,11 @@ python tools/make_figures.py
   原文的 Ritz/Galerkin 两条路线在本库补齐了完整证明（对称情形等价、非对称 2×2 反例、
   能量正交投影与最佳逼近），并新增收敛阶与稠密/带状刚度矩阵的数值对照；
   公式逐式转写为 LaTeX，算例与图件全部重做，未复制原文图片。
+- 笔记 [`docs/07-fluid/`](docs/07-fluid/) 整理自公众号「自由度FreeDof」的
+  《从不可压缩到可压缩：N–S 方程与求解流程有哪些改变？》（2026-10-29）。
+  原文约 2 万字、98 个独立公式、30 张插图；本库按 M7 四篇重组，补齐二维三维边界计数、
+  单元平均偏差、网格收敛阶、扩散步长系数与低马赫步数代价，并新增 Sod 守恒审计。
+  30 张原图仅在案例笔记中登记远程地址，未复制图片；本库图 24–图 33 为独立重绘。
 - 本库正文为独立撰写，推导与算例均重新完成；图件为自绘，不复制原文图像。
 
 ---
