@@ -139,7 +139,7 @@ python tools/make_figures.py
 | 图 4 | `assets/figures/fig04-yield-criteria.png` | Rankine / von Mises / Tresca 平面应力对比 |
 | 图 5 | `assets/figures/fig05-stress-path-uniaxial.png` | 单轴加载在莫尔圆上的对应点移动 |
 | 图 6 | `assets/figures/fig06-anderson-faults.png` | 三类断层与主应力方位 |
-| 图 7 | `assets/figures/fig07-single-element.png` | 单 Q4 算例：模型、$u_x$、$\lvert u\rvert$ 与 $\sigma_y$ 云图 |
+| 图 7 | `assets/figures/fig07-single-element.png` | 单 Q4 算例：模型、 $u_x$、 $\lvert u\rvert$ 与 $\sigma_y$ 云图 |
 | 图 8 | `assets/figures/fig08-fem-workflow.png` | 有限元程序的四步流程与数据结构 |
 | 图 9 | `assets/figures/fig09-node-ordering-detj.png` | 三种节点顺序下的 detJ 符号 |
 | 图 10 | `assets/figures/fig10-isoparametric-jacobian.png` | 母单元到实际单元的等参映射 |

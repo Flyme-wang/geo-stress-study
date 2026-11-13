@@ -85,7 +85,7 @@ py -3 tools/verify_fem_notes.py
 
 | 图 | 文件 | 用在哪 |
 |---|---|---|
-| 图 7 | `assets/figures/fig07-single-element.png` | 第 1 章：单 Q4 的模型与 $u_x$、$\lvert u\rvert$、$\sigma_y$ 云图 |
+| 图 7 | `assets/figures/fig07-single-element.png` | 第 1 章：单 Q4 的模型与 $u_x$、 $\lvert u\rvert$、 $\sigma_y$ 云图 |
 | 图 8 | `assets/figures/fig08-fem-workflow.png` | 第 1 章：四步流程 |
 | 图 9 | `assets/figures/fig09-node-ordering-detj.png` | 第 2 章：三种节点顺序与 detJ 符号 |
 | 图 10 | `assets/figures/fig10-isoparametric-jacobian.png` | 第 2 章：母单元到实际单元的映射 |
