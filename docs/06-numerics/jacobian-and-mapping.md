@@ -290,8 +290,7 @@ $D$ 是最容易被忽视的一个：它**不是**"缩小到零倍"，而是"把
 $\mathbf{x}_0$、 $\mathbf{g}$ 在 $\mathbf{f}(\mathbf{x}_0)$ 处可微。则
 
 $$
-\boxed{\ J_{\mathbf{h}}(\mathbf{x}_0)=J_{\mathbf{g}}\bigl(\mathbf{f}(\mathbf{x}_0)\bigr)\ 
-J_{\mathbf{f}}(\mathbf{x}_0)\ }
+\boxed{\ J_{\mathbf{h}}(\mathbf{x}_0)=J_{\mathbf{g}}\bigl(\mathbf{f}(\mathbf{x}_0)\bigr)\ J_{\mathbf{f}}(\mathbf{x}_0)\ }
 $$
 
 **推导。** 记 $\mathbf{y}_0=\mathbf{f}(\mathbf{x}_0)$， $\delta=\mathbf{f}(\mathbf{x}_0+\Delta\mathbf{x})-\mathbf{y}_0$。
