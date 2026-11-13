@@ -18,7 +18,7 @@
    左态 $(\rho,p,u)=(1,1,0)$，右态 $(0.125,0.1,0)$。
 3. 精确黎曼解给出中间压力与速度：
 
-   $$p_*=0.303130,\qquad u_*=0.927453 .$$
+   $$p_{\ast}=0.303130,\qquad u_{\ast}=0.927453 .$$
 
    接触间断两侧密度分别为 0.426319 与 0.265574，压力、速度连续。
 4. $t=0.2$ 时四道结构的位置是 0.263357（稀疏波头）、0.485945（稀疏波尾）、
@@ -60,9 +60,9 @@ $$
 |---|---|
 | $\mathbf U$ | 守恒量 $(\rho,\rho u,\mathcal E)^{\mathsf T}$ |
 | $\mathbf F$ | 物理通量 $(\rho u,\rho u^2+p,(\mathcal E+p)u)^{\mathsf T}$ |
-| $p_*,u_*$ | 中间压力、中间速度 |
-| $\rho_{*L},\rho_{*R}$ | 接触间断左、右密度 |
-| $c_*$ | 中间声速 |
+| $p_{\ast},u_{\ast}$ | 中间压力、中间速度 |
+| $\rho_{\ast L},\rho_{\ast R}$ | 接触间断左、右密度 |
+| $c_{\ast}$ | 中间声速 |
 | $S$ | 激波速度 |
 | $h$ | 单元长度 $1/N$ |
 | $\varepsilon_\rho$ | 密度积分绝对误差 |
@@ -103,9 +103,9 @@ Sod 问题的解是"左稀疏波—接触间断—右激波"的组合。
 $J_+=u+2c/(\gamma-1)$ 在全扇区守恒。把左态的速度与声速代入，
 
 $$
-u_*=\frac{2(c_L-c_*)}{\gamma-1},
+u_{\ast}=\frac{2(c_L-c_{\ast})}{\gamma-1},
 \qquad
-c_*=c_L\left(\frac{p}{p_L}\right)^{(\gamma-1)/(2\gamma)} .
+c_{\ast}=c_L\left(\frac{p}{p_L}\right)^{(\gamma-1)/(2\gamma)} .
 $$
 
 定义
@@ -115,7 +115,7 @@ f_L(p)=\frac{2c_L}{\gamma-1}
 \left[\left(\frac{p}{p_L}\right)^{(\gamma-1)/(2\gamma)}-1\right],
 $$
 
-则 $u_*=-f_L(p)$。
+则 $u_{\ast}=-f_L(p)$。
 
 右侧是激波（ $p>p_R$）。Rankine–Hugoniot 关系给出
 
@@ -124,7 +124,7 @@ f_R(p)=(p-p_R)\frac{\sqrt{2/((\gamma+1)\rho_R)}}
 {\sqrt{p+\frac{\gamma-1}{\gamma+1}p_R}},
 $$
 
-且 $u_*=f_R(p)$。两式相等：
+且 $u_{\ast}=f_R(p)$。两式相等：
 
 $$
 f_L(p)+f_R(p)=0 .
@@ -139,24 +139,24 @@ $$
 左星区是等熵的：
 
 $$
-\rho_{*L}=\rho_L\left(\frac{p_*}{p_L}\right)^{1/\gamma}=0.426319,
+\rho_{\ast L}=\rho_L\left(\frac{p_{\ast}}{p_L}\right)^{1/\gamma}=0.426319,
 \qquad
-c_*=c_L\left(\frac{p_*}{p_L}\right)^{(\gamma-1)/(2\gamma)}=0.997725 .
+c_{\ast}=c_L\left(\frac{p_{\ast}}{p_L}\right)^{(\gamma-1)/(2\gamma)}=0.997725 .
 $$
 
 右星区跨激波，用 Rankine–Hugoniot 的密度比：
 
 $$
-\rho_{*R}=\rho_R
-\frac{\dfrac{p_*}{p_R}+\dfrac{\gamma-1}{\gamma+1}}
-{\dfrac{\gamma-1}{\gamma+1}\dfrac{p_*}{p_R}+1}
+\rho_{\ast R}=\rho_R
+\frac{\dfrac{p_{\ast}}{p_R}+\dfrac{\gamma-1}{\gamma+1}}
+{\dfrac{\gamma-1}{\gamma+1}\dfrac{p_{\ast}}{p_R}+1}
 =0.265574 .
 $$
 
 激波速度（右态静止）：
 
 $$
-S=c_R\sqrt{\frac{\gamma+1}{2\gamma}\frac{p_*}{p_R}
+S=c_R\sqrt{\frac{\gamma+1}{2\gamma}\frac{p_{\ast}}{p_R}
 +\frac{\gamma-1}{2\gamma}}
 =1.752156 .
 $$
@@ -168,11 +168,11 @@ $t$ 时刻，以隔膜为原点：
 $$
 x_{\mathrm{head}}=0.5-c_Lt,
 \qquad
-x_{\mathrm{tail}}=0.5+(u_*-c_*)t,
+x_{\mathrm{tail}}=0.5+(u_{\ast}-c_{\ast})t,
 $$
 
 $$
-x_{\mathrm{contact}}=0.5+u_*t,
+x_{\mathrm{contact}}=0.5+u_{\ast}t,
 \qquad
 x_{\mathrm{shock}}=0.5+St .
 $$
@@ -275,11 +275,11 @@ $$
 
 | 量 | 数值 |
 |---|---:|
-| $p_*$ | 0.303130 |
-| $u_*$ | 0.927453 |
-| $\rho_{*L}$ | 0.426319 |
-| $\rho_{*R}$ | 0.265574 |
-| $c_*$ | 0.997725 |
+| $p_{\ast}$ | 0.303130 |
+| $u_{\ast}$ | 0.927453 |
+| $\rho_{\ast L}$ | 0.426319 |
+| $\rho_{\ast R}$ | 0.265574 |
+| $c_{\ast}$ | 0.997725 |
 | $S$ | 1.752156 |
 
 $t=0.2$ 时的波位置：
@@ -337,9 +337,9 @@ $$
 | 速度 | 数值 | 含义 |
 |---|---:|---|
 | 激波前沿 $S$ | 1.752 | 间断面的传播速度 |
-| 波后气体 $u_*$ | 0.927 | 气体本身的运动速度 |
+| 波后气体 $u_{\ast}$ | 0.927 | 气体本身的运动速度 |
 | 前方声速 $c_R$ | 1.058 | 未扰动气体中的声速 |
-| 波后声速 $c_*$ | 0.998 | 星区中的声速 |
+| 波后声速 $c_{\ast}$ | 0.998 | 星区中的声速 |
 
 激波相对于前方气体是超音速的，这是它能形成间断的原因：
 $S$ 比右态声速大，所以波前气体来不及用声波预警。
@@ -400,9 +400,9 @@ $$
 
 ## 5. 自测
 
-**题 1** 为什么 $p_*$ 要迭代求解？能否直接写出解析表达式？
+**题 1** 为什么 $p_{\ast}$ 要迭代求解？能否直接写出解析表达式？
 
-**题 2** 用 $u_*=0.927453$ 估算 $t=0.3$ 时接触间断的位置。
+**题 2** 用 $u_{\ast}=0.927453$ 估算 $t=0.3$ 时接触间断的位置。
 
 **题 3** 解释为什么 $t=0.2$ 时全域动量是 0.18，而质量与能量不变。
 

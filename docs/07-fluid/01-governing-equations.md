@@ -447,12 +447,16 @@ $$
 $$
 \mathbf F_L=
 \begin{pmatrix}
-0\\1\\0
+0\\
+1\\
+0
 \end{pmatrix},
 \qquad
 \mathbf F_R=
 \begin{pmatrix}
-0\\0.1\\0
+0\\
+0.1\\
+0
 \end{pmatrix}.
 $$
 
