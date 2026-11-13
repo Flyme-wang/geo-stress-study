@@ -87,10 +87,13 @@ GitHub 会先按 CommonMark 规则把反斜杠当转义符处理一遍，再交�
   要写成 `\lbrace S_N`。
 - `\operatorname`、`\phantom`、`\colorbox`、`\fcolorbox` 在 GitHub 黑名单里，
   报 "The following macros are not allowed"；用 `\mathrm{rank}`、`\mathrm{span}` 代替。
-- 行内公式里的 `\_` 虽然会被吃掉一个反斜杠，但正好还原成下标，**不要随手改成 `_`**：
+- `\_` 虽然会被吃掉一个反斜杠，但正好还原成下标，**不要随手改成 `_`**：
   一个行内公式里出现两处及以上下标时，Markdown 的强调语法可能把两个 `_` 当成斜体配对，
   整条公式都不渲染（实测 `$(\mathbf{A}\mathbf{b})_i = A_{ij}b_j$` 必坏，
   写成 `\_` 才稳；`$a_ib_i$` 这类词内下划线则安全）。独立公式 `$$...$$` 里正常写 `_`。
+- `\boxed{...}` 不报错，但 Chrome / Edge 不画外框：MathJax 把它输出成
+  `<menclose notation="box">`，而 Chromium 至今不支持这个 MathML 元素（Firefox 正常）。
+  重点结论用加粗的 `**结论**` 一行标示，不要指望 `\boxed` 的方框。
 - 百分号是唯一的例外：`\%` 被吃掉后 `%` 变成 TeX 注释符，
   线上会**丢掉百分号和同一公式行的后半段**。所以 `0.30%` 这类数字直接写成正文，
   不要塞进 `$...$`。
