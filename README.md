@@ -66,14 +66,16 @@ graph LR
 | [`docs/03-constitutive/`](docs/03-constitutive/) | 本构与强度：弹性、塑性、Mohr–Coulomb、Hoek–Brown | 🚧 提纲 |
 | [`docs/04-fracture/`](docs/04-fracture/) | 断裂与破坏：Griffith、应力强度因子、水力压裂 | 🚧 提纲 |
 | [`docs/05-geomechanics/`](docs/05-geomechanics/) | 地质力学：原地应力、有效应力、断层类型 | 🚧 提纲 |
-| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL | 🚧 提纲（编程基础已完成） |
+| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL | 🚧 提纲（编程基础、雅可比已完成） |
 | [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/) | 有限元编程基础：从 $Ku=F$ 到手写 Q4、组装、约束荷载与求解器 | ✅ 5 篇 + 导读 |
-| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 49 节点 |
+| [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md) | 雅可比矩阵：多变量映射的局部线性化、 $\det J$ 的几何、秩与奇异位形 | ✅ 1 篇 |
+| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 51 节点 |
 | [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 2 篇 |
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
 | [`tools/verify_fem_notes.py`](tools/verify_fem_notes.py) | 复算 FEM 编程五章的全部数值（61 项断言） | ✅ |
+| [`tools/verify_jacobian_note.py`](tools/verify_jacobian_note.py) | 复算雅可比笔记的全部数值（面积比、一阶误差、两连杆） | ✅ |
 
 ---
 
@@ -92,6 +94,9 @@ graph LR
 从 $Ku=F$ 的四步流程开始，依次是节点排序与雅可比、组装与稀疏存储、约束与荷载、线性方程组求解。
 入口见 [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/)，
 所有算例可用 `py -3 tools/verify_fem_notes.py` 复算。
+雅可比矩阵本身的几何与秩，见
+[`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md)
+（图 17–图 19，可用 `py -3 tools/verify_jacobian_note.py` 复算）。
 
 ---
 
@@ -149,6 +154,9 @@ python tools/make_figures.py
 | 图 14 | `assets/figures/fig14-load-vector.png` | 三类荷载的等效节点力与组装后的 F |
 | 图 15 | `assets/figures/fig15-solver-cost.png` | 直接法与迭代法的代价量级 |
 | 图 16 | `assets/figures/fig16-cg-pcg-convergence.png` | CG 与 PCG 的真实残差曲线 |
+| 图 17 | `assets/figures/fig17-jacobian-tangent-and-map.png` | 一阶近似：切线（一维）与平行四边形（多维） |
+| 图 18 | `assets/figures/fig18-jacobian-det-cases.png` | 同一函数的四个工作点：放大、压缩、翻转、退化 |
+| 图 19 | `assets/figures/fig19-jacobian-singular-arm.png` | 两连杆奇异位形：速度可达集压成线段 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -165,6 +173,11 @@ python tools/make_figures.py
   「有限元编程基础」11 篇系列（2026-11），逐篇对应本库
   [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/) 的五章，
   并列出对该系列的三处订正。未复制原文图片与代码。
+- 笔记 [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md)
+  整理自公众号文章《理论剖析 || 雅可比矩阵：连接多变量世界的数学桥梁》（2026-11）。
+  原文公式为图片，本库逐式转写为 LaTeX 并重算数值；原文的四个算例点在本库按
+  放大 / 压缩 / 翻转 / 退化重新分配（原文以奇异点演示"缩放"，见笔记 §4 误解 5）。
+  未复制原文图片。
 - 本库正文为独立撰写，推导与算例均重新完成；图件为自绘，不复制原文图像。
 
 ---

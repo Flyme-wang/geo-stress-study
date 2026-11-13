@@ -1254,6 +1254,267 @@ def fig16():
     save(fig, "fig16-cg-pcg-convergence.png")
 
 
+# ============================================================ 图 17 雅可比：导数与映射
+def _jac_model(x):
+    """贯穿雅可比笔记的算例：y1 = x1^2 + x2, y2 = x1*x2"""
+    return np.array([x[0] ** 2 + x[1], x[0] * x[1]])
+
+
+def _jac_matrix(x):
+    return np.array([[2.0 * x[0], 1.0], [x[1], x[0]]])
+
+
+def fig17():
+    """左：一元切线；右：小方格经 J 映射成平行四边形"""
+    with plt.rc_context({"font.size": 13}):
+        fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.6))
+
+        # ---- 左：一元导数就是局部线性化
+        ax = axes[0]
+        f = lambda x: 0.45 * x ** 2 + 0.25 * x + 0.6
+        df = lambda x: 0.9 * x + 0.25
+        x0, dx = 1.0, 0.85
+        xs = np.linspace(0.15, 2.35, 200)
+        ax.plot(xs, f(xs), color=BLUE, lw=2.4, label="真实 $y=f(x)$")
+        tx = np.array([x0 - 0.28, x0 + dx + 0.22])
+        ax.plot(tx, f(x0) + df(x0) * (tx - x0), color=RED, lw=2.2, ls="--",
+                label="切线（一阶近似）")
+        ax.plot([x0], [f(x0)], "o", color=RED, ms=8, zorder=8)
+        ax.annotate("$x_0$", (x0, f(x0)), xytext=(-6, -20), textcoords="offset points",
+                    fontsize=14, color=GRAY, ha="center")
+        ax.annotate("", (x0 + dx, f(x0)), (x0, f(x0)),
+                    arrowprops=dict(arrowstyle="<|-|>", color=GRAY, lw=1.3,
+                                    shrinkA=0, shrinkB=0))
+        ax.annotate(r"$\Delta x$", (x0 + dx / 2, f(x0)), xytext=(0, -22),
+                    textcoords="offset points", ha="center", fontsize=14, color=GRAY)
+        ax.annotate("", (x0 + dx, f(x0 + dx)), (x0 + dx, f(x0)),
+                    arrowprops=dict(arrowstyle="<|-|>", color=GREEN, lw=1.7,
+                                    shrinkA=0, shrinkB=0))
+        ax.annotate("真实\n$\\Delta y$", (x0 + dx, (f(x0) + f(x0 + dx)) / 2),
+                    xytext=(10, 0), textcoords="offset points", fontsize=13,
+                    color=GREEN, va="center")
+        ax.set_xlim(0.1, 2.55)
+        ax.set_ylim(0.0, 3.05)
+        ax.set_xlabel("$x$", fontsize=14)
+        ax.set_ylabel("$y$", fontsize=14)
+        ax.set_title("一元：用一条切线代替一段曲线", fontsize=14)
+        ax.legend(fontsize=11.5, loc="upper left", framealpha=0.95)
+        ax.grid(True, color="#E8EDF2", lw=0.7)
+        ax.set_axisbelow(True)
+        ax.tick_params(labelsize=11)
+        for s in ("top", "right"):
+            ax.spines[s].set_visible(False)
+
+        # ---- 右：输入方格 -> 输出平行四边形（左右两套坐标框）
+        ax = axes[1]
+        x0v = np.array([2.0, 1.0])
+        Jm = _jac_matrix(x0v)
+        h = 1.0
+        o_in = np.array([-4.3, 1.0])
+        sq = np.array([[0, 0], [h, 0], [h, h], [0, h]]) + o_in
+        poly = np.array([(0, 0), (h, 0), (h, h), (0, h)], float) @ Jm.T
+
+        ax.add_patch(Polygon(sq, closed=True, facecolor=BLUE, alpha=0.18,
+                             edgecolor=BLUE, lw=2.0, joinstyle="round"))
+        ax.add_patch(Polygon(poly, closed=True, facecolor=RED, alpha=0.13,
+                             edgecolor=RED, lw=2.0, joinstyle="round"))
+        arrow(ax, o_in, o_in + np.array([1.9, 0]), GRAY, lw=1.1, ms=10)
+        arrow(ax, o_in, o_in + np.array([0, 1.9]), GRAY, lw=1.1, ms=10)
+        arrow(ax, (0, 0), (5.6, 0), GRAY, lw=1.1, ms=10)
+        arrow(ax, (0, 0), (0, 4.4), GRAY, lw=1.1, ms=10)
+        arrow(ax, (0, 0), poly[1], RED, lw=2.2, ms=13)
+        arrow(ax, (0, 0), poly[3], RED, lw=2.2, ms=13)
+        ax.annotate(r"$\Delta x_1$", (o_in[0] + h / 2, o_in[1] - 0.22), ha="center",
+                    va="top", fontsize=13, color=BLUE)
+        ax.annotate(r"$\Delta x_2$", (o_in[0] - 0.18, o_in[1] + h / 2), ha="right",
+                    va="center", fontsize=13, color=BLUE)
+        ax.annotate(r"$\mathbf{J}(\Delta x_1,0)^{\mathrm{T}}$",
+                    poly[1] + np.array([0.00, -0.55]),
+                    ha="center", va="top", fontsize=12, color=RED)
+        ax.annotate(r"$\mathbf{J}(0,\Delta x_2)^{\mathrm{T}}$",
+                    poly[3] + np.array([-0.10, 0.20]),
+                    ha="left", va="bottom", fontsize=12, color=RED)
+        arrow(ax, (-2.25, 1.55), (-0.75, 1.55), "#37474F", lw=2.4, ms=16)
+        ax.annotate("$\\mathbf{J}$", (-1.50, 1.90), ha="center", fontsize=17,
+                    color="#37474F")
+        ax.annotate("输入 $(x_1,x_2)$", (-3.55, -0.55), ha="center",
+                    fontsize=12, color=GRAY)
+        ax.annotate("输出 $(y_1,y_2)$", (2.7, -0.55), ha="center",
+                    fontsize=12, color=GRAY)
+        ax.set_xlim(-5.1, 6.6)
+        ax.set_ylim(-0.95, 4.6)
+        ax.set_aspect("equal")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title("二元：两列就是两个坐标方向的像", fontsize=14)
+        for s in ("top", "right", "bottom", "left"):
+            ax.spines[s].set_visible(False)
+
+        fig.tight_layout()
+        save(fig, "fig17-jacobian-tangent-and-map.png")
+
+
+# ============================================================ 图 18 det J 的四种情形
+def fig18():
+    """同一个函数，四个工作点：放大 / 压缩 / 翻转 / 退化（同一坐标窗，直接可比）"""
+    cases = [
+        ((2.0, 1.0), "放大", "+7", GREEN),
+        ((0.5, 0.0), "压缩", "+0.5", BLUE),
+        ((0.0, 1.0), "翻转", "-1", "#E65100"),
+        ((1.0, 2.0), "退化", "0", RED),
+    ]
+    with plt.rc_context({"font.size": 13}):
+        fig, axes = plt.subplots(2, 2, figsize=(8.6, 8.2))
+        h = 1.0
+        sq = np.array([[0, 0], [h, 0], [h, h], [0, h]], float)
+        lim = 5.3
+        for k, (ax, (p, tag, dtxt, col)) in enumerate(zip(axes.ravel(), cases)):
+            x0 = np.array(p, float)
+            Jm = _jac_matrix(x0)
+            img = (Jm @ sq.T).T
+            ax.add_patch(Polygon(sq, closed=True, facecolor=BLUE, alpha=0.16,
+                                 edgecolor=BLUE, lw=1.6, ls=(0, (4, 3))))
+            ax.add_patch(Polygon(img, closed=True, facecolor=col, alpha=0.22,
+                                 edgecolor=col, lw=2.1, joinstyle="round"))
+            arrow(ax, (0, 0), tuple(img[1]), col, lw=1.9, ms=11)
+            arrow(ax, (0, 0), tuple(img[3]), col, lw=1.9, ms=11)
+            kmax = int(np.argmax(np.hypot(*(img - sq).T)))
+            a0, a1 = sq[kmax], img[kmax]
+            ax.plot([a0[0]], [a0[1]], "o", ms=6, color=BLUE, zorder=8)
+            ax.plot([a1[0]], [a1[1]], "o", ms=7, color=col, zorder=9)
+            ax.annotate("$A$", a0, xytext=(4, 5), textcoords="offset points",
+                        fontsize=12, color=BLUE)
+            ax.annotate("$A'$", a1, xytext=(-8, 6), textcoords="offset points",
+                        fontsize=12.5, color=col, ha="right", va="bottom")
+            if np.hypot(*(a1 - a0)) > 0.2:
+                ax.annotate("", a1, a0,
+                            arrowprops=dict(arrowstyle="-|>", color=col, lw=1.2,
+                                            ls=(0, (3, 2)), shrinkA=3, shrinkB=3,
+                                            alpha=0.8), zorder=7)
+            ax.axhline(0, color=GRAY, lw=0.9)
+            ax.axvline(0, color=GRAY, lw=0.9)
+            ax.annotate("$\\det\\mathbf{J}=%s$" % dtxt, (0.5, 0.975),
+                        xycoords="axes fraction", ha="center", va="top",
+                        fontsize=14, color=col,
+                        bbox=dict(boxstyle="round,pad=0.3", fc="white",
+                                  ec=col, lw=1.2))
+            ax.annotate(tag, (0.5, 0.875), xycoords="axes fraction",
+                        ha="center", va="top", fontsize=14, color="#263238")
+            ax.annotate("工作点 $(%g,\\ %g)$" % (p[0], p[1]), (0.5, 0.80),
+                        xycoords="axes fraction", ha="center", va="top",
+                        fontsize=11.5, color=GRAY)
+            ax.set_xlim(-0.9, lim)
+            ax.set_ylim(-0.9, lim)
+            ax.set_aspect("equal")
+            ax.set_xticks([])
+            ax.set_yticks([])
+            for s in ("top", "right", "bottom", "left"):
+                ax.spines[s].set_visible(False)
+
+        fig.suptitle("同一个函数： $\\det\\mathbf{J}=2x_1^2-x_2$ 决定局部面积怎么变",
+                     fontsize=15, y=0.985)
+        fig.text(0.5, 0.018,
+                 "蓝色虚线为单位方格（输入），实色为其像（输出）；\n"
+                 "同一坐标窗，大小可直接比较； $A\\to A'$ 看定向是否翻转。",
+                 ha="center", fontsize=11.5, color=GRAY, linespacing=1.5)
+        fig.tight_layout(rect=(0, 0.055, 1, 0.955))
+        save(fig, "fig18-jacobian-det-cases.png")
+
+
+# ============================================================ 图 19 二连杆奇异位形
+def fig19():
+    l1 = l2 = 1.0
+
+    def pose(t1, t2):
+        p0 = np.array([0.0, 0.0])
+        p1 = p0 + l1 * np.array([np.cos(t1), np.sin(t1)])
+        p2 = p1 + l2 * np.array([np.cos(t1 + t2), np.sin(t1 + t2)])
+        return p0, p1, p2
+
+    def jac(t1, t2):
+        s1, c1 = np.sin(t1), np.cos(t1)
+        s12, c12 = np.sin(t1 + t2), np.cos(t1 + t2)
+        return np.array([[-l1 * s1 - l2 * s12, -l2 * s12],
+                         [l1 * c1 + l2 * c12, l2 * c12]])
+
+    with plt.rc_context({"font.size": 13}):
+        fig, axes = plt.subplots(1, 2, figsize=(10.4, 5.2))
+        poses = [(np.radians(18), np.radians(62), "一般姿态：两连杆不共线"),
+                 (np.radians(28), 0.0, "奇异姿态：两连杆伸直")]
+        for ax, (t1, t2, title) in zip(axes, poses):
+            p0, p1, p2 = pose(t1, t2)
+            for a, b in ((p0, p1), (p1, p2)):
+                ax.plot([a[0], b[0]], [a[1], b[1]], color="#455A64", lw=10,
+                        solid_capstyle="round", zorder=3)
+                ax.plot([a[0], b[0]], [a[1], b[1]], color="#90A4AE", lw=3.4,
+                        solid_capstyle="round", zorder=4)
+            for p in (p0, p1, p2):
+                ax.plot([p[0]], [p[1]], "o", ms=10, color=BLUE, mec="white",
+                        mew=1.5, zorder=6)
+            Jm = jac(t1, t2)
+            detJ = np.linalg.det(Jm)
+            # 关节速度 |q_i| <= 1 时，末端可达速度集合 = J 作用在单位方格上
+            sqv = np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float)
+            vel = (Jm @ (sqv.T * 0.34)).T
+            col = RED if abs(detJ) < 1e-6 else GREEN
+            if abs(detJ) < 1e-6:
+                # 秩 1：可达速度集合退化成一条线段，直接画线而不画“零面积四边形”
+                ax.plot([p2[0], (p2 + vel[2])[0]], [p2[1], (p2 + vel[2])[1]],
+                        color=col, lw=5.2, alpha=0.4, solid_capstyle="round",
+                        zorder=5)
+                arrow(ax, p2, p2 + vel[2], col, lw=1.9, ms=11)
+            else:
+                ax.add_patch(Polygon(p2 + vel, closed=True, facecolor=col,
+                                     alpha=0.24, edgecolor=col, lw=1.7,
+                                     joinstyle="round", zorder=5))
+                arrow(ax, p2, p2 + vel[1], col, lw=1.7, ms=10)
+                arrow(ax, p2, p2 + vel[3], col, lw=1.7, ms=10)
+            ax.annotate("关节 1", p0, xytext=(8, -20), textcoords="offset points",
+                        fontsize=11.5, color=GRAY)
+            ax.annotate("关节 2", p1, xytext=(-10, 12), textcoords="offset points",
+                        fontsize=11.5, color=GRAY, ha="right")
+            ax.annotate("末端", p2, xytext=(12, -18), textcoords="offset points",
+                        fontsize=11.5, color=GRAY)
+            if abs(detJ) < 1e-6:
+                seg_mid = p2 + vel[2]
+                note = ("$\\dot q_1,\\dot q_2$ 任取：末端速度\n"
+                        "被压成一条线段（秩 1），\n"
+                        "只能垂直于连杆运动")
+            else:
+                seg_mid = p2 + vel[2]
+                note = ("$|\\dot q_i|\\leq 1$ 时末端速度\n"
+                        "可达集是一个平行四边形\n"
+                        "（秩 2，面积 $=|\\det\\mathbf{J}|$）")
+            ax.annotate(note, xy=seg_mid, xycoords="data",
+                        xytext=(0.025, 0.975), textcoords="axes fraction",
+                        ha="left", va="top", fontsize=11.8, color=col,
+                        linespacing=1.55,
+                        arrowprops=dict(arrowstyle="-", lw=1.1, color=col,
+                                        shrinkA=4, shrinkB=9,
+                                        connectionstyle="arc3,rad=-0.14"))
+            ax.annotate("$\\det\\mathbf{J}=l_1l_2\\sin\\theta_2=%s$"
+                        % ("0" if abs(detJ) < 1e-6 else "%.2f" % detJ),
+                        (0.5, 0.035), xycoords="axes fraction", ha="center",
+                        fontsize=13.5, color=col,
+                        bbox=dict(boxstyle="round,pad=0.32", fc="white",
+                                  ec=col, lw=1.1))
+            ax.set_title(title, fontsize=13.5)
+            ax.set_xlim(-1.75, 3.05)
+            ax.set_ylim(-1.05, 2.25)
+            ax.set_aspect("equal")
+            ax.grid(True, color="#EEF2F5", lw=0.7)
+            ax.set_axisbelow(True)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            for s in ("top", "right"):
+                ax.spines[s].set_visible(False)
+
+        fig.suptitle("奇异位形： $\\det\\mathbf{J}=0$ 时，关节转得再快也伸不出连杆",
+                     fontsize=14.5, y=0.995)
+        fig.tight_layout()
+        save(fig, "fig19-jacobian-singular-arm.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -1271,3 +1532,6 @@ if __name__ == "__main__":
     fig14()
     fig15()
     fig16()
+    fig17()
+    fig18()
+    fig19()

@@ -5,7 +5,7 @@ window.GRAPH = {
     "title": "geo-stress-study 力学知识图谱",
     "subtitle": "从一个点的应力，到地应力场与数值实现",
     "version": "0.1.0",
-    "updated": "2026-11-10",
+    "updated": "2026-11-13",
     "convention": "拉为正；应力分量用指标记法 σ_ij（i 为面法向，j 为力方向）",
     "statusLegend": {
       "done": "笔记已完成，可直接阅读",
@@ -434,6 +434,16 @@ window.GRAPH = {
       "summary": "读 .msg、判断增量塌缩的物理原因、确定调参优先级。"
     },
     {
+      "id": "M6-06",
+      "label": "雅可比与多变量映射",
+      "type": "topic",
+      "status": "done",
+      "col": 7,
+      "row": 6,
+      "doc": "docs/06-numerics/jacobian-and-mapping.md",
+      "summary": "J_ij = ∂y_i/∂x_j 是唯一的局部线性化映射；det J 是面积/体积缩放，为 0 是降秩而非“缩得很小”；m≠n 看秩与奇异值。"
+    },
+    {
       "id": "M6-P",
       "label": "P 有限元编程基础",
       "type": "module",
@@ -719,6 +729,16 @@ window.GRAPH = {
       "from": "M6",
       "to": "M6-05",
       "kind": "contains"
+    },
+    {
+      "from": "M6",
+      "to": "M6-06",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-06",
+      "to": "M6-P2",
+      "kind": "precedes"
     },
     {
       "from": "M6",
