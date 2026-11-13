@@ -62,7 +62,7 @@ $$
 | $J(\mathbf{x}_0)$ | 雅可比矩阵， $m\times n$，在 $\mathbf{x}_0$ 处取值 |
 | $J_{ij}$ | 第 $i$ 行第 $j$ 列元素， $\partial y_i/\partial x_j$ |
 | $\det J$ | 雅可比行列式（仅当 $m=n$），带符号 |
-| $\operatorname{rank}J$ | 雅可比的秩， $\le\min(m,n)$ |
+| $\mathrm{rank}J$ | 雅可比的秩， $\le\min(m,n)$ |
 | $\sigma_{\max},\sigma_{\min}$ | 最大/最小奇异值（ $m\neq n$ 时的"拉伸倍数"） |
 | $\kappa=\sigma_{\max}/\sigma_{\min}$ | 条件数，度量"反解误差放大多少倍" |
 | $\mathbf{e}_j$ | 第 $j$ 个单位坐标向量 |
@@ -345,8 +345,8 @@ $$
 
 | 情形 | 含义 |
 |---|---|
-| $\operatorname{rank}J=n$（列满秩） | 局部**单射**：不同的 $\Delta\mathbf{x}$ 给出不同的 $\Delta\mathbf{y}$，输入可以局部反推 |
-| $\operatorname{rank}J<n$ | 存在非零 $\Delta\mathbf{x}$ 使 $J\Delta\mathbf{x}=\mathbf{0}$：某个输入方向"看不见" |
+| $\mathrm{rank}J=n$（列满秩） | 局部**单射**：不同的 $\Delta\mathbf{x}$ 给出不同的 $\Delta\mathbf{y}$，输入可以局部反推 |
+| $\mathrm{rank}J<n$ | 存在非零 $\Delta\mathbf{x}$ 使 $J\Delta\mathbf{x}=\mathbf{0}$：某个输入方向"看不见" |
 | $m>n$ 且列满秩 | 像是 $\mathbb{R}^m$ 中的一个 $n$ 维曲面， $\mathbf{y}$ 不能取遍整个空间 |
 | $m<n$ | 不可能单射，必然多对一 |
 
@@ -556,7 +556,7 @@ $\det J=0$——它演示的是**退化**，不是缩放。用奇异点讲缩放
 "可逆性"由秩/奇异值描述（§2.9）； $m>n$ 时像只是高维空间中的一张曲面，
 $m<n$ 时必然多对一。
 
-正确说法：方阵看 $\det$，长方形看 $\operatorname{rank}$ 与 $\sigma_{\min}$。
+正确说法：方阵看 $\det$，长方形看 $\mathrm{rank}$ 与 $\sigma_{\min}$。
 
 ---
 

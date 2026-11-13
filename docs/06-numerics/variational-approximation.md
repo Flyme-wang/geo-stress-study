@@ -56,7 +56,7 @@
 | $J(v)$ | 总势能 $=\tfrac12A(v,v)-F(v)$ |
 | $H$ | 精确解所在的全空间 |
 | $\{\varphi_i\}$ | 有限元基函数（形函数），线性无关 |
-| $S_N$ | 子空间 $\operatorname{span}\{\varphi_i\}_{i=1}^{N}$ |
+| $S_N$ | 子空间 $\mathrm{span}\{\varphi_i\}_{i=1}^{N}$ |
 | $u$ | 精确解： $A(u,v)=F(v)$ 对所有 $v\in H$ |
 | $u_N$ | 离散解： $A(u_N,v)=F(v)$ 对所有 $v\in S_N$ |
 | $K,\mathbf{f}$ | 刚度矩阵 $K_{ij}=A(\varphi_i,\varphi_j)$、荷载向量 $f_i=F(\varphi_i)$ |
@@ -165,7 +165,7 @@ $$
 既然在全空间 $H$ 里找不到，就退到有限维子空间
 
 $$
-S_N=\operatorname{span}\{\varphi_1,\dots,\varphi_N\}\subset H
+S_N=\mathrm{span}\{\varphi_1,\dots,\varphi_N\}\subset H
 $$
 
 并只在这个子空间里找极小点：
