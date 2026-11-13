@@ -1515,6 +1515,238 @@ def fig19():
         save(fig, "fig19-jacobian-singular-arm.png")
 
 
+# ================================== 图 20 Ritz 与 Galerkin：两条路，一个方程组
+def fig20():
+    fig, ax = plt.subplots(figsize=(12.8, 6.0))
+    ax.set_xlim(0, 12.8)
+    ax.set_ylim(0, 6.0)
+    ax.axis("off")
+
+    def box(x, y, w, h, title, body, fc):
+        ax.add_patch(FancyBboxPatch(
+            (x, y), w, h, boxstyle="round,pad=0.10,rounding_size=0.14",
+            facecolor=fc, edgecolor="#37474F", lw=1.0, zorder=2))
+        ax.text(x + w / 2, y + h - 0.33, title, ha="center", va="center",
+                fontsize=12.4, color="#22303A", zorder=3)
+        ax.text(x + w / 2, y + h / 2 - 0.34, body, ha="center", va="center",
+                fontsize=10.0, color="#4A5A66", linespacing=1.7, zorder=3)
+
+    w, h = 2.85, 1.62
+    xs = [0.75, 4.25, 7.75]
+    y_top, y_bot = 3.72, 1.32
+
+    rows = [
+        (y_top, "#E8F1FB", [
+            ("Ritz：先有能量", "总势能 $J(v)=\\frac{1}{2}A(v,v)-F(v)$\n求 $J$ 在 $H$ 上的极小"),
+            ("限制到子空间", "$J(\\mathbf{c})=\\frac{1}{2}\\mathbf{c}^{\\top}K\\mathbf{c}-\\mathbf{f}^{\\top}\\mathbf{c}$\n$\\mathbf{c}=(c_1,\\dots,c_N)$"),
+            ("极值条件", "$\\partial J/\\partial c_i=0$\n二次型正定 → 极小点唯一"),
+        ]),
+        (y_bot, "#EAF4EC", [
+            ("Galerkin：只用弱形式", "$A(u,v)=F(v)$，$\\forall v\\in H$\n不要求 $A$ 对称"),
+            ("测试函数取在子空间", "$A(u_N,v)=F(v)$，$\\forall v\\in S_N$\n$u_N=\\sum_j c_j\\varphi_j$"),
+            ("$c_i$ 任意 → 括号为零", "$\\sum_i c_i[\\sum_j A(\\varphi_j,\\varphi_i)c_j-F(\\varphi_i)]=0$"),
+        ]),
+    ]
+    for y, color, items in rows:
+        for x, (t, b) in zip(xs, items):
+            box(x, y, w, h, t, b, color)
+        for x in xs[:-1]:
+            arrow(ax, (x + w + 0.10, y + h / 2), (x + w + 0.42, y + h / 2),
+                  GRAY, lw=1.6, ms=11)
+
+    ax.add_patch(FancyBboxPatch(
+        (11.02, 2.62), 1.52, 1.42, boxstyle="round,pad=0.10,rounding_size=0.16",
+        facecolor="#FDF3E3", edgecolor="#B7202A", lw=1.4, zorder=4))
+    ax.text(11.78, 3.52, "同一个", ha="center", va="center", fontsize=10.5,
+            color="#8A2A2A", zorder=5)
+    ax.text(11.78, 3.16, "$K\\mathbf{c}=\\mathbf{f}$", ha="center", va="center",
+            fontsize=14.5, color="#B7202A", zorder=5)
+    ax.text(11.78, 2.85, "对称时完全一致", ha="center", va="center",
+            fontsize=8.8, color="#8A2A2A", zorder=5)
+    arrow(ax, (10.72, 4.53), (11.10, 3.86), GRAY, lw=1.5, ms=11)
+    arrow(ax, (10.72, 2.13), (11.10, 2.80), GRAY, lw=1.5, ms=11)
+
+    ax.text(6.4, 5.62, "两条路径：能量极小化 vs 加权余量投影",
+            ha="center", fontsize=15)
+    ax.text(6.4, 0.86,
+            "上排只有在 $A$ 对称正定时才存在（否则没有能量泛函可极小化）；"
+            "下排只要求 $A$ 有界、强制，非对称问题照样能导出方程组。",
+            ha="center", fontsize=10.8, color=GRAY)
+    ax.text(6.4, 0.44,
+            "所以：Ritz 是 Galerkin 在“对称正定”情形下的特例，而不是另一套方法。",
+            ha="center", fontsize=10.8, color="#B7202A")
+    save(fig, "fig20-ritz-galerkin-two-roads.png")
+
+
+# ================================== 图 21 能量正交投影：误差垂直于子空间
+def fig21():
+    fig, ax = plt.subplots(figsize=(11.6, 6.2))
+    ax.set_xlim(0, 11.6)
+    ax.set_ylim(0, 6.2)
+    ax.axis("off")
+
+    y0 = 2.30                      # 子空间（画成一条带）
+    xO, xN, xv = 1.30, 5.20, 8.30
+    u_top = 4.55
+
+    ax.add_patch(Rectangle((0.55, y0 - 0.30), 10.2, 0.60, facecolor=BLUE,
+                           alpha=0.10, edgecolor=BLUE, lw=1.1, zorder=1))
+    ax.text(10.55, y0 + 0.42, "子空间 $S_N$", color=BLUE, fontsize=14,
+            ha="right", va="bottom")
+
+    # 三个向量：u、u_N、以及任取的 v
+    arrow(ax, (xO, y0), (xN, u_top), RED, lw=3.0, ms=15)
+    arrow(ax, (xO, y0), (xN, y0), GREEN, lw=3.0, ms=15)
+    arrow(ax, (xO, y0), (xv, y0), "#37474F", lw=1.6, ms=12)
+    arrow(ax, (xN, y0), (xN, u_top), "#8E24AA", lw=2.4, ms=14)
+
+    # 勾股三角形 u - v - u_N
+    ax.plot([xN, xv], [u_top, y0], color=GRAY, lw=1.3, ls=(0, (4, 3)), zorder=3)
+
+    # 直角标记（在 u_N 处，竖直边与子空间法向）
+    s = 0.26
+    ax.add_patch(Rectangle((xN, y0), s, s, facecolor="white",
+                           edgecolor="#37474F", lw=1.1, zorder=5))
+
+    for (xx, yy), col in [((xO, y0), "#37474F"), ((xN, y0), GREEN),
+                          ((xN, u_top), RED), ((xv, y0), "#37474F")]:
+        ax.plot([xx], [yy], "o", ms=8.5, color=col, mec="white", mew=1.4,
+                zorder=6)
+
+    ax.text(xO - 0.18, y0 - 0.30, "$O$", fontsize=14, ha="right", va="top")
+    ax.text(xN - 0.20, y0 - 0.30, "$u_N$", color=GREEN, fontsize=16,
+            ha="right", va="top")
+    ax.text(xN - 0.22, u_top + 0.05, "$u$", color=RED, fontsize=16,
+            ha="right", va="bottom")
+    ax.text(xN + 0.20, 0.5 * (y0 + u_top), "$u-u_N$", color="#8E24AA",
+            fontsize=15, ha="left", va="center")
+    ax.text(xv + 0.10, y0 - 0.32, "$v$（任取）", color="#37474F", fontsize=14,
+            ha="left", va="top")
+
+    ax.text(0.55, 5.90, r"$A(u-u_N,\,v)=0$ 对所有 $v\in S_N$",
+            fontsize=17, color="#22303A")
+    ax.text(0.55, 5.42,
+            "不是“误差很小”，而是误差与整个子空间精确正交",
+            fontsize=12.5, color=GRAY)
+
+    ax.text(0.55, 1.22,
+            r"于是 $\Vert u-v\Vert_E^2=\Vert u-u_N\Vert_E^2"
+            r"+\Vert u_N-v\Vert_E^2\ \geq\ \Vert u-u_N\Vert_E^2$。",
+            fontsize=13.2, color="#22303A")
+    ax.text(0.55, 0.74,
+            "在 $S_N$ 能表示的所有函数里， $u_N$ 离真解最近——这就是“最佳逼近”，"
+            "勾股定理的直接推论。",
+            fontsize=12.5, color=GRAY)
+    save(fig, "fig21-energy-orthogonal-projection.png")
+
+
+# ================================== 图 22 收敛：能量单调上升，误差按阶下降
+def fig22():
+    ns = np.array([3, 7, 15, 31, 63, 127])
+    hs = 1.0 / (ns + 1)
+    A = np.array([4.686291501, 4.871709919, 4.918968217,
+                  4.930839888, 4.933811384, 4.934554481])
+    eA = np.array([4.985e-01, 2.512e-01, 1.258e-01,
+                   6.295e-02, 3.148e-02, 1.574e-02])
+    eL2 = np.array([3.928e-02, 9.921e-03, 2.487e-03,
+                    6.220e-04, 1.555e-04, 3.888e-05])
+    exact = np.pi ** 2 / 2
+
+    fig, axes = plt.subplots(1, 2, figsize=(12.8, 5.0))
+
+    ax = axes[0]
+    ax.axhline(exact, color=GRAY, lw=1.3, ls="--")
+    ax.plot(ns, A, "o-", color=GREEN, lw=2.2, ms=7,
+            label="$A(u_N,u_N)$（离散应变能）")
+    ax.text(3.15, exact + 0.008, "$A(u,u)=\\pi^2/2=%.6f$" % exact,
+            fontsize=11.2, color=GRAY, va="bottom")
+    ax.text(0.97, 0.13,
+            "曲线与虚线的差距\n$=A(u,u)-A(u_N,u_N)=\\Vert u-u_N\\Vert_E^2\\geq0$",
+            transform=ax.transAxes, ha="right", va="bottom", fontsize=11,
+            color="#B7202A", linespacing=1.6)
+    ax.set_xscale("log")
+    ax.set_xlabel("内部节点数 $N$（网格越来越细 →）", fontsize=12)
+    ax.set_ylabel("应变能", fontsize=12)
+    ax.set_title("(a) 离散能量从下方单调逼近真值", fontsize=13)
+    ax.set_ylim(4.66, 4.96)
+    ax.legend(loc="lower right", fontsize=11)
+    ax.grid(True, color="#EEF2F5", lw=0.8)
+    ax.set_axisbelow(True)
+
+    ax = axes[1]
+    ax.loglog(hs, eA, "o-", color=BLUE, lw=2.2, ms=7,
+              label="能量范数误差 $\\Vert u-u_N\\Vert_E$")
+    ax.loglog(hs, eL2, "s-", color=RED, lw=2.2, ms=6.5,
+              label="$L^2$ 误差 $\\Vert u-u_N\\Vert_{L^2}$")
+    hh = np.array([hs[-1], 0.30])
+    ax.loglog(hh, eA[-1] * (hh / hs[-1]) ** 1.0, "--", color=BLUE, lw=1.2,
+              alpha=0.8)
+    ax.loglog(hh, eL2[-1] * (hh / hs[-1]) ** 2.0, "--", color=RED, lw=1.2,
+              alpha=0.8)
+    ax.text(0.058, 0.135, "斜率 1", color=BLUE, fontsize=11.5)
+    ax.text(0.052, 0.0033, "斜率 2", color=RED, fontsize=11.5)
+    ax.set_xlabel("单元尺寸 $h$（→ 越来越小）", fontsize=12)
+    ax.set_ylabel("误差", fontsize=12)
+    ax.set_title("(b) 双对数斜率 = 收敛阶", fontsize=13)
+    ax.legend(loc="lower left", fontsize=11)
+    ax.grid(True, which="both", color="#EEF2F5", lw=0.8)
+    ax.set_axisbelow(True)
+    ax.invert_xaxis()
+
+    fig.suptitle("一维模型问题 $-u''=\\pi^2\\sin\\pi x$：分片线性 Galerkin 的收敛",
+                 fontsize=15, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig22-galerkin-convergence.png")
+
+
+# ================================== 图 23 全域基 vs 分片基：稠密与带状
+def fig23():
+    n = 40
+    i = np.arange(1, n + 1, dtype=float)
+    Kp = np.outer(i, i) / (i[:, None] + i[None, :] - 1.0)      # 多项式基
+    h = 1.0 / (n + 1)
+    Kh = (2.0 * np.eye(n) - np.eye(n, k=1) - np.eye(n, k=-1)) / h  # hat 基
+
+    fig, axes = plt.subplots(1, 2, figsize=(12.4, 5.3))
+
+    for ax, M, title, cmap in [
+            (axes[0], Kp, "(a) 全域多项式基：稠密、病态", "Reds"),
+            (axes[1], Kh, "(b) 分片 hat 基：三对角、稀疏", "Blues")]:
+        Mm = np.abs(M)
+        Mm = Mm / Mm.max()
+        ax.imshow(Mm ** 0.35, cmap=cmap, interpolation="nearest",
+                  vmin=0, vmax=1)
+        nnz = int(np.count_nonzero(np.abs(M) > 1e-12 *
+                                   (np.abs(M).max() if np.abs(M).max() else 1)))
+        dens = 100.0 * nnz / n ** 2
+        cond = np.linalg.cond(M)
+        ax.set_title(title, fontsize=13)
+        ax.set_xticks([0, n - 1])
+        ax.set_yticks([0, n - 1])
+        ax.set_xticklabels([1, n], fontsize=9)
+        ax.set_yticklabels([1, n], fontsize=9)
+        ax.set_xlabel("未知量编号 $j$", fontsize=11.5)
+        ax.set_ylabel("未知量编号 $i$", fontsize=11.5)
+        mant, expo = ("%.1f" % (cond / 10 ** np.floor(np.log10(cond))),
+                      int(np.floor(np.log10(cond))))
+        ax.text(0.5, 0.94,
+                "非零元 %d / %d（%.1f%%）\n条件数 $\\kappa\\approx%s\\times10^{%d}$"
+                % (nnz, n * n, dens, mant, expo),
+                transform=ax.transAxes, ha="center", va="top", fontsize=10.8,
+                color="#22303A",
+                bbox=dict(boxstyle="round,pad=0.32", fc="white", ec="#C9D2DA",
+                          alpha=0.94))
+
+    fig.suptitle("基函数选在哪里，决定刚度矩阵长什么样（$N=%d$）" % n,
+                 fontsize=15, y=0.99)
+    fig.text(0.5, 0.015,
+             "左：基函数铺满全场的代价 —— 任意两基函数重叠，矩阵全满；"
+             "右：基函数只在自己的节点邻域非零，重叠只能是相邻节点。",
+             ha="center", fontsize=10.8, color=GRAY)
+    fig.tight_layout(rect=(0, 0.05, 1, 0.94))
+    save(fig, "fig23-dense-vs-banded-stiffness.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -1535,3 +1767,7 @@ if __name__ == "__main__":
     fig17()
     fig18()
     fig19()
+    fig20()
+    fig21()
+    fig22()
+    fig23()

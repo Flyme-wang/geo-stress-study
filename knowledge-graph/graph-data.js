@@ -444,6 +444,16 @@ window.GRAPH = {
       "summary": "J_ij = ∂y_i/∂x_j 是唯一的局部线性化映射；det J 是面积/体积缩放，为 0 是降秩而非“缩得很小”；m≠n 看秩与奇异值。"
     },
     {
+      "id": "M6-07",
+      "label": "变分近似与投影",
+      "type": "topic",
+      "status": "done",
+      "col": 7,
+      "row": 7,
+      "doc": "docs/06-numerics/variational-approximation.md",
+      "summary": "弱形式 A(u,v)=F(v) 与泛函 J(v)=½A(v,v)−F(v) 的极小等价；Ritz 与 Galerkin 在对称情形同解、非对称情形不等价；离散解是能量正交投影 ⇒ 最佳逼近与能量恒等式；分片线性收敛 O(h)/O(h²)；全域基稠密病态 vs 分片基带状良态。"
+    },
+    {
       "id": "M6-P",
       "label": "P 有限元编程基础",
       "type": "module",
@@ -736,8 +746,28 @@ window.GRAPH = {
       "kind": "contains"
     },
     {
+      "from": "M6",
+      "to": "M6-07",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-06",
+      "to": "M6-07",
+      "kind": "precedes"
+    },
+    {
       "from": "M6-06",
       "to": "M6-P2",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-07",
+      "to": "M6-01",
+      "kind": "precedes"
+    },
+    {
+      "from": "M6-07",
+      "to": "M6-P1",
       "kind": "precedes"
     },
     {

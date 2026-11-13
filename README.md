@@ -66,16 +66,18 @@ graph LR
 | [`docs/03-constitutive/`](docs/03-constitutive/) | 本构与强度：弹性、塑性、Mohr–Coulomb、Hoek–Brown | 🚧 提纲 |
 | [`docs/04-fracture/`](docs/04-fracture/) | 断裂与破坏：Griffith、应力强度因子、水力压裂 | 🚧 提纲 |
 | [`docs/05-geomechanics/`](docs/05-geomechanics/) | 地质力学：原地应力、有效应力、断层类型 | 🚧 提纲 |
-| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL | 🚧 提纲（编程基础、雅可比已完成） |
+| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL | 🚧 提纲（编程基础、雅可比、变分近似已完成） |
 | [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/) | 有限元编程基础：从 $Ku=F$ 到手写 Q4、组装、约束荷载与求解器 | ✅ 5 篇 + 导读 |
 | [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md) | 雅可比矩阵：多变量映射的局部线性化、 $\det J$ 的几何、秩与奇异位形 | ✅ 1 篇 |
-| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 51 节点 |
+| [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md) | 变分近似：弱形式↔能量极小、Ritz 与 Galerkin、正交投影与最佳逼近 | ✅ 1 篇 |
+| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 52 节点 |
 | [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 2 篇 |
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
 | [`tools/verify_fem_notes.py`](tools/verify_fem_notes.py) | 复算 FEM 编程五章的全部数值（61 项断言） | ✅ |
 | [`tools/verify_jacobian_note.py`](tools/verify_jacobian_note.py) | 复算雅可比笔记的全部数值（面积比、一阶误差、两连杆） | ✅ |
+| [`tools/verify_variational_note.py`](tools/verify_variational_note.py) | 复算变分近似笔记的全部数值（能量极小、正交性、收敛阶、稀疏度） | ✅ |
 
 ---
 
@@ -97,6 +99,9 @@ graph LR
 雅可比矩阵本身的几何与秩，见
 [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md)
 （图 17–图 19，可用 `py -3 tools/verify_jacobian_note.py` 复算）。
+最后回到「刚度矩阵凭什么长这样」：弱形式与能量极小的等价、Ritz 与 Galerkin 两路同归，见
+[`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md)
+（图 20–图 23，可用 `py -3 tools/verify_variational_note.py` 复算）。
 
 ---
 
@@ -157,6 +162,10 @@ python tools/make_figures.py
 | 图 17 | `assets/figures/fig17-jacobian-tangent-and-map.png` | 一阶近似：切线（一维）与平行四边形（多维） |
 | 图 18 | `assets/figures/fig18-jacobian-det-cases.png` | 同一函数的四个工作点：放大、压缩、翻转、退化 |
 | 图 19 | `assets/figures/fig19-jacobian-singular-arm.png` | 两连杆奇异位形：速度可达集压成线段 |
+| 图 20 | `assets/figures/fig20-ritz-galerkin-two-roads.png` | 两条路径：能量极小化 vs 加权余量投影 |
+| 图 21 | `assets/figures/fig21-energy-orthogonal-projection.png` | 子空间上的能量正交投影与勾股定理 |
+| 图 22 | `assets/figures/fig22-galerkin-convergence.png` | 能量逼近与 $L^2$ 逼近：误差曲线与收敛阶 |
+| 图 23 | `assets/figures/fig23-dense-vs-banded-stiffness.png` | 全域基（稠密、病态）vs 分片基（带状、良态） |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -178,6 +187,11 @@ python tools/make_figures.py
   原文公式为图片，本库逐式转写为 LaTeX 并重算数值；原文的四个算例点在本库按
   放大 / 压缩 / 翻转 / 退化重新分配（原文以奇异点演示"缩放"，见笔记 §4 误解 5）。
   未复制原文图片。
+- 笔记 [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md)
+  整理自公众号文章《变分问题与变分方程的近似求解：从离散投影到现代有限元理论》（2026-11）。
+  原文的 Ritz/Galerkin 两条路线在本库补齐了完整证明（对称情形等价、非对称 2×2 反例、
+  能量正交投影与最佳逼近），并新增收敛阶与稠密/带状刚度矩阵的数值对照；
+  公式逐式转写为 LaTeX，算例与图件全部重做，未复制原文图片。
 - 本库正文为独立撰写，推导与算例均重新完成；图件为自绘，不复制原文图像。
 
 ---
