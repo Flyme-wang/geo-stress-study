@@ -16,7 +16,7 @@
    它把"一个输出对一个输入的敏感度"排成矩阵。
 2. 它给出**局部线性化**：
    $\mathbf{f}(\mathbf{x}_0+\Delta\mathbf{x})\approx\mathbf{f}(\mathbf{x}_0)+J(\mathbf{x}_0)\Delta\mathbf{x}$，
-   误差是 $O(\|\Delta\mathbf{x}\|^2)$。
+   误差是 $O(\Vert\Delta\mathbf{x}\Vert^2)$。
 3. 一维导数是**一个数**（斜率），多维导数是**一个矩阵**：
    它把输入的小方格线性地变成输出的平行四边形（图 17）。
 4. $\det J$ 是**局部面积（体积）缩放因子**，带符号： $|\det J|$ 是倍数，
@@ -95,9 +95,9 @@ $$
 **定义（Fréchet 可微）**。若存在 $m\times n$ 矩阵 $J$，使
 
 $$
-\frac{\bigl\|\mathbf{f}(\mathbf{x}_0+\Delta\mathbf{x})
--\mathbf{f}(\mathbf{x}_0)-J\Delta\mathbf{x}\bigr\|}
-{\|\Delta\mathbf{x}\|}\longrightarrow 0
+\frac{\bigl\Vert\mathbf{f}(\mathbf{x}_0+\Delta\mathbf{x})
+-\mathbf{f}(\mathbf{x}_0)-J\Delta\mathbf{x}\bigr\Vert}
+{\Vert\Delta\mathbf{x}\Vert}\longrightarrow 0
 \qquad(\Delta\mathbf{x}\to\mathbf{0})
 $$
 
@@ -110,7 +110,7 @@ $$
 代入定义：
 
 $$
-\frac{\bigl\|\mathbf{f}(\mathbf{x}_0+h\mathbf{e}_j)-\mathbf{f}(\mathbf{x}_0)-hJ\mathbf{e}_j\bigr\|}{h}\to0
+\frac{\bigl\Vert\mathbf{f}(\mathbf{x}_0+h\mathbf{e}_j)-\mathbf{f}(\mathbf{x}_0)-hJ\mathbf{e}_j\bigr\Vert}{h}\to0
 $$
 
 而 $J\mathbf{e}_j$ 恰好是 $J$ 的第 $j$ 列。两边除以 $h$ 取极限，得到
@@ -127,8 +127,8 @@ $$
 一阶项对 $\Delta\mathbf{x}$ 是线性的，所以
 
 $$
-J\Delta\mathbf{x}=\sum_{j=1}^{n}\Delta x_j\,(J\mathbf{e}_j)
-=\sum_{j=1}^{n}\Delta x_j\,\frac{\partial\mathbf{f}}{\partial x_j}
+J\Delta\mathbf{x}=\sum_{j=1}^{n}\Delta x_j\ (J\mathbf{e}_j)
+=\sum_{j=1}^{n}\Delta x_j\ \frac{\partial\mathbf{f}}{\partial x_j}
 $$
 
 读法：每个输入方向的敏感度乘上该方向的步长，再**叠加**。
@@ -136,14 +136,14 @@ $$
 
 **步骤 3｜唯一性。**
 若 $J$ 与 $J'$ 都满足定义，令 $\Delta\mathbf{x}=h\mathbf{v}$（任意固定方向），
-相减得 $\|(J-J')\mathbf{v}\|\,h/h\to0$，故 $(J-J')\mathbf{v}=\mathbf{0}$ 对一切 $\mathbf{v}$ 成立，
+相减得 $\Vert(J-J')\mathbf{v}\Vert\ h/h\to0$，故 $(J-J')\mathbf{v}=\mathbf{0}$ 对一切 $\mathbf{v}$ 成立，
 所以 $J=J'$。线性化矩阵是唯一的。
 
 **结论**：
 
 $$
-\boxed{\;J_{ij}=\frac{\partial y_i}{\partial x_j},\qquad
-\Delta\mathbf{y}\approx J(\mathbf{x}_0)\,\Delta\mathbf{x}\;}
+\boxed{\ J_{ij}=\frac{\partial y_i}{\partial x_j},\qquad
+\Delta\mathbf{y}\approx J(\mathbf{x}_0)\ \Delta\mathbf{x}\ }
 $$
 
 **依据**：可微定义。矩阵 $J$ 不是"把偏导数排成一张表"，
@@ -155,7 +155,7 @@ $$
 $$
 J=
 \begin{bmatrix}
-\dfrac{\partial y_1}{\partial x_1} & \dfrac{\partial y_1}{\partial x_2}\\[6pt]
+\dfrac{\partial y_1}{\partial x_1} & \dfrac{\partial y_1}{\partial x_2}\\
 \dfrac{\partial y_2}{\partial x_1} & \dfrac{\partial y_2}{\partial x_2}
 \end{bmatrix} =
 \begin{bmatrix}
@@ -173,9 +173,12 @@ $$
 在点 $(2,1)$：
 
 $$
-J=\begin{bmatrix}4&1\\1&2\end{bmatrix},\qquad
-J\mathbf{e}_1=\begin{pmatrix}4\\1\end{pmatrix},\qquad
-J\mathbf{e}_2=\begin{pmatrix}1\\2\end{pmatrix}
+J=\begin{bmatrix}4&1\\
+1&2\end{bmatrix},\qquad
+J\mathbf{e}_1=\begin{pmatrix}4\\
+1\end{pmatrix},\qquad
+J\mathbf{e}_2=\begin{pmatrix}1\\
+2\end{pmatrix}
 $$
 
 输入平面上以 $\mathbf{e}_1,\mathbf{e}_2$ 为边的单位方格，被 $J$ 线性地送到
@@ -193,7 +196,7 @@ $$
 
 三点必须说清：
 
-1. **误差是二阶的**： $\Delta\mathbf{y}=J\Delta\mathbf{x}+O(\|\Delta\mathbf{x}\|^2)$。
+1. **误差是二阶的**： $\Delta\mathbf{y}=J\Delta\mathbf{x}+O(\Vert\Delta\mathbf{x}\Vert^2)$。
    所以 $\Delta\mathbf{x}$ 减半，**绝对误差**大约降到 $1/4$，**相对误差**只降到 $1/2$。
 2. **$J$ 随点变化**： $J=J(\mathbf{x}_0)$ 是在**哪个点**上算的，必须写清楚。
    同一个函数在 $(2,1)$ 与 $(1,2)$ 的 $J$ 完全不同，后者甚至奇异。
@@ -208,13 +211,13 @@ $J\mathbf{e}_1+J\mathbf{e}_2$、 $J\mathbf{e}_2$，围成一个平行四边形�
 以 $J\mathbf{e}_1$、 $J\mathbf{e}_2$ 为列组成的矩阵恰好就是 $J$ 本身：
 
 $$
-\bigl[J\mathbf{e}_1\;\;J\mathbf{e}_2\bigr]=J\bigl[\mathbf{e}_1\;\;\mathbf{e}_2\bigr]=J
+\bigl[J\mathbf{e}_1\ \ J\mathbf{e}_2\bigr]=J\bigl[\mathbf{e}_1\ \ \mathbf{e}_2\bigr]=J
 $$
 
 而"两列张成的平行四边形面积"等于这两列组成的矩阵的行列式的绝对值，于是
 
 $$
-\boxed{\;\text{面积比}=\left|\det J\right|\;}
+\boxed{\ \text{面积比}=\left|\det J\right|\ }
 $$
 
 **一般区域。** 把输入区域切成边长 $h$ 的小方格：每个小方格面积 $h^2$，
@@ -222,7 +225,7 @@ $$
 就得到换元公式的几何证明：
 
 $$
-\mathrm{d}A_y=\left|\det J\right|\,\mathrm{d}A_x
+\mathrm{d}A_y=\left|\det J\right|\ \mathrm{d}A_x
 $$
 
 **三维与 $n$ 维。** 三条像向量 $J\mathbf{e}_1,J\mathbf{e}_2,J\mathbf{e}_3$ 张成的
@@ -258,10 +261,14 @@ $$
 四个点的雅可比依次是
 
 $$
-J_A=\begin{bmatrix}4&1\\1&2\end{bmatrix},\qquad
-J_B=\begin{bmatrix}1&1\\0&0.5\end{bmatrix},\qquad
-J_C=\begin{bmatrix}0&1\\1&0\end{bmatrix},\qquad
-J_D=\begin{bmatrix}2&1\\2&1\end{bmatrix}
+J_A=\begin{bmatrix}4&1\\
+1&2\end{bmatrix},\qquad
+J_B=\begin{bmatrix}1&1\\
+0&0.5\end{bmatrix},\qquad
+J_C=\begin{bmatrix}0&1\\
+1&0\end{bmatrix},\qquad
+J_D=\begin{bmatrix}2&1\\
+2&1\end{bmatrix}
 $$
 
 逐点核对：
@@ -283,16 +290,16 @@ $D$ 是最容易被忽视的一个：它**不是**"缩小到零倍"，而是"把
 $\mathbf{x}_0$、 $\mathbf{g}$ 在 $\mathbf{f}(\mathbf{x}_0)$ 处可微。则
 
 $$
-\boxed{\;J_{\mathbf{h}}(\mathbf{x}_0)=J_{\mathbf{g}}\bigl(\mathbf{f}(\mathbf{x}_0)\bigr)\,
-J_{\mathbf{f}}(\mathbf{x}_0)\;}
+\boxed{\ J_{\mathbf{h}}(\mathbf{x}_0)=J_{\mathbf{g}}\bigl(\mathbf{f}(\mathbf{x}_0)\bigr)\ 
+J_{\mathbf{f}}(\mathbf{x}_0)\ }
 $$
 
 **推导。** 记 $\mathbf{y}_0=\mathbf{f}(\mathbf{x}_0)$， $\delta=\mathbf{f}(\mathbf{x}_0+\Delta\mathbf{x})-\mathbf{y}_0$。
 
-1. 由 $\mathbf{f}$ 可微： $\delta=J_{\mathbf{f}}\Delta\mathbf{x}+O(\|\Delta\mathbf{x}\|^2)$，
-   特别地 $\|\delta\|=O(\|\Delta\mathbf{x}\|)$。
+1. 由 $\mathbf{f}$ 可微： $\delta=J_{\mathbf{f}}\Delta\mathbf{x}+O(\Vert\Delta\mathbf{x}\Vert^2)$，
+   特别地 $\Vert\delta\Vert=O(\Vert\Delta\mathbf{x}\Vert)$。
 2. 由 $\mathbf{g}$ 在 $y_0$ 处可微：增量等于 $J_{\mathbf{g}}\delta+O(\lVert\delta\rVert^2)$。
-3. 代入： $=J_{\mathbf{g}}J_{\mathbf{f}}\Delta\mathbf{x}+O(\|\Delta\mathbf{x}\|^2)$。
+3. 代入： $=J_{\mathbf{g}}J_{\mathbf{f}}\Delta\mathbf{x}+O(\Vert\Delta\mathbf{x}\Vert^2)$。
 
 按定义，一阶项的系数矩阵就是 $J_{\mathbf{h}}$，故结论成立。 ∎
 
@@ -315,7 +322,7 @@ $$
 就是一个 $\mathbb{R}^2\to\mathbb{R}^2$ 的映射，它的雅可比是 $\partial(x,y)/\partial(\xi,\eta)$。
 由此直接得到三件事：
 
-1. **面积元**： $\mathrm{d}A=\det J\ \mathrm{d}\xi\,\mathrm{d}\eta$（§2.5）。
+1. **面积元**： $\mathrm{d}A=\det J\ \mathrm{d}\xi\ \mathrm{d}\eta$（§2.5）。
 2. **导数变换**：由链式法则， $\nabla_{\xi}N=J^{\mathrm T}\nabla_{x}N$，
    故 $\nabla_{x}N=J^{-\mathrm T}\nabla_{\xi}N$；
    只要 $\det J\neq0$， $J$ 可逆，变换成立。
@@ -412,7 +419,7 @@ $\sigma_{\min}$ 是最短半轴（最小拉伸）。 $\sigma_{\min}=0$ 等价于
 在 $(2,1)$ 沿 $x_1$ 方向走一步， $\Delta\mathbf{x}=(h,0)^{\mathrm T}$，
 比较真实增量与 $J\Delta\mathbf{x}$：
 
-| $h$ | $\|J\Delta\mathbf{x}\|$ | 真实误差 | 相对误差 |
+| $h$ | $\Vert J\Delta\mathbf{x}\Vert$ | 真实误差 | 相对误差 |
 |---|---|---|---|
 | $10^{-1}$ | $4.1231\times10^{-1}$ | $1.0000\times10^{-2}$ | $2.43\times10^{-2}$ |
 | $10^{-2}$ | $4.1231\times10^{-2}$ | $1.0000\times10^{-4}$ | $2.43\times10^{-3}$ |
@@ -421,7 +428,7 @@ $\sigma_{\min}$ 是最短半轴（最小拉伸）。 $\sigma_{\min}=0$ 等价于
 
 手算核对： $y_1(2+h,1)-y_1(2,1)=(2+h)^2+1-5=4h+h^2$，而 $J\Delta\mathbf{x}$ 给出 $4h$，
 误差是 $h^2$； $y_2$ 的一阶项恰好精确。相对误差
-$=h^2/(h\sqrt{4^2+1^2})=h/\sqrt{17}\approx0.2425\,h$。表中 $2.43\times10^{-2}$
+$=h^2/(h\sqrt{4^2+1^2})=h/\sqrt{17}\approx0.2425\ h$。表中 $2.43\times10^{-2}$
 对应 $h=0.1$，与 $1/\sqrt{17}=0.2425$ 一致。
 
 **教学要点**：相对误差随 $h$ **线性**下降，而不是平方下降。
@@ -429,7 +436,7 @@ $=h^2/(h\sqrt{4^2+1^2})=h/\sqrt{17}\approx0.2425\,h$。表中 $2.43\times10^{-2}
 
 ### 3.4 退化点的局部像集
 
-在 $D=(1,2)$ 附近取 $\mathbf{x}=(1+u,\,2+v)$，直接计算：
+在 $D=(1,2)$ 附近取 $\mathbf{x}=(1+u,\ 2+v)$，直接计算：
 
 $$
 y_1-y_2=\bigl(3+2u+u^2+v\bigr)-\bigl(2+2u+v+uv\bigr)=1+u^2-uv
@@ -460,7 +467,7 @@ $$
 J=
 \begin{bmatrix}
 -l_1\sin\theta_1-l_2\sin(\theta_1+\theta_2) & -l_2\sin(\theta_1+\theta_2)\\
-\;\;l_1\cos\theta_1+l_2\cos(\theta_1+\theta_2) & \;\;l_2\cos(\theta_1+\theta_2)
+\ \ l_1\cos\theta_1+l_2\cos(\theta_1+\theta_2) & \ \ l_2\cos(\theta_1+\theta_2)
 \end{bmatrix}
 $$
 
@@ -563,7 +570,7 @@ $m<n$ 时必然多对一。
 ## 5. 自测
 
 1. 求 $y_1=x_1x_2$、 $y_2=x_1^2-x_2^2$ 的雅可比与 $\det J$，并指出哪些点奇异。
-2. 用本文算例在 $(1,1)$ 处的一阶近似，估算 $\mathbf{f}(1.01,\,0.99)$，
+2. 用本文算例在 $(1,1)$ 处的一阶近似，估算 $\mathbf{f}(1.01,\ 0.99)$，
    并与真值比较误差。
 3. 极坐标 $x=r\cos\theta$、 $y=r\sin\theta$ 的雅可比是什么？ $\det J$ 说明原点附近发生了什么？
 4. 两连杆 $l_1=l_2=1$： $\theta_2=90^\circ$ 与 $\theta_2=180^\circ$ 时 $\det J$ 各是多少？
@@ -576,7 +583,8 @@ $m<n$ 时必然多对一。
 **第 1 题。** 雅可比为
 
 $$
-J=\begin{bmatrix}x_2&x_1\\2x_1&-2x_2\end{bmatrix}
+J=\begin{bmatrix}x_2&x_1\\
+2x_1&-2x_2\end{bmatrix}
 $$
 
 故 $\det J=-2x_2^2-2x_1^2=-2(x_1^2+x_2^2)\le0$，只在原点为零。
@@ -585,17 +593,19 @@ $$
 **第 2 题。** 在 $(1,1)$ 处
 
 $$
-J(1,1)=\begin{bmatrix}2&1\\1&1\end{bmatrix}
+J(1,1)=\begin{bmatrix}2&1\\
+1&1\end{bmatrix}
 $$
 
 取 $\Delta\mathbf{x}=(0.01,-0.01)$，
-线性预测 $(2.01,\,1.00)$；真值 $(1.0201,\,0.9999)$，
+线性预测 $(2.01,\ 1.00)$；真值 $(1.0201,\ 0.9999)$，
 $y_1$ 的误差为 $1\times10^{-4}$，量级正是 $O(\lVert\Delta\mathbf{x}\rVert^2)$。
 
 **第 3 题。** 极坐标的雅可比为
 
 $$
-J=\begin{bmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{bmatrix},
+J=\begin{bmatrix}\cos\theta&-r\sin\theta\\
+ \sin\theta&r\cos\theta\end{bmatrix},
 \qquad \det J=r
 $$
 

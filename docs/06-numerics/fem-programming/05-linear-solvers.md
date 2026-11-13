@@ -184,7 +184,9 @@ $$
 对上篇的 $3\times3$ 刚度矩阵：
 
 $$
-K=\begin{bmatrix}2&-1&0\\-1&2&-1\\0&-1&2\end{bmatrix}
+K=\begin{bmatrix}2&-1&0\\
+-1&2&-1\\
+0&-1&2\end{bmatrix}
 \quad\Longrightarrow\quad
 L=\begin{bmatrix}
 1.414214&0&0\\

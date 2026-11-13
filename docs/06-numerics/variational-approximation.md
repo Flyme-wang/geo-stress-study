@@ -41,7 +41,7 @@
 
 给定双线性型 $A(\cdot,\cdot)$ 与线性泛函 $F(\cdot)$，并假设：
 
-- **有界**： $|A(u,v)|\le M\lVert u\rVert\,\lVert v\rVert$；
+- **有界**： $|A(u,v)|\le M\lVert u\rVert\ \lVert v\rVert$；
 - **对称**： $A(u,v)=A(v,u)$（非对称问题见 §2.4）；
 - **强制**（椭圆性）： $A(v,v)\ge\alpha\lVert v\rVert^2$， $\alpha>0$。
 
@@ -55,8 +55,8 @@
 | $F(v)$ | 线性泛函（荷载），有界 |
 | $J(v)$ | 总势能 $=\tfrac12A(v,v)-F(v)$ |
 | $H$ | 精确解所在的全空间 |
-| $\{\varphi_i\}$ | 有限元基函数（形函数），线性无关 |
-| $S_N$ | 子空间 $\mathrm{span}\{\varphi_i\}_{i=1}^{N}$ |
+| $\lbrace\varphi_i\rbrace$ | 有限元基函数（形函数），线性无关 |
+| $S_N$ | 子空间 $\mathrm{span}\lbrace\varphi_i\rbrace_{i=1}^{N}$ |
 | $u$ | 精确解： $A(u,v)=F(v)$ 对所有 $v\in H$ |
 | $u_N$ | 离散解： $A(u_N,v)=F(v)$ 对所有 $v\in S_N$ |
 | $K,\mathbf{f}$ | 刚度矩阵 $K_{ij}=A(\varphi_i,\varphi_j)$、荷载向量 $f_i=F(\varphi_i)$ |
@@ -78,12 +78,12 @@ $$
 它对应的弱形式与能量是
 
 $$
-A(u,v)=\int_0^1 u'v'\,\mathrm{d}x,\qquad
-F(v)=\int_0^1 fv\,\mathrm{d}x,\qquad
-J(v)=\frac12\int_0^1 (v')^2\,\mathrm{d}x-\int_0^1 fv\,\mathrm{d}x
+A(u,v)=\int_0^1 u'v'\ \mathrm{d}x,\qquad
+F(v)=\int_0^1 fv\ \mathrm{d}x,\qquad
+J(v)=\frac12\int_0^1 (v')^2\ \mathrm{d}x-\int_0^1 fv\ \mathrm{d}x
 $$
 
-精确能量 $A(u,u)=\int_0^1\pi^2\cos^2\pi x\,\mathrm{d}x=\pi^2/2=4.9348022$。
+精确能量 $A(u,u)=\int_0^1\pi^2\cos^2\pi x\ \mathrm{d}x=\pi^2/2=4.9348022$。
 后面所有的数值检验都围着这个数转。
 
 ---
@@ -95,14 +95,14 @@ $$
 取任意测试函数 $v$，满足 $v(0)=v(1)=0$，用 $v$ 乘方程两端并积分：
 
 $$
-\int_0^1(-u'')v\,\mathrm{d}x=\int_0^1 fv\,\mathrm{d}x
+\int_0^1(-u'')v\ \mathrm{d}x=\int_0^1 fv\ \mathrm{d}x
 $$
 
 对左端分部积分：
 
 $$
-\int_0^1(-u'')v\,\mathrm{d}x
-=\underbrace{\big[-u'v\big]_0^1}_{=0}+\int_0^1 u'v'\,\mathrm{d}x
+\int_0^1(-u'')v\ \mathrm{d}x
+=\underbrace{\big[-u'v\big]_0^1}_{=0}+\int_0^1 u'v'\ \mathrm{d}x
 $$
 
 边界项为零，是因为 $v$ 在两端取零（若 $u$ 的端点值已知，则是把已知值挪到右端）。
@@ -165,7 +165,7 @@ $$
 既然在全空间 $H$ 里找不到，就退到有限维子空间
 
 $$
-S_N=\mathrm{span}\{\varphi_1,\dots,\varphi_N\}\subset H
+S_N=\mathrm{span}\lbrace\varphi_1,\dots,\varphi_N\rbrace\subset H
 $$
 
 并只在这个子空间里找极小点：
@@ -252,7 +252,7 @@ $$
 相减：
 
 $$
-A(u-u_N,\,v)=0,\qquad\forall v\in S_N
+A(u-u_N,\ v)=0,\qquad\forall v\in S_N
 $$
 
 用能量内积记作 $[u-u_N,v]_E=0$。
@@ -277,7 +277,7 @@ $$
 &=A(u-v,u-v)\\
 &=A\big[(u-u_N)+(u_N-v),\ (u-u_N)+(u_N-v)\big]\\
 &=\lVert u-u_N\rVert_E^2
-+2\underbrace{A(u-u_N,\,u_N-v)}_{=0\ \text{（}u_N-v\in S_N\text{）}}
++2\underbrace{A(u-u_N,\ u_N-v)}_{=0\ \text{（}u_N-v\in S_N\text{）}}
 +\lVert u_N-v\rVert_E^2
 \end{aligned}
 $$
@@ -332,7 +332,7 @@ $$
 
 ### 2.8 第六步：收敛性与收敛阶
 
-**收敛**。若子空间序列 $\{S_N\}$ 在 $H$ 中渐进稠密（任何 $H$ 中的函数都能被任意逼近），
+**收敛**。若子空间序列 $\lbrace S_N\rbrace$ 在 $H$ 中渐进稠密（任何 $H$ 中的函数都能被任意逼近），
 由 §2.6 的最佳逼近性质
 
 $$
@@ -345,7 +345,7 @@ $$
 **阶**。分片线性（P1）基函数在一维网格 $h$ 上满足
 
 $$
-\lVert u-I_hu\rVert_E=\lVert (u-I_hu)'\rVert_{L^2}\le Ch\,|u|_{H^2}
+\lVert u-I_hu\rVert_E=\lVert (u-I_hu)'\rVert_{L^2}\le Ch\ |u|_{H^2}
 $$
 
 要求 $u\in H^2$（二阶导数平方可积）。于是
@@ -376,7 +376,7 @@ Ritz 与 Galerkin 在 20 世纪初就有了，但有限元要到 1960 年代才�
 $K_{ij}\neq0$ 几乎处处成立。以一维多项式基 $\varphi_k=x^k$ 为例：
 
 $$
-K_{ij}=\int_0^1 i x^{i-1}\,j x^{j-1}\,\mathrm{d}x=\frac{ij}{i+j-1}
+K_{ij}=\int_0^1 i x^{i-1}\ j x^{j-1}\ \mathrm{d}x=\frac{ij}{i+j-1}
 $$
 
 这是一个 Hilbert 型矩阵： $N=40$ 时条件数已达 $7.5\times10^{18}$（图 23a），
@@ -408,8 +408,12 @@ $N=999$ 时密度 $0.30\%$、非零元 2995 个——这就是"能算大问题"�
 单元刚度矩阵（ $2\times2$）与组装后的整体矩阵（三对角）：
 
 $$
-K^{e}=\frac1h\begin{bmatrix}1&-1\\-1&1\end{bmatrix},\qquad
-K=\frac1h\begin{bmatrix}2&-1&&\\-1&2&-1&\\&\ddots&\ddots&-1\\&&-1&2\end{bmatrix}
+K^{e}=\frac1h\begin{bmatrix}1&-1\\
+-1&1\end{bmatrix},\qquad
+K=\frac1h\begin{bmatrix}2&-1&&\\
+-1&2&-1&\\
+&\ddots&\ddots&-1\\
+&&-1&2\end{bmatrix}
 $$
 
 荷载向量 $f_i=\int f\varphi_i$ 用每单元 8 点 Gauss 积分得到（光滑被积函数，精度到机器 eps）。
@@ -494,7 +498,8 @@ $N=15$，逐个基函数算 $A(u-u_N,\varphi_i)$：
 取一个 $2\times2$ 的玩具问题：
 
 $$
-A=\begin{bmatrix}2&1\\0&3\end{bmatrix},\qquad F=(1,0)^{\mathsf T}.
+A=\begin{bmatrix}2&1\\
+0&3\end{bmatrix},\qquad F=(1,0)^{\mathsf T}.
 $$
 
 - **Galerkin**：解 $A\mathbf{c}=F$，得 $\mathbf{c}=(0.5,\ 0)^{\mathsf T}$。
@@ -584,7 +589,7 @@ $$
 **第 1 题。** 用 $v$（ $v(0)=v(1)=0$）乘方程并积分，分部积分得
 
 $$
-\int_0^1 u'v'\,\mathrm{d}x=\int_0^1 fv\,\mathrm{d}x,\quad\forall v\in H_0^1
+\int_0^1 u'v'\ \mathrm{d}x=\int_0^1 fv\ \mathrm{d}x,\quad\forall v\in H_0^1
 $$
 
 边界项 $[-u'v]_0^1$ 消失是因为 $v$ 在两端为零；这正是把边界条件"吸收"进试探空间的做法。

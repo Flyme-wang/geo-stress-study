@@ -85,7 +85,7 @@ $$
 $$
 J=
 \begin{bmatrix}
-\dfrac{\partial x}{\partial \xi} & \dfrac{\partial y}{\partial \xi}\\[6pt]
+\dfrac{\partial x}{\partial \xi} & \dfrac{\partial y}{\partial \xi}\\
 \dfrac{\partial x}{\partial \eta} & \dfrac{\partial y}{\partial \eta}
 \end{bmatrix}
 $$
@@ -135,12 +135,12 @@ $$
 
 $$
 \begin{bmatrix}
-\dfrac{\partial N_i}{\partial \xi}\\[6pt]
+\dfrac{\partial N_i}{\partial \xi}\\
 \dfrac{\partial N_i}{\partial \eta}
 \end{bmatrix}
 = J
 \begin{bmatrix}
-\dfrac{\partial N_i}{\partial x}\\[6pt]
+\dfrac{\partial N_i}{\partial x}\\
 \dfrac{\partial N_i}{\partial y}
 \end{bmatrix}
 $$
@@ -205,7 +205,7 @@ $$
 $$
 J=
 \begin{bmatrix}
--\tfrac12\eta & 0\\[4pt]
+-\tfrac12\eta & 0\\
 -\tfrac12\xi & \tfrac12
 \end{bmatrix},\qquad
 \boxed{\det J=-\tfrac14\eta}

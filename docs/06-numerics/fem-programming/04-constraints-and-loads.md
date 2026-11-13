@@ -49,9 +49,12 @@
 把自由度重排成"自由在前、约束在后"：
 
 $$
-\begin{bmatrix}K_{ff} & K_{fc}\\ K_{cf} & K_{cc}\end{bmatrix}
-\begin{bmatrix}u_f\\ u_c\end{bmatrix}
-= \begin{bmatrix}F_f\\ F_c\end{bmatrix}
+\begin{bmatrix}K_{ff} & K_{fc}\\
+ K_{cf} & K_{cc}\end{bmatrix}
+\begin{bmatrix}u_f\\
+ u_c\end{bmatrix}
+= \begin{bmatrix}F_f\\
+ F_c\end{bmatrix}
 $$
 
 **依据**：这只是把方程按未知/已知分组，没有做任何近似。
@@ -199,9 +202,12 @@ $$
 当作一条方程，引入乘子 $\lambda$，方程组扩成鞍点形式：
 
 $$
-\begin{bmatrix}\mathbf{K} & \mathbf{e}_i\\ \mathbf{e}_i^{\mathrm{T}} & 0\end{bmatrix}
-\begin{bmatrix}\mathbf{u}\\ \lambda\end{bmatrix}
-=\begin{bmatrix}\mathbf{F}\\ \bar u_i\end{bmatrix}
+\begin{bmatrix}\mathbf{K} & \mathbf{e}_i\\
+ \mathbf{e}_i^{\mathrm{T}} & 0\end{bmatrix}
+\begin{bmatrix}\mathbf{u}\\
+ \lambda\end{bmatrix}
+=\begin{bmatrix}\mathbf{F}\\
+ \bar u_i\end{bmatrix}
 $$
 
 - **约束零误差**：第二行直接就是 $u_i=\bar u_i$，不像罚法残留 $\lvert\lambda_i\rvert/\alpha$；
@@ -277,8 +283,12 @@ $$
 取
 
 $$
-K=\begin{bmatrix}2&-1&0\\-1&2&-1\\0&-1&2\end{bmatrix},\qquad
-F=\begin{bmatrix}1\\0\\0\end{bmatrix}
+K=\begin{bmatrix}2&-1&0\\
+-1&2&-1\\
+0&-1&2\end{bmatrix},\qquad
+F=\begin{bmatrix}1\\
+0\\
+0\end{bmatrix}
 $$
 
 **无约束解**（可直接验证 $Ku=F$）：
@@ -292,11 +302,16 @@ $$
 **消元法**：删去第 2 行第 2 列，右端减去 $K_{f2}\bar u_2=(-1,0)^{\mathrm{T}}\times0.25$：
 
 $$
-\begin{bmatrix}2&0\\0&2\end{bmatrix}
-\begin{bmatrix}u_1\\u_3\end{bmatrix}
-= \begin{bmatrix}1\\0\end{bmatrix} -
-\begin{bmatrix}-1\\0\end{bmatrix}\times0.25
-= \begin{bmatrix}1.25\\0.25\end{bmatrix}
+\begin{bmatrix}2&0\\
+0&2\end{bmatrix}
+\begin{bmatrix}u_1\\
+u_3\end{bmatrix}
+= \begin{bmatrix}1\\
+0\end{bmatrix} -
+\begin{bmatrix}-1\\
+0\end{bmatrix}\times0.25
+= \begin{bmatrix}1.25\\
+0.25\end{bmatrix}
 $$
 
 解得 $u_1=0.625$、 $u_3=0.125$。
