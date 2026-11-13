@@ -1,8 +1,11 @@
 # 雅可比矩阵：多变量映射的局部线性化
 
 > 对应知识图谱节点：`M6-06`
+>
 > 前置：[节点顺序、形函数与雅可比](fem-programming/02-node-ordering-and-jacobian.md)
+>
 > 相关：[M2 应变与变形](../02-strain/README.md)（变形梯度 $\mathbf{F}=\partial\mathbf{x}/\partial\mathbf{X}$ 就是雅可比）
+>
 > 原始推文：《理论剖析 || 雅可比矩阵：连接多变量世界的数学桥梁》（链接见文末来源）
 
 ---
