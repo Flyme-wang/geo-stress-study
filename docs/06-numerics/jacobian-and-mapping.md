@@ -154,8 +154,7 @@ J=
 \begin{bmatrix}
 \dfrac{\partial y_1}{\partial x_1} & \dfrac{\partial y_1}{\partial x_2}\\[6pt]
 \dfrac{\partial y_2}{\partial x_1} & \dfrac{\partial y_2}{\partial x_2}
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 2x_1 & 1\\
 x_2 & x_1
@@ -246,12 +245,21 @@ $$
 > 四个徽标给出该点的 $\det J$。
 > 文件：`assets/figures/fig18-jacobian-det-cases.png`
 
-| 工作点 | $J$ | $\det J$ | 局部行为 |
-|---|---|---|---|
-| $A=(2,1)$ | $\begin{bmatrix}4&1\\1&2\end{bmatrix}$ | $+7$ | 面积放大 7 倍，朝向不变 |
-| $B=(0.5,0)$ | $\begin{bmatrix}1&1\\0&0.5\end{bmatrix}$ | $+0.5$ | 面积压缩到一半，朝向不变 |
-| $C=(0,1)$ | $\begin{bmatrix}0&1\\1&0\end{bmatrix}$ | $-1$ | 两个输出分量互换，面积不变、朝向翻转 |
-| $D=(1,2)$ | $\begin{bmatrix}2&1\\2&1\end{bmatrix}$ | $0$ | 两行相同，局部像集是一条直线 |
+| 工作点 | $\det J$ | 局部行为 |
+|---|---|---|
+| $A=(2,1)$ | $+7$ | 面积放大 7 倍，朝向不变 |
+| $B=(0.5,0)$ | $+0.5$ | 面积压缩到一半，朝向不变 |
+| $C=(0,1)$ | $-1$ | 两个输出分量互换，面积不变、朝向翻转 |
+| $D=(1,2)$ | $0$ | 两行相同，局部像集是一条直线 |
+
+四个点的雅可比依次是
+
+$$
+J_A=\begin{bmatrix}4&1\\1&2\end{bmatrix},\qquad
+J_B=\begin{bmatrix}1&1\\0&0.5\end{bmatrix},\qquad
+J_C=\begin{bmatrix}0&1\\1&0\end{bmatrix},\qquad
+J_D=\begin{bmatrix}2&1\\2&1\end{bmatrix}
+$$
 
 逐点核对：
 
@@ -280,7 +288,7 @@ $$
 
 1. 由 $\mathbf{f}$ 可微： $\delta=J_{\mathbf{f}}\Delta\mathbf{x}+O(\|\Delta\mathbf{x}\|^2)$，
    特别地 $\|\delta\|=O(\|\Delta\mathbf{x}\|)$。
-2. 由 $\mathbf{g}$ 可微： $\mathbf{g}(\mathbf{y}_0+\delta)-\mathbf{g}(\mathbf{y}_0)=J_{\mathbf{g}}\delta+O(\|\delta\|^2)$。
+2. 由 $\mathbf{g}$ 在 $y_0$ 处可微：增量等于 $J_{\mathbf{g}}\delta+O(\lVert\delta\rVert^2)$。
 3. 代入： $=J_{\mathbf{g}}J_{\mathbf{f}}\Delta\mathbf{x}+O(\|\Delta\mathbf{x}\|^2)$。
 
 按定义，一阶项的系数矩阵就是 $J_{\mathbf{h}}$，故结论成立。 ∎
@@ -365,12 +373,12 @@ $\sigma_{\min}$ 是最短半轴（最小拉伸）。 $\sigma_{\min}=0$ 等价于
 
 ### 3.1 四个工作点的行列式
 
-| 工作点 | $J$ | $\det J$（手算） | $\det J$（脚本） |
-|---|---|---|---|
-| $(2,1)$ | $\begin{bmatrix}4&1\\1&2\end{bmatrix}$ | $8-1=7$ | $7$ |
-| $(0.5,0)$ | $\begin{bmatrix}1&1\\0&0.5\end{bmatrix}$ | $0.5-0=0.5$ | $0.5$ |
-| $(0,1)$ | $\begin{bmatrix}0&1\\1&0\end{bmatrix}$ | $0-1=-1$ | $-1$ |
-| $(1,2)$ | $\begin{bmatrix}2&1\\2&1\end{bmatrix}$ | $2-2=0$ | $0$ |
+| 工作点 | $\det J$（手算） | $\det J$（脚本） |
+|---|---|---|
+| $(2,1)$ | $4\times2-1\times1=7$ | $7$ |
+| $(0.5,0)$ | $1\times0.5-0=0.5$ | $0.5$ |
+| $(0,1)$ | $0-1\times1=-1$ | $-1$ |
+| $(1,2)$ | $2\times1-2\times1=0$ | $0$ |
 
 ### 3.2 面积比：把 $\det J$ "测"出来
 
@@ -497,12 +505,12 @@ py -3 tools/verify_jacobian_note.py
 为什么错：转置是**另一个线性映射**。 $J\Delta\mathbf{x}$ 与 $J^{\mathrm T}\Delta\mathbf{x}$
 的维数都可能不同（ $m\neq n$ 时直接无定义），方阵时结果也不同。
 行列式与秩对转置不变，所以"面积/奇异性"的结论不受影响；
-但"$\Delta\mathbf{y}=J\Delta\mathbf{x}$"这个乘法一错，整个线性化就错了。
+但乘法 $\Delta\mathbf{y}=J\Delta\mathbf{x}$ 一写错，整个线性化就错了。
 
 正确说法：先确认约定的下标顺序（本库 $J_{ij}=\partial y_i/\partial x_j$，行是输出），
 再动手乘。
 
-**误解 2："$\det J$ 为负没有意义，取绝对值就行。"**
+**误解 2：** $\det J$ 为负没有意义，取绝对值就行。
 
 为什么错：负号是**朝向**信息。面积用 $|\det J|$ 是对的，但"翻没翻"必须保留符号。
 在有限元里 $\det J<0$ 说明节点顺序错、单元被翻面（第 2 章）；
@@ -511,7 +519,7 @@ py -3 tools/verify_jacobian_note.py
 
 正确说法：计算面积/积分时用 $|\det J|$，做合法性检查时用 $\det J$ 的**符号**。
 
-**误解 3："$\det J=0$ 表示缩放因子很小。"**
+**误解 3：** $\det J=0$ 表示缩放因子很小。
 
 为什么错：零不是"小"，是**降维**。 $\det J=0$ 时局部像集少一维
 （图 18 右下、§3.4）：二维输入被压成一条线，面积按 $h^3$ 而不是 $h^2$ 缩小。
@@ -519,7 +527,7 @@ py -3 tools/verify_jacobian_note.py
 
 正确说法：看 $\det J$ 是否为零判断**秩**，看 $|\det J|$ 的大小判断**缩放**。
 
-**误解 4："$\det J\neq0$，所以整个映射可逆。"**
+**误解 4：** $\det J\neq0$，所以整个映射可逆。
 
 为什么错：可微只保证**局部**线性化可逆。反例一：极坐标
 $x=r\cos\theta$、 $y=r\sin\theta$， $\det J=r$，除原点外处处非零，
@@ -539,7 +547,7 @@ $\det J=0$——它演示的是**退化**，不是缩放。用奇异点讲缩放
 正确说法：演示缩放要选 $\det J\neq0$ 的点；本文把四个点分开，
 分别对应放大、压缩、翻转、退化（§2.6）。
 
-**误解 6："$m\neq n$ 时也能算行列式。"**
+**误解 6：** $m\neq n$ 时也能算行列式。
 
 为什么错：行列式只对方阵有定义。长方形雅可比没有 det，
 "可逆性"由秩/奇异值描述（§2.9）； $m>n$ 时像只是高维空间中的一张曲面，
@@ -560,29 +568,48 @@ $m<n$ 时必然多对一。
 5. 为什么等参单元检查的是 $\det J>0$，而不是 $|\det J|>0$？
 6. 一个 $3\times2$ 的雅可比列满秩，说明映射的什么性质？它能"取遍" $\mathbb{R}^3$ 吗？
 
-<details>
-<summary>参考答案</summary>
+### 参考答案
 
-1. $J=\begin{bmatrix}x_2&x_1\\2x_1&-2x_2\end{bmatrix}$，
-   $\det J=-2x_2^2-2x_1^2=-2(x_1^2+x_2^2)\le0$，只在原点为零。
-   即除原点外处处局部可逆（但注意：这只是局部结论）。
-2. $J(1,1)=\begin{bmatrix}2&1\\1&1\end{bmatrix}$， $\Delta\mathbf{x}=(0.01,-0.01)$，
-   线性预测 $(2.01,\,1.00)$；真值 $(1.0201,\,0.9999)$，
-   $y_1$ 的误差为 $1\times10^{-4}$，量级正是 $O(\|\Delta\mathbf{x}\|^2)$。
-3. $J=\begin{bmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{bmatrix}$， $\det J=r$。
-   原点处 $\det J=0$，所有 $\theta$ 映到同一点，映射在原点降秩、不可逆；
-   平面上其余点局部可逆，但 $\theta$ 与 $\theta+2\pi$ 给出同一像，全局多对一。
-4. $\det J=\sin\theta_2$： $90^\circ$ 时为 $1$， $180^\circ$ 时为 $0$。
-   伸直时两关节对末端速度的贡献都垂直于连杆，沿连杆方向的速度分量恒为零，
-   所以"伸出去"这个方向不存在。
-5. $\det J<0$ 表示映射翻转（节点顺序错或网格折叠），
-   积分会把正负贡献相互抵消，得到的刚度矩阵对应一个不存在的几何。
-   取绝对值只是让程序继续跑，掩盖了错误。面积元本身用 $|\det J|$，合法性检查用符号。
-6. 列满秩说明局部单射：二维输入的不同变化给出不同的三维输出，
-   输入可以局部反推。但像是 $\mathbb{R}^3$ 中的一张二维曲面，
-   不能取遍整个 $\mathbb{R}^3$。
+**第 1 题。** 雅可比为
 
-</details>
+$$
+J=\begin{bmatrix}x_2&x_1\\2x_1&-2x_2\end{bmatrix}
+$$
+
+故 $\det J=-2x_2^2-2x_1^2=-2(x_1^2+x_2^2)\le0$，只在原点为零。
+即除原点外处处局部可逆（但注意：这只是局部结论）。
+
+**第 2 题。** 在 $(1,1)$ 处
+
+$$
+J(1,1)=\begin{bmatrix}2&1\\1&1\end{bmatrix}
+$$
+
+取 $\Delta\mathbf{x}=(0.01,-0.01)$，
+线性预测 $(2.01,\,1.00)$；真值 $(1.0201,\,0.9999)$，
+$y_1$ 的误差为 $1\times10^{-4}$，量级正是 $O(\lVert\Delta\mathbf{x}\rVert^2)$。
+
+**第 3 题。** 极坐标的雅可比为
+
+$$
+J=\begin{bmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{bmatrix},
+\qquad \det J=r
+$$
+
+原点处 $\det J=0$，所有 $\theta$ 映到同一点，映射在原点降秩、不可逆；
+平面上其余点局部可逆，但 $\theta$ 与 $\theta+2\pi$ 给出同一像，全局多对一。
+
+**第 4 题。** $\det J=\sin\theta_2$： $90^\circ$ 时为 $1$， $180^\circ$ 时为 $0$。
+伸直时两关节对末端速度的贡献都垂直于连杆，沿连杆方向的速度分量恒为零，
+所以"伸出去"这个方向不存在。
+
+**第 5 题。** $\det J<0$ 表示映射翻转（节点顺序错或网格折叠），
+积分会把正负贡献相互抵消，得到的刚度矩阵对应一个不存在的几何。
+取绝对值只是让程序继续跑，掩盖了错误。面积元本身用 $|\det J|$，合法性检查用符号。
+
+**第 6 题。** 列满秩说明局部单射：二维输入的不同变化给出不同的三维输出，
+输入可以局部反推。但像是 $\mathbb{R}^3$ 中的一张二维曲面，
+不能取遍整个 $\mathbb{R}^3$。
 
 ---
 
