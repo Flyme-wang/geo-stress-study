@@ -20,11 +20,11 @@ py -3 tools/verify_fem_notes.py
 
 | 章 | 标题 | 一句话结论 | 图 |
 |---|---|---|---|
-| [1](01-language-and-first-program.md) | 从语言到第一个程序 | 有限元程序只有四件事：离散、单元刚度、组装、求解；语言只影响写法，不影响数学 | 图 7 |
-| [2](02-node-ordering-and-jacobian.md) | 节点顺序、形函数与雅可比 | 节点顺序决定"哪个形函数配哪个物理角点"；detJ 是面积缩放，必须处处为正 | 图 8、图 9 |
-| [3](03-assembly-and-sparse-storage.md) | 组装与稀疏存储 | 组装是按自由度映射的"累加"，不是填表；稀疏存储省的是零，不是数 | 图 10、图 11 |
-| [4](04-constraints-and-loads.md) | 约束与荷载 | 三种约束写法在精确算术下等价；三种荷载三个积分公式 | 图 12、图 13 |
-| [5](05-linear-solvers.md) | 线性方程组求解 | 直接法稳、迭代法省内存；收敛看真实残差，不看"步数好看" | 图 14、图 15 |
+| [1](01-language-and-first-program.md) | 从语言到第一个程序 | 有限元程序只有四件事：离散、单元刚度、组装、求解；语言只影响写法，不影响数学 | 图 7、图 8 |
+| [2](02-node-ordering-and-jacobian.md) | 节点顺序、形函数与雅可比 | 节点顺序决定"哪个形函数配哪个物理角点"；detJ 是面积缩放，必须处处为正 | 图 9、图 10 |
+| [3](03-assembly-and-sparse-storage.md) | 组装与稀疏存储 | 组装是按自由度映射的"累加"，不是填表；稀疏存储省的是零，不是数 | 图 11、图 12 |
+| [4](04-constraints-and-loads.md) | 约束与荷载 | 三种约束写法在精确算术下等价；三种荷载三个积分公式 | 图 13、图 14 |
+| [5](05-linear-solvers.md) | 线性方程组求解 | 直接法稳、迭代法省内存；收敛看真实残差，不看"步数好看" | 图 15、图 16 |
 
 学习顺序就是表的顺序。第 1 章建立全局图景，第 2、3 章是"单元 → 整体"的两个关键转换，
 第 4 章把边界条件与右端项补齐，第 5 章才谈"怎么解、为什么解得起"。
@@ -60,7 +60,7 @@ py -3 tools/verify_fem_notes.py
    正确值是 **6 和 8**。本库第 1 章 §2.3 用公式重新推一遍。
 2. **CSR 的 PTR 长度**：原文说 PTR 长度等于自由度个数，示例给 `PTR(1:5) = [1,2,4,6,8]`；
    但要按 `PTR(i+1)-1` 取第 $i$ 行末位置，第 5 行会越界。完整 CSR 需补末位哨兵
-   `PTR(6)=10`，长度 $n+1$。本库第 3 章 §2.6 与图 11 按完整写法给出。
+   `PTR(6)=10`，长度 $n+1$。本库第 3 章 §2.6 与图 12 按完整写法给出。
 3. **示例矩阵的对称性**：原文 5×5 示例存了 $K_{21}$ 却没存 $K_{12}$。
    存储格式本身允许非对称，但线弹性刚度矩阵是对称的，实际只需存一半。
    本库把它明确标为"格式示意，不是物理刚度矩阵"。
@@ -85,15 +85,16 @@ py -3 tools/verify_fem_notes.py
 
 | 图 | 文件 | 用在哪 |
 |---|---|---|
-| 图 7 | `assets/figures/fig07-fem-workflow.png` | 第 1 章：四步流程 |
-| 图 8 | `assets/figures/fig08-node-ordering-detj.png` | 第 2 章：三种节点顺序与 detJ 符号 |
-| 图 9 | `assets/figures/fig09-isoparametric-jacobian.png` | 第 2 章：母单元到实际单元的映射 |
-| 图 10 | `assets/figures/fig10-assembly-scatter.png` | 第 3 章：两个 Q4 的组装与稀疏结构 |
-| 图 11 | `assets/figures/fig11-sparse-storage.png` | 第 3 章：Skyline / COO / CSR |
-| 图 12 | `assets/figures/fig12-constraint-methods.png` | 第 4 章：三种约束写法 |
-| 图 13 | `assets/figures/fig13-load-vector.png` | 第 4 章：三类荷载与组装后的 F |
-| 图 14 | `assets/figures/fig14-solver-cost.png` | 第 5 章：三种求解器的代价量级 |
-| 图 15 | `assets/figures/fig15-cg-pcg-convergence.png` | 第 5 章：CG 与 PCG 的真实残差曲线 |
+| 图 7 | `assets/figures/fig07-single-element.png` | 第 1 章：单 Q4 的模型与 $u_x$、$\lvert u\rvert$、$\sigma_y$ 云图 |
+| 图 8 | `assets/figures/fig08-fem-workflow.png` | 第 1 章：四步流程 |
+| 图 9 | `assets/figures/fig09-node-ordering-detj.png` | 第 2 章：三种节点顺序与 detJ 符号 |
+| 图 10 | `assets/figures/fig10-isoparametric-jacobian.png` | 第 2 章：母单元到实际单元的映射 |
+| 图 11 | `assets/figures/fig11-assembly-scatter.png` | 第 3 章：两个 Q4 的组装与稀疏结构 |
+| 图 12 | `assets/figures/fig12-sparse-storage.png` | 第 3 章：Skyline / COO / CSR |
+| 图 13 | `assets/figures/fig13-constraint-methods.png` | 第 4 章：三种约束写法 |
+| 图 14 | `assets/figures/fig14-load-vector.png` | 第 4 章：三类荷载、点荷载一致性与组装后的 F |
+| 图 15 | `assets/figures/fig15-solver-cost.png` | 第 5 章：三种求解器的代价量级 |
+| 图 16 | `assets/figures/fig16-cg-pcg-convergence.png` | 第 5 章：CG 与 PCG 的真实残差曲线 |
 
 重绘：
 

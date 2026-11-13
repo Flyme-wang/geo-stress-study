@@ -201,17 +201,17 @@ $L_{33}=\sqrt{2-1/1.5}=\sqrt{4/3}$。
 
 ### 3.2 层状网格上的 CG 与 PCG
 
-![图 14 直接法与迭代法的代价量级](../../../assets/figures/fig14-solver-cost.png)
+![图 15 直接法与迭代法的代价量级](../../../assets/figures/fig15-solver-cost.png)
 
-> 图 14：三种解法的运算量随自由度的增长（以 $N=10^4$ 归一）。
+> 图 15：三种解法的运算量随自由度的增长（以 $N=10^4$ 归一）。
 > 红线上翘最陡，蓝线最平；虚线处是当前示例的规模。
-> 文件：`assets/figures/fig14-solver-cost.png`
+> 文件：`assets/figures/fig15-solver-cost.png`
 
-![图 15 CG 与 Jacobi 预条件 CG 的残差与迭代数](../../../assets/figures/fig15-cg-pcg-convergence.png)
+![图 16 CG 与 Jacobi 预条件 CG 的残差与迭代数](../../../assets/figures/fig16-cg-pcg-convergence.png)
 
-> 图 15：左： $24\times24$ 层状网格的相对残差曲线，CG 97 步、PCG 75 步；
+> 图 16：左： $24\times24$ 层状网格的相对残差曲线，CG 97 步、PCG 75 步；
 > 最初几步残差上升，之后才下降。右：三种规模下达到 $10^{-8}$ 所需迭代数。
-> 文件：`assets/figures/fig15-cg-pcg-convergence.png`
+> 文件：`assets/figures/fig16-cg-pcg-convergence.png`
 
 测试问题： $n\times n$ 的层状五点差分矩阵（模拟非均质渗流/弹性），
 右端除边界外全为 1，容差 $10^{-8}$。

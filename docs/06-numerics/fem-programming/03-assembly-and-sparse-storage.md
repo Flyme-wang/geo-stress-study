@@ -75,11 +75,11 @@ $$
 **带宽不是几何量，是编号量。** 同一个网格，换一种节点编号，带宽会变。
 这也是为什么大型程序要做"重排序"（如 Reverse Cuthill–McKee）。
 
-![图 10 组装不是填表，而是把每个单元的贡献按自由度映射累加到全局矩阵](../../../assets/figures/fig10-assembly-scatter.png)
+![图 11 组装不是填表，而是把每个单元的贡献按自由度映射累加到全局矩阵](../../../assets/figures/fig11-assembly-scatter.png)
 
-> 图 10：两个 Q4、六个节点、12 个自由度。左图是连接关系，
+> 图 11：两个 Q4、六个节点、12 个自由度。左图是连接关系，
 > 右图是组装后的非零结构；红色块是共享自由度造成的耦合。
-> 文件：`assets/figures/fig10-assembly-scatter.png`
+> 文件：`assets/figures/fig11-assembly-scatter.png`
 
 ### 2.4 Skyline（轮廓）存储
 
@@ -135,11 +135,11 @@ $$
 按 `PTR(i+1)-1` 取第 5 行末位置会越界。完整写法要补 `PTR(6)=10`。
 程序里通常分配 $n+1$ 项，最后一项固定为 $\mathrm{nnz}+1$。
 
-![图 11 三种稀疏存储：Skyline 存轮廓，COO 存三元组，CSR 存行压缩](../../../assets/figures/fig11-sparse-storage.png)
+![图 12 三种稀疏存储：Skyline 存轮廓，COO 存三元组，CSR 存行压缩](../../../assets/figures/fig12-sparse-storage.png)
 
-> 图 11：三种格式并排。① Skyline 的对角元位置；② COO 的三元组；
+> 图 12：三种格式并排。① Skyline 的对角元位置；② COO 的三元组；
 > ③ CSR 的 `VAL`/`COL`/`PTR` 与两条查找示例。
-> 文件：`assets/figures/fig11-sparse-storage.png`
+> 文件：`assets/figures/fig12-sparse-storage.png`
 
 ### 2.7 三种格式的取舍
 
@@ -204,7 +204,7 @@ $$
 
 ### 3.4 CSR 的查找
 
-沿用图 11 的数组：
+沿用图 12 的数组：
 
 ```
 VAL = [1, 2, 3, 4, 5, 6, 7, 8, 9]

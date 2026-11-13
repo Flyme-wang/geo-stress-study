@@ -73,7 +73,7 @@ graph LR
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
-| [`tools/verify_fem_notes.py`](tools/verify_fem_notes.py) | 复算 FEM 编程五章的全部数值（52 项断言） | ✅ |
+| [`tools/verify_fem_notes.py`](tools/verify_fem_notes.py) | 复算 FEM 编程五章的全部数值（61 项断言） | ✅ |
 
 ---
 
@@ -139,15 +139,16 @@ python tools/make_figures.py
 | 图 4 | `assets/figures/fig04-yield-criteria.png` | Rankine / von Mises / Tresca 平面应力对比 |
 | 图 5 | `assets/figures/fig05-stress-path-uniaxial.png` | 单轴加载在莫尔圆上的对应点移动 |
 | 图 6 | `assets/figures/fig06-anderson-faults.png` | 三类断层与主应力方位 |
-| 图 7 | `assets/figures/fig07-fem-workflow.png` | 有限元程序的四步流程与数据结构 |
-| 图 8 | `assets/figures/fig08-node-ordering-detj.png` | 三种节点顺序下的 detJ 符号 |
-| 图 9 | `assets/figures/fig09-isoparametric-jacobian.png` | 母单元到实际单元的等参映射 |
-| 图 10 | `assets/figures/fig10-assembly-scatter.png` | 两个 Q4 的组装与稀疏结构 |
-| 图 11 | `assets/figures/fig11-sparse-storage.png` | Skyline / COO / CSR 三种存储格式 |
-| 图 12 | `assets/figures/fig12-constraint-methods.png` | 消元、改行列、罚法三种约束写法 |
-| 图 13 | `assets/figures/fig13-load-vector.png` | 三类荷载的等效节点力与组装后的 F |
-| 图 14 | `assets/figures/fig14-solver-cost.png` | 直接法与迭代法的代价量级 |
-| 图 15 | `assets/figures/fig15-cg-pcg-convergence.png` | CG 与 PCG 的真实残差曲线 |
+| 图 7 | `assets/figures/fig07-single-element.png` | 单 Q4 算例：模型、$u_x$、$\lvert u\rvert$ 与 $\sigma_y$ 云图 |
+| 图 8 | `assets/figures/fig08-fem-workflow.png` | 有限元程序的四步流程与数据结构 |
+| 图 9 | `assets/figures/fig09-node-ordering-detj.png` | 三种节点顺序下的 detJ 符号 |
+| 图 10 | `assets/figures/fig10-isoparametric-jacobian.png` | 母单元到实际单元的等参映射 |
+| 图 11 | `assets/figures/fig11-assembly-scatter.png` | 两个 Q4 的组装与稀疏结构 |
+| 图 12 | `assets/figures/fig12-sparse-storage.png` | Skyline / COO / CSR 三种存储格式 |
+| 图 13 | `assets/figures/fig13-constraint-methods.png` | 消元、改行列、罚法三种约束写法 |
+| 图 14 | `assets/figures/fig14-load-vector.png` | 三类荷载的等效节点力与组装后的 F |
+| 图 15 | `assets/figures/fig15-solver-cost.png` | 直接法与迭代法的代价量级 |
+| 图 16 | `assets/figures/fig16-cg-pcg-convergence.png` | CG 与 PCG 的真实残差曲线 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 

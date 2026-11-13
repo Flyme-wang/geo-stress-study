@@ -103,6 +103,35 @@ def part1():
     check("sum Ry", R[1::2].sum(), 200.0, 1e-9)
     approx("eps_y vs sigma/E", abs(u[5]) / 1.0, 200 / 300e9, 0.05)
 
+    # ---- 后处理：图 7 的三个场（u_x、|u|、sigma_y）
+    def B_at(xi, eta):
+        d = np.linalg.solve(jacobian(xy, dn_local(xi, eta)),
+                            dn_local(xi, eta).T).T
+        Bx = np.zeros((3, 8))
+        for i in range(4):
+            Bx[0, 2 * i] = d[i, 0]
+            Bx[1, 2 * i + 1] = d[i, 1]
+            Bx[2, 2 * i] = d[i, 1]
+            Bx[2, 2 * i + 1] = d[i, 0]
+        return Bx
+
+    sig_c = D @ B_at(0.0, 0.0) @ u
+    check("sigma_y at centre", sig_c[1], -200.0, 1e-6)
+    check("sigma_x at centre", sig_c[0], -19.853, 1e-3)
+    g = 1 / np.sqrt(3)
+    check("sigma_y at GP 1", (D @ B_at(-g, -g) @ u)[1], -207.641, 1e-3)
+    check("sigma_y at GP 4", (D @ B_at(g, g) @ u)[1], -192.359, 1e-3)
+    mean_sy = sum((D @ B_at(sx * g, sy * g) @ u)[1]
+                  for sx in (-1, 1) for sy in (-1, 1)) / 4.0
+    check("mean sigma_y == -200 N / 1 m^2", mean_sy, -200.0, 1e-9)
+    check("|u| at node 3", np.hypot(u[4], u[5]), 6.605125e-10, 1e-15)
+
+    # ---- 点荷载一致性：中心 30 N -> 四节点各 7.5 N
+    w = 0.25 * np.ones(4)
+    check("N_a(0,0) = 1/4", w[0], 0.25, 0.0)
+    check("point load total", (w * 30.0).sum(), 30.0, 1e-12)
+    check("point load per node", (w * 30.0)[0], 7.5, 1e-12)
+
 
 # ============================================================ 2. node ordering / detJ
 def part2():

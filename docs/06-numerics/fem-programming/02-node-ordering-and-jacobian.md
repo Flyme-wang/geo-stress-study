@@ -72,11 +72,11 @@ $$
 **依据**：双线性插值。四个角点的坐标确定一个双线性映射；
 当四边形退化为平行四边形时，它进一步退化为仿射映射。
 
-![图 9 等参映射：同一组形函数既插值坐标，也插值位移](../../../assets/figures/fig09-isoparametric-jacobian.png)
+![图 10 等参映射：同一组形函数既插值坐标，也插值位移](../../../assets/figures/fig10-isoparametric-jacobian.png)
 
-> 图 9：左边是母单元，右边是由四个物理节点围成的实际单元。
+> 图 10：左边是母单元，右边是由四个物理节点围成的实际单元。
 > 同一个 $(\xi,\eta)$ 在两边的位置由上式对应。
-> 文件：`assets/figures/fig09-isoparametric-jacobian.png`
+> 文件：`assets/figures/fig10-isoparametric-jacobian.png`
 
 ### 2.3 雅可比矩阵与面积元
 
@@ -218,11 +218,11 @@ $+0.1443$、 $-0.1443$。**同一个单元，一半高斯点正、一半负，�
 母单元整条中线被压到物理平面上的一点 $(0.5,0.5)$。映射不再是一一对应，
 这就是"折叠"。
 
-![图 8 同一个单元、同一组坐标：节点顺序改变的是形函数与物理节点的对应](../../../assets/figures/fig08-node-ordering-detj.png)
+![图 9 同一个单元、同一组坐标：节点顺序改变的是形函数与物理节点的对应](../../../assets/figures/fig09-node-ordering-detj.png)
 
-> 图 8：三种顺序的连线与 detJ。右图的红色区域是映射折叠区，
+> 图 9：三种顺序的连线与 detJ。右图的红色区域是映射折叠区，
 > 虚线 $\eta=0$ 上 detJ 为零。
-> 文件：`assets/figures/fig08-node-ordering-detj.png`
+> 文件：`assets/figures/fig09-node-ordering-detj.png`
 
 ### 2.6 程序里怎么检查
 

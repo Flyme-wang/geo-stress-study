@@ -500,8 +500,149 @@ def fig06():
     save(fig, "fig06-anderson-faults.png")
 
 
-# ==================================================== 图 7 有限元程序的四步闭环
+# ======================================== 图 7 单单元算例：模型、位移与应力
+def _q4_square(E, nu, t, F):
+    """1×1 正方形 Q4（节点 1-2-3-4 逆时针），四个高斯点积分。
+
+    固定节点 1、2 的全部自由度；返回 8 个自由度的位移、以及可在
+    单元内任意点求值的场函数 (ε, σ)。
+    """
+    coords = np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float)
+    D = E / (1 - nu ** 2) * np.array([[1, nu, 0], [nu, 1, 0], [0, 0, (1 - nu) / 2]])
+    g = 1 / np.sqrt(3)
+
+    def Bmat(xi, eta):
+        dN = np.array([
+            [-(1 - eta), (1 - eta), (1 + eta), -(1 + eta)],
+            [-(1 - xi), -(1 + xi), (1 + xi), (1 - xi)]]) / 4.0
+        J = dN @ coords
+        dNdX = np.linalg.solve(J, dN)
+        B = np.zeros((3, 8))
+        B[0, 0::2] = dNdX[0]
+        B[1, 1::2] = dNdX[1]
+        B[2, 0::2] = dNdX[1]
+        B[2, 1::2] = dNdX[0]
+        return B, np.linalg.det(J)
+
+    K = np.zeros((8, 8))
+    for xi in (-g, g):
+        for eta in (-g, g):
+            B, detJ = Bmat(xi, eta)
+            K += B.T @ D @ B * detJ * t
+    u = np.zeros(8)
+    u[4:] = np.linalg.solve(K[4:, 4:], F[4:])
+
+    def field(xi, eta):
+        B, _ = Bmat(xi, eta)
+        return B @ u, D @ B @ u
+
+    return u, field
+
+
 def fig07():
+    import numpy as np
+    E, nu, t = 300e9, 0.3, 1.0
+    F = np.array([0, 0, 0, 0, 0, -100.0, 0, -100.0])
+    u, field = _q4_square(E, nu, t, F)
+
+    xi = np.linspace(-1, 1, 81)
+    XI, ETA = np.meshgrid(xi, xi)
+    X = (1 + XI) / 2
+    Y = (1 + ETA) / 2
+    N = np.stack([(1 - XI) * (1 - ETA), (1 + XI) * (1 - ETA),
+                  (1 + XI) * (1 + ETA), (1 - XI) * (1 + ETA)], axis=0) / 4
+
+    N0, N1, N2, N3 = N[0], N[1], N[2], N[3]
+    ux = (N0 * u[0] + N1 * u[2] + N2 * u[4] + N3 * u[6])
+    uy = (N0 * u[1] + N1 * u[3] + N2 * u[5] + N3 * u[7])
+    umag = np.hypot(ux, uy)
+
+    sig = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            sig[i, j] = field(XI[i, j], ETA[i, j])[1][1]
+
+    fig, axes = plt.subplots(1, 4, figsize=(14.4, 4.05))
+
+    # ---- ① 模型
+    ax = axes[0]
+    ax.set_aspect("equal"); ax.axis("off")
+    ax.set_xlim(-0.30, 1.30); ax.set_ylim(-0.42, 1.60)
+    ax.add_patch(Rectangle((0, 0), 1, 1, facecolor="#F4F7FA",
+                           edgecolor="#37474F", lw=1.6, zorder=2))
+    nodes = {1: (0, 0), 2: (1, 0), 3: (1, 1), 4: (0, 1)}
+    off = {1: (-16, -12), 2: (10, -12), 3: (10, 8), 4: (-24, 8)}
+    for k, (x, y) in nodes.items():
+        ax.plot([x], [y], "o", ms=6.5, mfc="white", mec="#37474F", mew=1.5, zorder=4)
+        ax.annotate(str(k), (x, y), xytext=off[k], textcoords="offset points",
+                    fontsize=11.5, color="#22303A", zorder=5)
+    for x in (0.0, 1.0):
+        ax.add_patch(Polygon([[x - 0.10, -0.10], [x + 0.10, -0.10],
+                              [x, 0.0]], closed=True,
+                             facecolor="#BFC8CE", edgecolor="#37474F", lw=1.0, zorder=3))
+        ax.plot([x - 0.13, x + 0.13], [-0.10, -0.10], color="#37474F", lw=1.3, zorder=3)
+    for x in (0.0, 1.0):
+        arrow(ax, (x, 1.40), (x, 1.03), BLUE, lw=2.2, ms=13)
+        ax.annotate("100 N", (x, 1.42), xytext=(0, 2), textcoords="offset points",
+                    ha="center", va="bottom", fontsize=10.5, color=BLUE)
+    ax.annotate("", xy=(0, -0.26), xytext=(1, -0.26),
+                arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0))
+    ax.text(0.5, -0.36, "1 m", ha="center", va="top", fontsize=10.5, color=GRAY)
+    ax.set_title("① 模型：1 个 Q4，固定 1、2", fontsize=11.5, pad=8)
+    ax.text(0.5, 0.5, "E = 300 GPa\nν = 0.3，t = 1 m\n平面应力",
+            ha="center", va="center", fontsize=10, color="#4A5A66",
+            linespacing=1.6, zorder=5)
+
+    # ---- ② ③ 位移云图
+    for ax, val, title, unit_note in (
+            (axes[1], ux * 1e10, "② $u_x$ 云图", "u_x"),
+            (axes[2], umag * 1e10, "③ 总位移 $|u|$ 云图", "|u|")):
+        pm = ax.pcolormesh(X, Y, val, shading="gouraud", cmap="jet")
+        ax.set_aspect("equal"); ax.axis("off")
+        ax.set_xlim(-0.04, 1.04); ax.set_ylim(-0.04, 1.04)
+        ax.add_patch(Rectangle((0, 0), 1, 1, fill=False, edgecolor="#37474F", lw=1.3))
+        cb = fig.colorbar(pm, ax=ax, fraction=0.046, pad=0.03)
+        cb.ax.tick_params(labelsize=8.5)
+        cb.set_label(unit_note + r" / $10^{-10}$ m", fontsize=9.5)
+        ax.set_title(title, fontsize=11.5, pad=8)
+
+    axes[1].text(0.06, 0.94, "顶边 $\\pm1.338$", fontsize=9.5, color="#22303A",
+                 ha="left", va="top", zorder=6,
+                 bbox=dict(facecolor="white", alpha=0.75, edgecolor="none", pad=1.6))
+    axes[1].text(0.06, 0.06, "底边 0", fontsize=9.5, color="#22303A",
+                 ha="left", va="bottom", zorder=6,
+                 bbox=dict(facecolor="white", alpha=0.75, edgecolor="none", pad=1.6))
+    axes[2].text(0.06, 0.94, "角点 6.6051", fontsize=9.5, color="#22303A",
+                 ha="left", va="top", zorder=6,
+                 bbox=dict(facecolor="white", alpha=0.75, edgecolor="none", pad=1.6))
+    axes[2].text(0.06, 0.06, "底边 0", fontsize=9.5, color="#22303A",
+                 ha="left", va="bottom", zorder=6,
+                 bbox=dict(facecolor="white", alpha=0.75, edgecolor="none", pad=1.6))
+
+    # ---- ④ σy 云图
+    ax = axes[3]
+    pm = ax.pcolormesh(X, Y, sig, shading="gouraud", cmap="jet")
+    ax.set_aspect("equal"); ax.axis("off")
+    ax.set_xlim(-0.04, 1.04); ax.set_ylim(-0.04, 1.04)
+    ax.add_patch(Rectangle((0, 0), 1, 1, fill=False, edgecolor="#37474F", lw=1.3))
+    cb = fig.colorbar(pm, ax=ax, fraction=0.046, pad=0.03)
+    cb.ax.tick_params(labelsize=8.5)
+    cb.set_label(r"$\sigma_y$ / Pa", fontsize=9.5)
+    ax.set_title(r"④ $\sigma_y$ 云图", fontsize=11.5, pad=8)
+    ax.text(0.5, 0.52, "中心 $-200$\n$=-200\\,/\\,1$ N/m$^2$",
+            ha="center", va="center", fontsize=9.5, color="#22303A", zorder=6,
+            bbox=dict(facecolor="white", alpha=0.78, edgecolor="none", pad=2.0))
+    ax.text(0.06, 0.06, "底边 $-213$", fontsize=9.5, color="white",
+            ha="left", va="bottom", zorder=6)
+    ax.text(0.06, 0.94, "顶边 $-187$", fontsize=9.5, color="white",
+            ha="left", va="top", zorder=6)
+
+    fig.tight_layout()
+    save(fig, "fig07-single-element.png")
+
+
+# ==================================================== 图 8 有限元程序的四步闭环
+def fig08():
     fig, ax = plt.subplots(figsize=(12.6, 4.2))
     ax.set_xlim(0, 12.6); ax.set_ylim(0, 4.2); ax.axis("off")
 
@@ -529,11 +670,11 @@ def fig07():
             ha="center", fontsize=11.5, color=GRAY)
     ax.text(6.3, 0.38, "后处理（应变 ε = Bu，应力 σ = Dε）不改变求解，只改变“看结果”的方式",
             ha="center", fontsize=9.8, color="#7A8792")
-    save(fig, "fig07-fem-workflow.png")
+    save(fig, "fig08-fem-workflow.png")
 
 
-# ==================================================== 图 8 节点排序与 det(J)
-def fig08():
+# ==================================================== 图 9 节点排序与 det(J)
+def fig09():
     fig, axes = plt.subplots(1, 3, figsize=(12.8, 4.9))
     node_xy = {1: (0, 0), 2: (1, 0), 3: (1, 1), 4: (0, 1)}
     cases = [
@@ -576,11 +717,11 @@ def fig08():
     fig.suptitle("同一个单元、同一组坐标：节点顺序改变的是“形函数与物理节点的对应”",
                  fontsize=13, y=1.03)
     fig.tight_layout()
-    save(fig, "fig08-node-ordering-detj.png")
+    save(fig, "fig09-node-ordering-detj.png")
 
 
-# ==================================================== 图 9 等参映射与雅可比
-def fig09():
+# ==================================================== 图 10 等参映射与雅可比
+def fig10():
     fig, ax = plt.subplots(figsize=(11.6, 5.0))
     ax.set_aspect("equal"); ax.axis("off")
     ax.set_xlim(-0.42, 6.90); ax.set_ylim(-1.30, 2.10)
@@ -638,11 +779,11 @@ def fig09():
 
     fig.suptitle("等参映射：同一组形函数既插值坐标，也插值位移", fontsize=13, y=1.00)
     fig.tight_layout()
-    save(fig, "fig09-isoparametric-jacobian.png")
+    save(fig, "fig10-isoparametric-jacobian.png")
 
 
-# ==================================================== 图 10 组装：局部 → 全局
-def fig10():
+# ==================================================== 图 11 组装：局部 → 全局
+def fig11():
     fig = plt.figure(figsize=(12.4, 5.4))
     gs = fig.add_gridspec(1, 2, width_ratios=[1.0, 1.05], wspace=0.22)
     ax = fig.add_subplot(gs[0, 0])
@@ -703,11 +844,11 @@ def fig10():
     fig.suptitle("组装不是“填表”，而是把每个单元的贡献按自由度映射累加到全局矩阵",
                  fontsize=13, y=0.99)
     fig.tight_layout()
-    save(fig, "fig10-assembly-scatter.png")
+    save(fig, "fig11-assembly-scatter.png")
 
 
-# ==================================================== 图 11 三种稀疏存储
-def fig11():
+# ==================================================== 图 12 三种稀疏存储
+def fig12():
     fig = plt.figure(figsize=(13.6, 5.0))
     gs = fig.add_gridspec(1, 3, width_ratios=[1.0, 1.0, 1.25], wspace=0.20)
 
@@ -811,11 +952,11 @@ def fig11():
     fig.suptitle("三种稀疏存储：Skyline 存轮廓，COO 存三元组，CSR 存行压缩",
                  fontsize=13, y=1.00)
     fig.tight_layout()
-    save(fig, "fig11-sparse-storage.png")
+    save(fig, "fig12-sparse-storage.png")
 
 
-# ==================================================== 图 12 约束处理三法
-def fig12():
+# ==================================================== 图 13 约束处理三法
+def fig13():
     fig, axes = plt.subplots(1, 4, figsize=(13.0, 4.6))
     base = np.array([[2.0, -1.0, 0.0],
                      [-1.0, 2.0, -1.0],
@@ -870,13 +1011,13 @@ def fig12():
                     ls=(0, (4, 3)))
     fig.suptitle("同一个约束，三种写法：改的是矩阵与右端项，不是物理", fontsize=13, y=1.03)
     fig.tight_layout()
-    save(fig, "fig12-constraint-methods.png")
+    save(fig, "fig13-constraint-methods.png")
 
 
-# ==================================================== 图 13 荷载向量
-def fig13():
-    fig, axes = plt.subplots(1, 2, figsize=(12.8, 5.2),
-                             gridspec_kw={"width_ratios": [1.05, 1.0]})
+# ==================================================== 图 14 荷载向量
+def fig14():
+    fig, axes = plt.subplots(1, 3, figsize=(14.6, 5.2),
+                             gridspec_kw={"width_ratios": [1.05, 0.60, 1.0]})
     ax = axes[0]
     ax.set_aspect("equal"); ax.axis("off")
     ax.set_xlim(-0.55, 2.55); ax.set_ylim(-0.85, 1.75)
@@ -905,7 +1046,35 @@ def fig13():
     ax.annotate("+30 N", (2.0, 1.34), ha="center", fontsize=9.5, color=RED)
     ax.set_title("2 m × 1 m × 0.1 m 的 Q4：三种荷载同时作用", fontsize=12)
 
+    # ---- 中：点荷载一致性
     ax = axes[1]
+    ax.set_aspect("equal"); ax.axis("off")
+    ax.set_xlim(-0.20, 1.16); ax.set_ylim(-0.02, 2.34)
+    ax.add_patch(Rectangle((0.08, 1.55), 0.84, 0.70, facecolor="#F4F7FA",
+                           edgecolor="#37474F", lw=1.2, zorder=2))
+    ax.text(0.50, 2.12, "P = 30 N", ha="center", va="center",
+            fontsize=10, color=RED, zorder=6)
+    arrow(ax, (0.5, 2.02), (0.5, 1.78), RED, lw=2.2, ms=12)
+    ax.plot([0.5], [1.86], "o", ms=4.5, color=RED, zorder=5)
+    ax.text(-0.06, 1.90, "①", ha="center", va="center", fontsize=10.5,
+            color="#22303A")
+
+    ax.add_patch(Rectangle((0.08, 0.36), 0.84, 0.70, facecolor="#F4F7FA",
+                           edgecolor="#37474F", lw=1.2, zorder=2))
+    for x in (0.08, 0.92):
+        ax.plot([x], [0.36], "o", ms=5, color="#37474F", zorder=5)
+        ax.plot([x], [1.06], "o", ms=5, color="#37474F", zorder=5)
+        arrow(ax, (x, 1.34), (x, 1.09), RED, lw=1.8, ms=10, zorder=6)
+        arrow(ax, (x, 0.32), (x, 0.09), RED, lw=1.8, ms=10, zorder=6)
+    ax.text(0.50, 0.71, "四节点\n各 7.5 N", ha="center", va="center",
+            fontsize=9.5, color=RED, linespacing=1.5)
+    ax.text(-0.06, 0.71, "②", ha="center", va="center", fontsize=10.5,
+            color="#22303A")
+    ax.text(0.50, 0.02, "$N_a(0,0)=1/4$，合力仍为 30 N",
+            ha="center", va="bottom", fontsize=9.2, color="#4A5A66")
+    ax.set_title("点荷载一致性", fontsize=12)
+
+    ax = axes[2]
     labels = ["u1x", "u1y", "u2x", "u2y", "u3x", "u3y", "u4x", "u4y"]
     F = np.array([0, -100, 50, -100, 50, -70, 0, -100])
     colors = ["#8D6E63" if abs(v) == 100 and i % 2 == 1 else "#6D4C41"
@@ -936,11 +1105,11 @@ def fig13():
     fig.suptitle("三种荷载，三个公式：集中力找作用点，面力积边界，体力积单元",
                  fontsize=13, y=1.01)
     fig.tight_layout(rect=(0, 0.06, 1, 0.98))
-    save(fig, "fig13-load-vector.png")
+    save(fig, "fig14-load-vector.png")
 
 
-# ==================================================== 图 14 求解器代价量级
-def fig14():
+# ==================================================== 图 15 求解器代价量级
+def fig15():
     N = np.logspace(2, 8, 200)
     dense = N ** 3
     skyline = N ** 2
@@ -965,10 +1134,10 @@ def fig14():
     ax.text(0.99, 0.04, "只比较量级，不含常数；实际选择还取决于条件数、内存与多工况复用",
             transform=ax.transAxes, ha="right", fontsize=8.6, color=GRAY)
     fig.tight_layout()
-    save(fig, "fig14-solver-cost.png")
+    save(fig, "fig15-solver-cost.png")
 
 
-# ==================================================== 图 15 CG / PCG 收敛
+# ==================================================== 图 16 CG / PCG 收敛
 def _lap_layers(n, ratio=8.0):
     """层状系数的二维拉普拉斯矩阵（Dirichlet 外边界），用于演示 CG/PCG。"""
     N = n * n
@@ -1020,7 +1189,7 @@ def _cg(A, b, tol=1e-8, maxit=4000, M=None):
     return x, np.array(hist)
 
 
-def fig15():
+def fig16():
     fig, axes = plt.subplots(1, 2, figsize=(12.6, 4.9))
     n = 24
     A, bnd = _lap_layers(n)
@@ -1082,7 +1251,7 @@ def fig15():
     fig.suptitle("真实残差才是收敛判据：同一条曲线，预处理后少走约 1/4 的步数",
                  fontsize=13, y=1.02)
     fig.tight_layout()
-    save(fig, "fig15-cg-pcg-convergence.png")
+    save(fig, "fig16-cg-pcg-convergence.png")
 
 
 if __name__ == "__main__":
@@ -1101,3 +1270,4 @@ if __name__ == "__main__":
     fig13()
     fig14()
     fig15()
+    fig16()

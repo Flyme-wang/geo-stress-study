@@ -7,11 +7,11 @@
 
 ## 已完成的子模块
 
-**[有限元编程基础](fem-programming/README.md)**（5 篇 + 导读，含图 7–图 15）
+**[有限元编程基础](fem-programming/README.md)**（5 篇 + 导读，含图 7–图 16）
 
 从 $Ku=F$ 的四步流程开始，自己动手写一个 Q4 单元：
 离散与第一个程序 → 节点顺序与雅可比 → 组装与稀疏存储 → 约束与荷载 → 线性方程组求解。
-所有数值可用 `py -3 tools/verify_fem_notes.py` 复算（52 项断言）。
+所有数值可用 `py -3 tools/verify_fem_notes.py` 复算（61 项断言）。
 
 ---
 
