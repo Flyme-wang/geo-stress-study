@@ -122,7 +122,7 @@ $$
 读本库只需要下面这些，遇到不熟的可以跳回来看：
 
 - 矢量点积与投影： $\mathbf{a}\cdot\mathbf{b} = a_ib_i$
-- 矩阵乘法： $(\mathbf{A}\mathbf{b})_i = A_{ij}b_j$
+- 矩阵乘法： $(\mathbf{A}\mathbf{b})\_i = A_{ij}b_j$
 - 特征值问题： $\mathbf{A}\mathbf{x} = \lambda\mathbf{x}$，等价于 $\det(\mathbf{A}-\lambda\mathbf{I})=0$
 - 实对称矩阵：特征值全为实数，不同特征值的特征向量正交
 - 三角函数： $\cos 2\theta = \cos^2\theta - \sin^2\theta$， $\sin 2\theta = 2\sin\theta\cos\theta$
