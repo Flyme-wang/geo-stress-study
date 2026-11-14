@@ -2810,6 +2810,380 @@ def fig40():
     save(fig, "fig40-element-selection.png")
 
 
+# ============================================================ 图 41 FRIC 两个算例
+def fig41():
+    fig, axes = plt.subplots(1, 2, figsize=(11.6, 4.8),
+                             gridspec_kw={"width_ratios": [1.05, 1.0]})
+
+    # ---- (a) B31 梁压在刚性平面上
+    ax = axes[0]
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 6)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    # 刚性平面与阴影
+    ax.plot([0.6, 9.4], [1.48, 1.48], color="black", lw=2.2, zorder=3)
+    hatch = Polygon([[0.6, 1.48], [9.4, 1.48], [9.4, 0.55], [0.6, 0.55]],
+                    closed=True, fc="#ECEFF1", ec="none", hatch="///",
+                    zorder=1)
+    ax.add_patch(hatch)
+    ax.text(7.0, 0.90, "解析刚体平面（主面）", ha="center", va="center",
+            fontsize=9.2, color=GRAY,
+            bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="none",
+                      alpha=0.9))
+
+    # 梁
+    ax.add_patch(Rectangle((2.1, 1.48), 4.8, 0.52, fc="#E3F2FD",
+                           ec=BLUE, lw=1.6, zorder=4))
+    ax.plot([2.1, 6.9], [1.74, 1.74], color=BLUE, lw=1.0, ls="--", zorder=5)
+    ax.text(4.9, 2.20, "B31 梁", ha="center", fontsize=11, color=BLUE)
+
+    # 接触点
+    ax.plot([4.5], [1.48], "o", ms=8, mfc=RED, mec="white", mew=1.0,
+            zorder=7)
+    ax.annotate("接触点", xy=(4.5, 1.48), xytext=(3.35, 1.12),
+                ha="left", va="center", fontsize=9.5, color=RED,
+                zorder=8,
+                bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none",
+                          alpha=0.9),
+                arrowprops=dict(arrowstyle="->", color=RED, lw=1.1))
+
+    # 法向力
+    arrow(ax, (3.6, 4.05), (3.6, 2.05), GREEN, lw=2.2, ms=14)
+    ax.text(3.76, 3.28, "P = 100\n（法向）", fontsize=9.5, color=GREEN)
+
+    # 切向力：三个方向
+    base = (6.9, 1.74)
+    arrow(ax, base, (8.35, 1.74), RED, lw=2.0, ms=13)
+    arrow(ax, base, (7.95, 2.40), RED, lw=2.0, ms=13, ls="--")
+    arrow(ax, base, (6.9, 3.05), RED, lw=2.0, ms=13, ls=":")
+    ax.text(7.82, 1.88, "步 3：沿 x", fontsize=8.8, color=RED,
+            bbox=dict(boxstyle="round,pad=0.10", fc="white", ec="none",
+                      alpha=0.9))
+    ax.text(7.85, 2.50, "步 4：45°", fontsize=8.8, color=RED)
+    ax.text(6.98, 3.12, "步 5：沿 y", fontsize=8.8, color=RED)
+
+    # 坐标 triad
+    tri = (8.7, 5.2)
+    arrow(ax, tri, (9.45, 5.2), BLUE, lw=1.5, ms=10)
+    arrow(ax, tri, (8.7, 5.95), GREEN, lw=1.5, ms=10)
+    ax.text(9.52, 5.12, "x", fontsize=10, color=BLUE)
+    ax.text(8.55, 5.98, "y", fontsize=10, color=GREEN)
+    ax.set_title("(a) 算例一：等温、常系数 k", fontsize=12, pad=8)
+
+    # ---- (b) 两块 C3D8T 的接触
+    ax = axes[1]
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 6)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    ax.add_patch(Rectangle((1.5, 0.9), 4.8, 1.55, fc="#E8F5E9",
+                           ec=GREEN, lw=1.6, zorder=2))
+    ax.add_patch(Rectangle((1.5, 2.45), 4.8, 1.55, fc="#FFEBEE",
+                           ec=RED, lw=1.6, zorder=2))
+    ax.plot([1.5, 6.3], [2.45, 2.45], color="black", lw=2.0, zorder=4)
+    ax.text(3.9, 1.65, "A：θ_A = 0°", ha="center", fontsize=11, color=GREEN)
+    ax.text(3.9, 3.22, "B：θ_B = 0 → 200°", ha="center", fontsize=11,
+            color=RED)
+    ax.text(3.9, 0.55,
+            "C3D8T，耦合温度–位移\nk = 0.001 + 1e-5·(θ₁+θ₂)/2",
+            ha="center", va="center", fontsize=9.0, color=GRAY)
+    ax.text(3.9, 2.58, "接触面：q_g 摩擦热", ha="center", fontsize=8.8,
+            color="black",
+            bbox=dict(boxstyle="round,pad=0.22", fc="white", ec=GRAY,
+                      lw=0.8, alpha=0.95))
+
+    arrow(ax, (3.9, 5.35), (3.9, 4.10), GREEN, lw=2.2, ms=14)
+    ax.text(4.08, 4.75, "P = 16000", fontsize=10, color=GREEN)
+    arrow(ax, (6.3, 3.55), (7.75, 3.55), RED, lw=2.2, ms=14)
+    ax.text(6.55, 3.72, "Q = 100", fontsize=10, color=RED)
+
+    ax.set_title("(b) 算例二：温度依赖 k", fontsize=12, pad=8)
+
+    fig.text(0.5, 0.985, "FRIC 的两个验证构造：等温滑移与温度依赖滑移",
+             fontsize=14.5, ha="center", va="top")
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig41-fric-setups.png")
+
+
+# ============================================================ 图 42 算例一滑移路径
+def fig42():
+    fig, ax = plt.subplots(figsize=(6.6, 6.0))
+    ax.set_aspect("equal")
+    ax.set_xlim(-0.015, 0.215)
+    ax.set_ylim(-0.015, 0.215)
+    ax.set_xlabel("x 方向累计滑移")
+    ax.set_ylabel("y 方向累计滑移")
+    ax.grid(True, color="#E0E0E0", lw=0.6)
+
+    # 坐标轴
+    ax.plot([0, 0.21], [0, 0], color="black", lw=1.0, zorder=2)
+    ax.plot([0, 0], [0, 0.21], color="black", lw=1.0, zorder=2)
+
+    p0 = np.array([0.0, 0.0])
+    p1 = np.array([0.1, 0.0])
+    p2 = np.array([0.170710678, 0.070710678])
+    p3 = np.array([0.170710678, 0.170710678])
+
+    arrow(ax, p0, p1, BLUE, lw=2.4, ms=14)
+    arrow(ax, p1, p2, RED, lw=2.4, ms=14)
+    arrow(ax, p2, p3, GREEN, lw=2.4, ms=14)
+
+    # 弦
+    ax.plot([0, p3[0]], [0, p3[1]], color=GRAY, lw=1.4, ls="--", zorder=1)
+    ax.text(0.045, 0.062, "弦长 0.2414", fontsize=10, color=GRAY,
+            rotation=45, ha="center", va="center")
+
+    # 终点投影
+    ax.plot([p3[0], p3[0]], [0, p3[1]], color=GRAY, lw=0.8, ls=":")
+    ax.plot([0, p3[0]], [p3[1], p3[1]], color=GRAY, lw=0.8, ls=":")
+    ax.plot([p3[0]], [p3[1]], "o", ms=7, mfc=GREEN, mec="white", mew=1.0,
+            zorder=8)
+    ax.annotate("(0.17071, 0.17071)", xy=p3, xytext=(0.128, 0.205),
+                fontsize=10, color=GREEN, va="bottom",
+                arrowprops=dict(arrowstyle="->", color=GREEN, lw=1.0))
+
+    # 增量标注
+    ax.text(0.050, 0.012, "① 0.1000 沿 x", fontsize=9.2, color=BLUE,
+            ha="center", va="bottom")
+    ax.text(0.130, 0.026, "② (0.07071, 0.07071)", fontsize=9.2,
+            color=RED, rotation=45, ha="center", va="bottom")
+    ax.text(0.177, 0.120, "③ 0.1000 沿 y", fontsize=9.2, color=GREEN,
+            rotation=90, va="center")
+
+    # 路径长
+    ax.text(0.020, 0.115,
+            "路径长 0.3000\n弦长 0.2414\n路径/弦 1.243",
+            fontsize=9.2, color="#22303A",
+            bbox=dict(boxstyle="round,pad=0.32", fc="#FFF8E1",
+                      ec="#EF6C00", lw=1.1))
+
+    # 图例
+    handles = [
+        plt.Line2D([], [], color=BLUE, lw=2.2, label="步 3：沿 x"),
+        plt.Line2D([], [], color=RED, lw=2.2, label="步 4：45°"),
+        plt.Line2D([], [], color=GREEN, lw=2.2, label="步 5：沿 y"),
+        plt.Line2D([], [], color=GRAY, lw=1.3, ls="--", label="终点弦"),
+    ]
+    ax.legend(handles=handles, loc="lower right", fontsize=8.8,
+              frameon=True, framealpha=0.95)
+
+    ax.set_title("算例一：三个增量把滑移矢量累加到 45°", fontsize=13,
+                 pad=10)
+    fig.tight_layout()
+    save(fig, "fig42-fric-slip-path.png")
+
+
+# ============================================================ 图 43 算例二收敛
+def fig43():
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.4))
+    n = np.array([1, 2, 5, 10, 20, 50, 100], dtype=float)
+    end = 0.15 + 0.05 / n
+    mid = np.full_like(n, 0.15)
+
+    ax = axes[0]
+    ax.semilogx(n, end, "o-", color=RED, lw=2.0, ms=6,
+                label="增量末采样：0.15 + 0.05/N")
+    ax.semilogx(n, mid, "s--", color=BLUE, lw=1.8, ms=5,
+                label="增量中点采样：0.150")
+    ax.axhline(0.15, color=GRAY, lw=1.0, ls=":", label="连续解：0.150")
+    ax.plot([10], [0.155], "o", ms=9, mfc="white", mec=RED, mew=2.0,
+            zorder=6)
+    ax.annotate("N = 10：0.155", xy=(10, 0.155), xytext=(15, 0.178),
+                fontsize=9.5, color=RED,
+                arrowprops=dict(arrowstyle="->", color=RED, lw=1.0))
+    ax.set_xlabel("增量数 N")
+    ax.set_ylabel("总滑移 γ")
+    ax.set_ylim(0.145, 0.205)
+    ax.set_title("(a) 总滑移随 N 的变化", fontsize=12)
+    ax.grid(True, which="both", color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=8.4, loc="upper right")
+
+    ax = axes[1]
+    err = 0.05 / n
+    ax.loglog(n, err, "o-", color=RED, lw=2.0, ms=6,
+              label="e_N = 0.05/N")
+    ax.loglog(n, 0.05 / n, color=GRAY, lw=1.2, ls="--",
+              label="参考斜率 −1")
+    ax.plot([10], [0.005], "o", ms=9, mfc="white", mec=RED, mew=2.0,
+            zorder=6)
+    ax.annotate("N = 10：0.005", xy=(10, 0.005), xytext=(2.0, 0.0016),
+                fontsize=9.5, color=RED, va="top",
+                arrowprops=dict(arrowstyle="->", color=RED, lw=1.0))
+    ax.set_xlabel("增量数 N")
+    ax.set_ylabel("误差 e_N")
+    ax.set_ylim(1e-4, 0.08)
+    ax.set_title("(b) 末采样误差按 1/N 收敛", fontsize=12)
+    ax.grid(True, which="both", color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=8.4, loc="lower left")
+    ax.text(0.97, 0.95, "N 加倍，误差减半\n（一阶收敛）",
+            transform=ax.transAxes, ha="right", va="top", fontsize=9.4,
+            bbox=dict(boxstyle="round,pad=0.30", fc="#FFF8E1",
+                      ec="#EF6C00", lw=1.0))
+
+    fig.suptitle("算例二：0.155 是增量末采样的一阶结果，不是连续解的精确值",
+                 fontsize=13.5, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig43-fric-convergence.png")
+
+
+# ============================================================ 图 44 摩擦热
+def fig44():
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.5))
+    t = np.linspace(0.0, 1.0, 201)
+    k = 0.001 * (1.0 + t)
+    q = 0.5 * k * 100.0 ** 2  # 5*(1+t)
+
+    ax = axes[0]
+    ax.plot(t, q, color=RED, lw=2.4, label="q_g = η k τ²")
+    ax.set_xlabel("时间 t")
+    ax.set_ylabel("摩擦热流 q_g (W/m²)", color=RED)
+    ax.tick_params(axis="y", colors=RED)
+    ax.set_ylim(0, 11.5)
+    ax.set_xlim(0, 1)
+    ax.grid(True, color="#E0E0E0", lw=0.6)
+    ax.plot([0, 1], [5, 10], "o", ms=6, mfc=RED, mec="white", mew=1.0,
+            zorder=6)
+    ax.annotate("5", xy=(0, 5), xytext=(0.035, 4.45), fontsize=9.5,
+                color=RED)
+    ax.annotate("10", xy=(1, 10), xytext=(0.94, 9.30), fontsize=9.5,
+                color=RED)
+
+    ax2 = ax.twinx()
+    ax2.plot(t, k / 1e-3, color=BLUE, lw=1.6, ls="--",
+             label="k / 10⁻³")
+    ax2.set_ylabel("k / 10⁻³", color=BLUE)
+    ax2.tick_params(axis="y", colors=BLUE)
+    ax2.set_ylim(0, 2.6)
+
+    lines1, labels1 = ax.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax.legend(lines1 + lines2, labels1 + labels2, fontsize=8.6,
+              loc="upper left")
+    ax.set_title("(a) 热流随温度线性上升", fontsize=12)
+
+    ax = axes[1]
+    # 连续累计热：∫0^t 5(1+s) ds = 5t + 2.5t²
+    qc = 5.0 * t + 2.5 * t ** 2
+    ax.plot(t, qc, color=BLUE, lw=2.2, label="连续解：5t + 2.5t²")
+    # 末采样 n=10 的阶梯
+    n = 10
+    ts = np.arange(n + 1) / n
+    qs = np.zeros(n + 1)
+    for i in range(1, n + 1):
+        qs[i] = qs[i - 1] + 0.5 * (0.001 * (1 + i / n)) * 100.0 ** 2 / n
+    ax.step(ts, qs, where="post", color=RED, lw=2.0,
+            label="末采样 N=10：7.75")
+    # 只画末端短线，避免被图例遮住
+    ax.plot([0.78, 1.0], [7.5, 7.5], color=BLUE, lw=1.0, ls=":")
+    ax.plot([0.78, 1.0], [7.75, 7.75], color=RED, lw=1.0, ls=":")
+    ax.text(0.79, 7.80, "7.75", fontsize=8.6, color=RED, va="bottom")
+    ax.text(0.79, 7.44, "7.50", fontsize=8.6, color=BLUE, va="top")
+    ax.set_xlabel("时间 t")
+    ax.set_ylabel("累计摩擦热 Q (J/m²)")
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 9.0)
+    ax.grid(True, color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=8.6, loc="upper left")
+    ax.text(0.97, 0.06,
+            "连续：功 15.0 → 热 7.5 → 每面 3.75\n"
+            "末采样：功 15.5 → 热 7.75 → 每面 3.875\n"
+            "（η = 0.5；每面再分一半 = 25%）",
+            transform=ax.transAxes, ha="right", va="bottom", fontsize=8.8,
+            bbox=dict(boxstyle="round,pad=0.32", fc="#FFF8E1",
+                      ec="#EF6C00", lw=1.0))
+    ax.set_title("(b) 累计热与表面分配", fontsize=12)
+
+    fig.suptitle("摩擦热账本：q_g = η τ γ̇ = η k τ²，不是凭空多出来的能量",
+                 fontsize=13.2, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig44-fric-heat.png")
+
+
+# ============================================================ 图 45 FRIC 位置与定律
+def fig45():
+    fig, axes = plt.subplots(1, 2, figsize=(11.8, 4.9),
+                             gridspec_kw={"width_ratios": [1.2, 1.0]})
+
+    # ---- (a) 流程图
+    ax = axes[0]
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 6)
+    ax.axis("off")
+
+    def box(x, y, w, h, text, fc, ec, fs=9.4):
+        ax.add_patch(FancyBboxPatch((x - w / 2, y - h / 2), w, h,
+                                    boxstyle="round,pad=0.05,rounding_size=0.10",
+                                    fc=fc, ec=ec, lw=1.3, zorder=3))
+        ax.text(x, y, text, ha="center", va="center", fontsize=fs,
+                color="#22303A", zorder=4)
+
+    box(1.65, 4.75, 2.7, 0.95, "接触搜索\n法向压力 p", "#E3F2FD", BLUE)
+    box(4.95, 4.75, 2.7, 0.95, "切向试算\n增量滑移 Δγ", "#E3F2FD", BLUE)
+    box(8.25, 4.75, 2.8, 0.95, "FRIC 返回\nτ 与切线", "#FFF3E0", "#EF6C00")
+    box(8.25, 2.70, 2.8, 0.95, "组装残差/刚度\nUNSYMM=YES", "#E8F5E9", GREEN)
+    box(4.95, 2.70, 2.7, 0.95, "收敛？", "#FFF8E1", "#EF6C00")
+    box(1.65, 2.70, 2.7, 0.95, "下一增量", "#ECEFF1", GRAY)
+
+    arrow(ax, (3.00, 4.75), (3.60, 4.75), GRAY, lw=1.6, ms=12)
+    arrow(ax, (6.30, 4.75), (6.85, 4.75), GRAY, lw=1.6, ms=12)
+    arrow(ax, (8.25, 4.27), (8.25, 3.18), GRAY, lw=1.6, ms=12)
+    arrow(ax, (6.85, 2.70), (6.30, 2.70), GRAY, lw=1.6, ms=12)
+    arrow(ax, (3.60, 2.70), (3.00, 2.70), GREEN, lw=1.8, ms=12)
+    ax.text(3.25, 2.86, "是", fontsize=9.0, color=GREEN)
+    arrow(ax, (4.95, 3.18), (4.95, 4.27), RED, lw=1.6, ms=12, ls="--")
+    ax.text(5.08, 3.72, "否：再迭代", fontsize=8.8, color=RED)
+
+    ax.text(5.0, 1.55,
+            "库仑：τ ≤ μp 时粘着（γ̇ = 0），超过才滑移\n"
+            "线性黏性：τ = Δγ/(kΔt)，任意 τ ≠ 0 都滑移\n"
+            "带门槛的黏塑性：τ = τ_y + η γ̇，τ_y > 0 才有粘着段",
+            ha="center", va="center", fontsize=9.0, color="#22303A",
+            bbox=dict(boxstyle="round,pad=0.35", fc="#F5F5F5",
+                      ec=GRAY, lw=1.0))
+    ax.set_title("(a) FRIC 在接触迭代中的位置", fontsize=12, pad=8)
+
+    # ---- (b) 三种界面定律
+    ax = axes[1]
+    gd = np.linspace(0.0, 0.07, 300)
+    mu, p = 0.6, 100.0
+    tau_c = mu * p
+    ax.plot([0, 0], [0, tau_c], color=BLUE, lw=2.2)
+    ax.plot([0, 0.07], [tau_c, tau_c], color=BLUE, lw=2.2,
+            label="库仑")
+    ax.annotate("粘着段\n$\\dot\\gamma=0$", xy=(0.0, 32),
+                xytext=(0.0062, 42), fontsize=8.4, color=BLUE,
+                ha="left", va="center",
+                arrowprops=dict(arrowstyle="->", color=BLUE, lw=1.0))
+    ax.plot(gd, gd / 0.001, color=RED, lw=2.2,
+            label="线性黏性")
+    tau_y = 20.0
+    ax.plot(gd, tau_y + gd / 0.001, color=GREEN, lw=2.2, ls="--",
+            label="黏塑性")
+    ax.axhline(tau_c, color=GRAY, lw=0.9, ls=":")
+    ax.set_xlim(-0.0035, 0.07)
+    ax.set_ylim(0, 70)
+    ax.set_xticks(np.arange(0.0, 0.071, 0.01))
+    ax.spines["left"].set_position(("data", -0.0035))
+    ax.set_xlabel("滑移速度 γ̇（长度/时间）")
+    ax.set_ylabel("剪应力 τ (Pa)")
+    ax.grid(True, color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=8.4, loc="lower right", handlelength=1.8,
+              borderaxespad=0.2)
+    ax.annotate("原文的式子在 τ_y = 0 时\n就是这条过原点直线",
+                xy=(0.035, 35), xytext=(0.012, 55),
+                fontsize=8.8, color=RED,
+                arrowprops=dict(arrowstyle="->", color=RED, lw=1.0))
+    ax.set_title("(b) 三种界面定律", fontsize=12, pad=8)
+
+    fig.suptitle("先分清“粘着–滑移”与“线性黏性”，再写 FRIC",
+                 fontsize=13.5, y=0.99)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    save(fig, "fig45-fric-laws.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -2851,3 +3225,8 @@ if __name__ == "__main__":
     fig38()
     fig39()
     fig40()
+    fig41()
+    fig42()
+    fig43()
+    fig44()
+    fig45()
