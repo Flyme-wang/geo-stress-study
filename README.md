@@ -68,19 +68,22 @@ graph LR
 | [`docs/03-constitutive/`](docs/03-constitutive/) | 本构与强度：弹性、塑性、Mohr–Coulomb、Hoek–Brown | 🚧 提纲 |
 | [`docs/04-fracture/`](docs/04-fracture/) | 断裂与破坏：Griffith、应力强度因子、水力压裂 | 🚧 提纲 |
 | [`docs/05-geomechanics/`](docs/05-geomechanics/) | 地质力学：原地应力、有效应力、断层类型 | 🚧 提纲 |
-| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL | 🚧 提纲（编程基础、雅可比、变分近似已完成） |
+| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL | 🚧 提纲（编程基础、雅可比、变分近似、单元类型已完成） |
 | [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/) | 有限元编程基础：从 $Ku=F$ 到手写 Q4、组装、约束荷载与求解器 | ✅ 5 篇 + 导读 |
 | [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md) | 雅可比矩阵：多变量映射的局部线性化、 $\det J$ 的几何、秩与奇异位形 | ✅ 1 篇 |
 | [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md) | 变分近似：弱形式↔能量极小、Ritz 与 Galerkin、正交投影与最佳逼近 | ✅ 1 篇 |
+| [`docs/06-numerics/element-types.md`](docs/06-numerics/element-types.md) | 单元类型与降维：实体/壳/梁/杆、剪切锁死、沙漏、平面应力/应变/轴对称 | ✅ 1 篇 |
 | [`docs/07-fluid/`](docs/07-fluid/) | 流体力学与 CFD：控制方程、状态与边界、面通量与时间推进、Sod 激波管 | ✅ 4 篇 + 导读 |
-| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 58 节点 |
-| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 3 篇 |
+| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 60 节点 |
+| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 4 篇 |
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
 | [`tools/verify_fem_notes.py`](tools/verify_fem_notes.py) | 复算 FEM 编程五章的全部数值（61 项断言） | ✅ |
 | [`tools/verify_jacobian_note.py`](tools/verify_jacobian_note.py) | 复算雅可比笔记的全部数值（面积比、一阶误差、两连杆） | ✅ |
 | [`tools/verify_variational_note.py`](tools/verify_variational_note.py) | 复算变分近似笔记的全部数值（能量极小、正交性、收敛阶、稀疏度） | ✅ |
+| [`tools/element_lib.py`](tools/element_lib.py) | 二维平面应力有限元库：Q4/Q8/T3、等参刚度、特征值与沙漏、寄生剪切 | ✅ |
+| [`tools/verify_element_notes.py`](tools/verify_element_notes.py) | 复算单元类型笔记的全部数值（挠度、锁死、零能模式、自由度账） | ✅ |
 | [`tools/fluid_lib.py`](tools/fluid_lib.py) | 可压缩 Euler 参考实现：守恒量换算、Rusanov 通量、Sod 精确解与一维有限体积 | ✅ |
 | [`tools/verify_fluid_notes.py`](tools/verify_fluid_notes.py) | 复算 M7 四篇笔记的全部数值（通量、星区、波位置、收敛阶、守恒审计） | ✅ |
 
@@ -107,6 +110,10 @@ graph LR
 最后回到「刚度矩阵凭什么长这样」：弱形式与能量极小的等价、Ritz 与 Galerkin 两路同归，见
 [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md)
 （图 20–图 23，可用 `py -3 tools/verify_variational_note.py` 复算）。
+最后回答"下拉菜单里的单元到底差在哪"：从实体、壳、梁、杆的运动学假设，
+到剪切锁死、沙漏与二维降维，见
+[`docs/06-numerics/element-types.md`](docs/06-numerics/element-types.md)
+（图 34–图 40，可用 `py -3 tools/verify_element_notes.py` 复算）。
 
 **第五阶段｜从固体到流体（约 6 学时）**
 流体不是"另一种固体"：未知量从位移换成守恒量，离散从单元积分换成面上通量，
@@ -188,6 +195,13 @@ python tools/make_figures.py
 | 图 31 | `assets/figures/fig31-low-mach-timescales.png` | 低马赫数下声学与对流两个时间尺度 |
 | 图 32 | `assets/figures/fig32-sod-shocktube.png` | Sod 激波管在 t=0.2 的数值解与精确解 |
 | 图 33 | `assets/figures/fig33-shock-jump-control-volume.png` | 随激波移动的控制体与质量收支 |
+| 图 34 | `assets/figures/fig34-element-family.png` | 单元家族与 Abaqus 命名编码 |
+| 图 35 | `assets/figures/fig35-four-element-types.png` | 实体、壳、梁、杆的几何与未知量 |
+| 图 36 | `assets/figures/fig36-cantilever-accuracy.png` | 同一根悬臂梁、同样 10 块的端部精度 |
+| 图 37 | `assets/figures/fig37-shear-locking.png` | 直边弯成梯形、寄生剪切与长厚比 |
+| 图 38 | `assets/figures/fig38-hourglass-modes.png` | 减缩积分的零能模式与沙漏 |
+| 图 39 | `assets/figures/fig39-2d-reductions.png` | 平面应力、平面应变、轴对称的约束 |
+| 图 40 | `assets/figures/fig40-element-selection.png` | 从几何到单元名的选型流程 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -214,6 +228,13 @@ python tools/make_figures.py
   原文的 Ritz/Galerkin 两条路线在本库补齐了完整证明（对称情形等价、非对称 2×2 反例、
   能量正交投影与最佳逼近），并新增收敛阶与稠密/带状刚度矩阵的数值对照；
   公式逐式转写为 LaTeX，算例与图件全部重做，未复制原文图片。
+- 笔记 [`docs/06-numerics/element-types.md`](docs/06-numerics/element-types.md) 与案例笔记
+  [`cases/2026-11-14-element-types.md`](cases/2026-11-14-element-types.md)
+  整理自公众号「嘎子科研助手」的《有限元单元类型》（2026-11-14）。
+  原文约 8 780 字、35 张插图，以自行车零件讲解实体、壳、梁、杆与二维降维；
+  本库补齐形函数、寄生剪切、沙漏秩计数、二维降维的应力状态与自由度账，
+  并说明原文 Abaqus 实测数字的口径。35 张原图仅登记远程地址，未复制；
+  本库图 34–图 40 为独立重绘。
 - 笔记 [`docs/07-fluid/`](docs/07-fluid/) 整理自公众号「自由度FreeDof」的
   《从不可压缩到可压缩：N–S 方程与求解流程有哪些改变？》（2026-10-29）。
   原文约 2 万字、98 个独立公式、30 张插图；本库按 M7 四篇重组，补齐二维三维边界计数、

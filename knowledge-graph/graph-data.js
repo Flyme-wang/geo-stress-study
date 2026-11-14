@@ -5,7 +5,7 @@ window.GRAPH = {
     "title": "geo-stress-study 力学知识图谱",
     "subtitle": "从一个点的应力，到地应力场、数值实现与流体流动",
     "version": "0.1.0",
-    "updated": "2026-11-13",
+    "updated": "2026-11-14",
     "convention": "拉为正；应力分量用指标记法 σ_ij（i 为面法向，j 为力方向）",
     "statusLegend": {
       "done": "笔记已完成，可直接阅读",
@@ -454,6 +454,16 @@ window.GRAPH = {
       "summary": "弱形式 A(u,v)=F(v) 与泛函 J(v)=½A(v,v)−F(v) 的极小等价；Ritz 与 Galerkin 在对称情形同解、非对称情形不等价；离散解是能量正交投影 ⇒ 最佳逼近与能量恒等式；分片线性收敛 O(h)/O(h²)；全域基稠密病态 vs 分片基带状良态。"
     },
     {
+      "id": "M6-08",
+      "label": "单元类型与降维",
+      "type": "topic",
+      "status": "done",
+      "col": 7,
+      "row": 8,
+      "doc": "docs/06-numerics/element-types.md",
+      "summary": "单元类型是未知量与变形模式的匹配：实体 3 平动；壳 6 写 5 用、厚度积分；梁 6；杆 3。Q4 纯弯曲寄生剪切 γ=κa/(2√3)，长厚比 10 时是同点弯曲应变的 10 倍 ⇒ 锁死；减缩积分零能模式 2D Q4 5 个、3D C3D8R 18 个；Q8 一层 99.8%、T3 23.1%；二维降维是给第三维加约束。"
+    },
+    {
       "id": "M6-P",
       "label": "P 有限元编程基础",
       "type": "module",
@@ -532,6 +542,16 @@ window.GRAPH = {
       "row": 7,
       "doc": "cases/2026-11-10-five-stress-concepts.md",
       "summary": "公众号科普文章的逐条拆解：原文结论、对应章节、补充推导、课堂提问清单。"
+    },
+    {
+      "id": "C4",
+      "label": "案例：有限元单元类型",
+      "type": "case",
+      "status": "done",
+      "col": 9,
+      "row": 7,
+      "doc": "cases/2026-11-14-element-types.md",
+      "summary": "《有限元单元类型》拆解：自行车零件对应实体/壳/梁/杆；悬臂梁 2/3、99%、23%；4 层规则与 Abaqus 691 mm 的口径；35 张原图登记与 7 张重绘。"
     },
     {
       "id": "M7",
@@ -1078,6 +1098,21 @@ window.GRAPH = {
     {
       "from": "C3",
       "to": "M7",
+      "kind": "case"
+    },
+    {
+      "from": "M6",
+      "to": "M6-08",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-07",
+      "to": "M6-08",
+      "kind": "precedes"
+    },
+    {
+      "from": "C4",
+      "to": "M6-08",
       "kind": "case"
     }
   ]

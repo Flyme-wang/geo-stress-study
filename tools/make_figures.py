@@ -20,7 +20,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import (Polygon, Wedge, FancyArrowPatch, Rectangle, Arc,
-                                FancyBboxPatch)
+                                FancyBboxPatch, Ellipse)
+import element_lib as el
 
 # ---------------------------------------------------------------- 全局样式
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -2250,6 +2251,565 @@ def fig33():
     save(fig, "fig33-shock-jump-control-volume.png")
 
 
+# ============================================================ 图 34 单元家族
+def fig34():
+    """三类单元与 Abaqus 命名的对照。"""
+    fig, ax = plt.subplots(figsize=(11.4, 7.4))
+    ax.set_xlim(0, 12)
+    ax.set_ylim(0, 8.5)
+    ax.axis("off")
+
+    def box(x, y, w, h, title, lines, color, fc):
+        ax.add_patch(FancyBboxPatch(
+            (x, y), w, h, boxstyle="round,pad=0.06,rounding_size=0.12",
+            fc=fc, ec=color, lw=1.5))
+        ax.text(x + w / 2, y + h - 0.24, title, ha="center", va="top",
+                fontsize=10.6, color=color, weight="bold")
+        for k, s in enumerate(lines):
+            ax.text(x + 0.18, y + h - 0.60 - 0.285 * k, s,
+                    ha="left", va="top", fontsize=9.0, color="#22303A")
+
+    ax.add_patch(FancyBboxPatch((2.4, 7.35), 7.2, 0.88,
+                                boxstyle="round,pad=0.08,rounding_size=0.16",
+                                fc="#E8F1FB", ec=BLUE, lw=1.8))
+    ax.text(6.0, 7.98, "单元类型 = 未知量的选择", ha="center", va="center",
+            fontsize=14.5, color=BLUE, weight="bold")
+    ax.text(6.0, 7.55, "名字是编码：族 + 维数 + 节点数 + 积分 / 扩展",
+            ha="center", va="center", fontsize=10.2, color="#22303A")
+
+    heads = [
+        (1.95, "三维实体", "3 个平动 / 节点", GREEN),
+        (6.0, "结构单元", "平动 + 转动", BLUE),
+        (10.05, "二维降维", "3 个平动 / 节点", RED),
+    ]
+    for x, t, s, c in heads:
+        ax.text(x, 6.78, t, ha="center", va="center", fontsize=12.2,
+                color=c, weight="bold")
+        ax.text(x, 6.48, s, ha="center", va="center", fontsize=9.6, color=GRAY)
+        arrow(ax, (x, 6.34), (x, 6.18), c, lw=1.4, ms=10)
+
+    box(0.3, 4.55, 3.3, 1.72, "C3D8 / C3D8R / C3D8I",
+        ["8 节点六面体，3 平动/节点",
+         "全积分 / 减缩 / 非协调模式",
+         "弯曲优先 C3D8I 或 C3D10"], GREEN, "#E8F5E9")
+    box(0.3, 2.62, 3.3, 1.72, "C3D10 / C3D4",
+        ["10 节点二次四面体（边中点）",
+         "4 节点线性四面体：常应变",
+         "复杂几何常用 C3D10"], GREEN, "#E8F5E9")
+    box(0.3, 0.69, 3.3, 1.72, "C3D8P / C3D8T",
+        ["附加孔压 / 温度自由度",
+         "每节点 4 个未知量",
+         "Soils 步用非对称求解"], "#6A1B9A", "#F3E5F5")
+
+    box(4.25, 4.55, 3.5, 1.72, "S4 / S4R / S8R",
+        ["4 或 8 节点壳，6 自由度",
+         "厚度 t 是截面输入，不划网格",
+         "薄：t 小于跨度约 1/10"], BLUE, "#E3F2FD")
+    box(4.25, 2.62, 3.5, 1.72, "B31 / B32",
+        ["2 / 3 节点梁，6 自由度",
+         "输入 A、I、J，输出截面内力",
+         "细长：截面小于长度约 1/10"], BLUE, "#E3F2FD")
+    box(4.25, 0.69, 3.5, 1.72, "T3D2 / T3D3",
+        ["2 / 3 节点杆，只有 3 平动",
+         "只受轴力，不能受弯",
+         "辐条、拉索、桁架腹杆"], "#00838F", "#E0F7FA")
+
+    box(8.2, 4.55, 3.5, 1.72, "CPS4 / CPS8",
+        [r"平面应力：$\sigma_z=0$",
+         "薄片在自身平面内受力",
+         "链片、膜、薄板面内"], RED, "#FFEBEE")
+    box(8.2, 2.62, 3.5, 1.72, "CPE4 / CPE8",
+        [r"平面应变：$\varepsilon_z=0$",
+         "长隧道、长坝、长边坡",
+         r"$\sigma_z=\nu(\sigma_x+\sigma_y)$"], RED, "#FFEBEE")
+    box(8.2, 0.69, 3.5, 1.72, "CAX4 / CAX8",
+        [r"轴对称：$\varepsilon_\theta=u_r/r$",
+         "只画半个剖面",
+         "套管、储罐、井筒"], RED, "#FFEBEE")
+
+    ax.add_patch(FancyBboxPatch((0.3, 0.06), 11.4, 0.46,
+                                boxstyle="round,pad=0.04,rounding_size=0.08",
+                                fc="#F5F5F5", ec=GRAY, lw=1.0))
+    ax.text(6.0, 0.29,
+            "C3D8R = Continuum + 3D + 8 nodes + Reduced    |    "
+            "S4R = Shell + 4 nodes + Reduced    |    "
+            "C3D10 = Continuum + 3D + 10 nodes",
+            ha="center", va="center", fontsize=9.4, color="#22303A")
+
+    fig.text(0.5, 0.975, "单元家族：名字里写着自由度与适用比例",
+             fontsize=15.5, ha="center", va="center")
+    save(fig, "fig34-element-family.png")
+
+
+# ============================================================ 图 35 四类单元
+def fig35():
+    """实体、壳、梁、杆的几何与自由度。"""
+    fig, axes = plt.subplots(2, 2, figsize=(10.4, 7.8))
+    for ax in axes.ravel():
+        ax.set_aspect("equal")
+        ax.axis("off")
+
+    # (a) 实体
+    ax = axes[0, 0]
+    ax.set_xlim(-0.1, 2.3)
+    ax.set_ylim(-0.62, 2.2)
+    d = np.array([0.42, 0.42])
+    front = np.array([[0.2, 0.2], [1.45, 0.2], [1.45, 1.45], [0.2, 1.45]])
+    back = front + d
+    ax.add_patch(Polygon(back, closed=True, fc="#E8F5E9", ec=GREEN, lw=1.6))
+    for p, q in zip(front, back):
+        ax.plot([p[0], q[0]], [p[1], q[1]], color=GREEN, lw=1.0)
+    ax.add_patch(Polygon(front, closed=True, fc="#C8E6C9", ec=GREEN, lw=2.0))
+    ax.scatter(np.r_[front[:, 0], back[:, 0]], np.r_[front[:, 1], back[:, 1]],
+               s=34, color=GREEN, zorder=5)
+    ax.text(0.80, 0.62, "8 个节点", ha="center", fontsize=9.5, color=GREEN)
+    arrow(ax, (1.45, 1.45), (2.0, 1.45), BLUE, lw=1.8, ms=11)
+    arrow(ax, (1.45, 1.45), (1.45, 2.0), GREEN, lw=1.8, ms=11)
+    arrow(ax, (1.45, 1.45), (1.82, 1.82), RED, lw=1.8, ms=11)
+    ax.text(2.02, 1.40, r"$u_x$", fontsize=10, color=BLUE)
+    ax.text(1.43, 2.02, r"$u_y$", fontsize=10, color=GREEN)
+    ax.text(1.78, 1.86, r"$u_z$", fontsize=10, color=RED)
+    ax.set_title("(a) 实体：C3D8 / C3D10", fontsize=12, color=GREEN)
+    ax.text(-0.05, -0.58, "3 个平动 / 节点；应力在单元内积分",
+            fontsize=9.4, color="#22303A", va="bottom")
+
+    # (b) 壳
+    ax = axes[0, 1]
+    ax.set_xlim(-0.12, 1.75)
+    ax.set_ylim(-0.2, 1.25)
+    x = np.linspace(0.08, 1.55, 120)
+    y = 0.22 * np.sin(np.pi * (x - 0.08) / 1.47)
+    y0 = 0.62
+    top = y0 + y + 0.07
+    bot = y0 + y - 0.07
+    ax.fill_between(x, bot, top, color="#BBDEFB", ec=BLUE, lw=1.7)
+    ax.plot(x, y0 + y, ls="--", color=BLUE, lw=1.2)
+    for xx in np.linspace(0.18, 1.45, 5):
+        yy = y0 + 0.22 * np.sin(np.pi * (xx - 0.08) / 1.47)
+        ax.scatter([xx], [yy], s=30, color=BLUE, zorder=5)
+        arrow(ax, (xx, yy), (xx, yy + 0.14), RED, lw=1.1, ms=8)
+    ax.annotate("", xy=(1.22, y0 + 0.30), xytext=(1.22, y0 + 0.16),
+                arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.2))
+    ax.text(1.26, y0 + 0.20, r"$t$", fontsize=10, color=GREEN)
+    ax.text(0.78, 0.30, "中面铺网格，厚度是输入", ha="center",
+            fontsize=9.6, color="#22303A")
+    ax.set_title("(b) 壳：S4 / S4R / S8R", fontsize=12, color=BLUE)
+
+    # (c) 梁
+    ax = axes[1, 0]
+    ax.set_xlim(-0.1, 2.1)
+    ax.set_ylim(-0.1, 1.45)
+    ax.plot([0.15, 1.55], [0.62, 0.62], color="#1565C0", lw=3.2)
+    for xx in np.linspace(0.15, 1.55, 5):
+        ax.scatter([xx], [0.62], s=34, color=BLUE, zorder=5)
+    ax.add_patch(Ellipse((1.55, 0.62), 0.18, 0.62, fc="#BBDEFB",
+                         ec=BLUE, lw=1.5))
+    ax.annotate("", xy=(1.55, 0.93), xytext=(1.55, 0.31),
+                arrowprops=dict(arrowstyle="<->", color=GREEN, lw=1.1))
+    ax.text(1.72, 0.58, "D", fontsize=10, color=GREEN)
+    ax.add_patch(Arc((1.2, 0.62), 0.32, 0.32, theta1=200, theta2=340,
+                     color=RED, lw=1.8))
+    arrow(ax, (1.35, 0.53), (1.37, 0.47), RED, lw=1.4, ms=9)
+    ax.text(1.15, 0.34, r"$\theta$", fontsize=10, color=RED)
+    ax.text(0.82, 0.08, "一根线 + 截面性质 A、I、J", ha="center",
+            fontsize=9.6, color="#22303A")
+    ax.set_title("(c) 梁：B31 / B32", fontsize=12, color=BLUE)
+
+    # (d) 杆
+    ax = axes[1, 1]
+    ax.set_xlim(-0.1, 2.1)
+    ax.set_ylim(-0.1, 1.45)
+    ax.plot([0.25, 1.55], [0.7, 0.7], color="#00838F", lw=3.2)
+    ax.scatter([0.25, 1.55], [0.7, 0.7], s=40, color="#00838F", zorder=5)
+    arrow(ax, (0.25, 0.7), (-0.02, 0.7), GREEN, lw=1.8, ms=11)
+    arrow(ax, (1.55, 0.7), (1.85, 0.7), GREEN, lw=1.8, ms=11)
+    ax.text(0.55, 0.80, r"$N$", fontsize=12, color=GREEN)
+    ax.plot([1.18, 1.33], [0.94, 1.09], color=RED, lw=2.2)
+    ax.plot([1.18, 1.33], [1.09, 0.94], color=RED, lw=2.2)
+    ax.text(1.37, 1.01, "无弯曲", fontsize=9.5, color=RED, va="center")
+    ax.text(0.9, 0.12, "只有轴力，节点不转动", ha="center",
+            fontsize=9.6, color="#22303A")
+    ax.set_title("(d) 杆：T3D2 / T3D3", fontsize=12, color="#00838F")
+
+    fig.suptitle("四类单元：几何决定未知量", fontsize=15.5, y=0.98)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    save(fig, "fig35-four-element-types.png")
+
+
+# ============================================================ 图 36 悬臂梁
+def fig36():
+    """悬臂梁：Q4 / Q8 / T3 的挠曲线与端部误差。"""
+    exact = el.beam_tip_exact()
+    cases = [
+        ("Q4 10×1", el.mesh_q4(10, 1),
+         lambda c: el.isoparametric_stiffness(c, el.q4_shape, el.gauss_2d(2)),
+         RED, "-"),
+        ("Q8 10×1", el.mesh_q8(10, 1),
+         lambda c: el.isoparametric_stiffness(c, el.q8_shape, el.gauss_2d(3)),
+         BLUE, "-"),
+        ("T3 10×1", el.mesh_t3(10, 1), el.cst_stiffness, GREEN, "-"),
+        ("Q4 80×8（640 块）", el.mesh_q4(80, 8),
+         lambda c: el.isoparametric_stiffness(c, el.q4_shape, el.gauss_2d(2)),
+         "#EF6C00", "--"),
+    ]
+
+    fig = plt.figure(figsize=(8.9, 8.7))
+    gs = fig.add_gridspec(2, 1, height_ratios=[1.45, 1.0], hspace=0.34)
+    ax1 = fig.add_subplot(gs[0])
+    ax2 = fig.add_subplot(gs[1])
+
+    xe, de = el.beam_centerline_exact()
+    ax1.plot(xe / el.BEAM_L, de / exact, color="black", lw=2.8,
+             label="Euler–Bernoulli 真值", zorder=1)
+
+    ratios = []
+    for label, (nodes, elems), fn, color, ls in cases:
+        U = el.assemble_and_solve(nodes, elems, fn)
+        x, u = el.centerline(nodes, U)
+        ratio = u[-1] / exact
+        ratios.append((label, ratio))
+        ax1.plot(x / el.BEAM_L, u / exact, color=color, ls=ls, lw=2.2,
+                 label="%s  %.3f" % (label, ratio), zorder=3)
+
+    ax1.axhline(1.0, color=GRAY, ls=":", lw=1.0)
+    ax1.set_xlim(0, 1)
+    ax1.set_ylim(0, 1.06)
+    ax1.set_xlabel(r"$x/L$", fontsize=11)
+    ax1.set_ylabel("挠度 / 梁理论真值", fontsize=11)
+    ax1.set_title("同一根梁、同样 10 块：单元决定误差", fontsize=13.5)
+    ax1.grid(alpha=0.3)
+    ax1.legend(fontsize=9.2, loc="upper left", framealpha=0.95)
+    ax1.text(0.02, 0.03,
+             "P = 1000 N，L = 100 mm，H = 10 mm，t = 10 mm；真值 1.9048 mm",
+             fontsize=8.8, color=GRAY, transform=ax1.transAxes)
+
+    labels = ["Q4\n10×1", "Q4\n10×2", "Q4\n10×4", "Q4\n10×8",
+              "Q4\n80×8", "Q8\n10×1", "T3\n10×1"]
+    vals = [ratios[0][1], 0.71109, 0.72015, 0.72247,
+            ratios[3][1], ratios[1][1], ratios[2][1]]
+    colors = [RED, RED, RED, RED, "#EF6C00", BLUE, GREEN]
+    bars = ax2.bar(range(len(vals)), vals, color=colors, width=0.66)
+    ax2.axhline(1.0, color="black", ls="--", lw=1.4)
+    ax2.set_xticks(range(len(vals)))
+    ax2.set_xticklabels(labels, fontsize=9.2)
+    ax2.set_ylim(0, 1.12)
+    ax2.set_ylabel("端部挠度 / 真值", fontsize=11)
+    ax2.set_title("端部精度：全积分、二次与线性三角形", fontsize=12.5)
+    ax2.grid(axis="y", alpha=0.3)
+    for b, v in zip(bars, vals):
+        ax2.text(b.get_x() + b.get_width() / 2, v + 0.025, "%.1f%%" % (100 * v),
+                 ha="center", fontsize=9.0, color="#22303A")
+    ax2.text(0.01, 0.92, "虚线 = 100%", fontsize=9.0, color=GRAY,
+             transform=ax2.transAxes)
+
+    fig.text(0.5, 0.985, "悬臂梁基准：为什么厚度方向的层数不是随便定的",
+             fontsize=15.0, ha="center", va="center")
+    save(fig, "fig36-cantilever-accuracy.png")
+
+
+# ============================================================ 图 37 剪切锁死
+def fig37():
+    """纯弯曲下 Q4 的寄生剪切。"""
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.2, 4.8),
+                                   gridspec_kw={"width_ratios": [1.05, 1.0]})
+
+    # 左：单元变形
+    a, h, kap = 1.25, 0.30, 1.4
+    ax1.set_aspect("equal")
+    ax1.set_xlim(-0.18, 1.55)
+    ax1.set_ylim(-0.14, 0.72)
+    ax1.axis("off")
+    ax1.add_patch(Rectangle((0, 0), a, h, fill=False, ls="--",
+                            ec=GRAY, lw=1.3))
+    # 精确弯曲：上下边是弧（中性轴在中面 y=h/2）
+    xs = np.linspace(0, a, 80)
+    for yy in [0.0, h]:
+        ax1.plot(xs + 0.10 * (-kap * xs * (yy - h / 2)),
+                 yy + 0.10 * (0.5 * kap * xs ** 2), color=GREEN,
+                 lw=1.4, ls=":", zorder=2)
+    # 双线性变形：顶点用同样的节点位移
+    corners = np.array([[0, 0], [a, 0], [a, h], [0, h]], float)
+    ux = -kap * corners[:, 0] * (corners[:, 1] - h / 2)
+    uy = 0.5 * kap * corners[:, 0] ** 2
+    defo = corners + 0.10 * np.c_[ux, uy]
+    ax1.add_patch(Polygon(defo, closed=True, fc="#BBDEFB", ec=BLUE,
+                          lw=2.0, alpha=0.75, zorder=3))
+    for p, q in zip(corners, defo):
+        ax1.plot([p[0], q[0]], [p[1], q[1]], color=BLUE, lw=0.8, ls="-.")
+    ax1.scatter(corners[:, 0], corners[:, 1], s=26, color=BLUE, zorder=6)
+    g = 1 / np.sqrt(3)
+    for xi in [-g, g]:
+        for eta in [-g, g]:
+            xg = a / 2 * (1 + xi)
+            yg = h / 2 * (1 + eta)
+            ax1.scatter([xg], [yg], s=42, marker="s", color=RED, zorder=7)
+            dy = 0.055 if xi * eta > 0 else -0.055
+            arrow(ax1, (xg, yg), (xg, yg + dy), RED, lw=1.2, ms=7)
+    ax1.text(a / 2, h + 0.10, "直边只能变梯形 → 寄生的 $\\gamma_{xy}$",
+             ha="center", fontsize=10.2, color=BLUE)
+    ax1.text(-0.14, 0.05, "虚线：精确弯曲", fontsize=8.8, color=GREEN,
+             rotation=90, va="bottom")
+    ax1.text(a + 0.05, -0.10, "红方块：2×2 Gauss 点", fontsize=8.8,
+             color=RED)
+    ax1.set_title("(a) 一个 Q4 单元的纯弯曲", fontsize=12.5)
+
+    # 右：寄生剪切随长厚比
+    ar = np.logspace(0, 2, 200)
+    ax2.loglog(ar, ar / (2 * np.sqrt(3)), color=BLUE, lw=2.4,
+               label=r"解析：$\gamma=\kappa a/(2\sqrt{3})$")
+    for aa in [1, 10, 100]:
+        ax2.loglog([aa], [el.parasitic_shear(1.0, aa)], "o", color=RED,
+                   ms=7, zorder=5)
+    ax2.axhline(1.0, color=GRAY, ls=":", lw=1.0)
+    ax2.text(1.15, 1.12, r"参考线 $\gamma=\kappa h$", fontsize=9.0, color=GRAY)
+    ax2.annotate(r"$a/h=10$：$\gamma=2.89\,\kappa h$",
+                 xy=(10, 2.89), xytext=(1.8, 9.0), fontsize=9.6,
+                 color=RED,
+                 arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.2))
+    ax2.set_xlabel("长厚比 $a/h$（单元长度 / 厚度）", fontsize=10.5)
+    ax2.set_ylabel(r"寄生剪切 $\gamma/(\kappa h)$", fontsize=10.5)
+    ax2.set_title("(b) 长厚比越大，锁死越重", fontsize=12.5)
+    ax2.grid(which="both", alpha=0.3)
+    ax2.legend(fontsize=9.2, loc="upper left")
+
+    fig.suptitle("剪切锁死：直边弯不了，只能靠假剪切消化弯曲",
+                 fontsize=14.5, y=1.0)
+    fig.tight_layout()
+    save(fig, "fig37-shear-locking.png")
+
+
+# ============================================================ 图 38 沙漏
+def fig38():
+    """减缩积分的零能模式与特征值谱。"""
+    efull = el.element_eigenvalues(el.q4_shape, el.gauss_2d(2))
+    ered = el.element_eigenvalues(el.q4_shape, el.gauss_2d(1))
+    modes = el.hourglass_modes()
+
+    fig, axes = plt.subplots(1, 3, figsize=(12.4, 4.4),
+                             gridspec_kw={"width_ratios": [1.2, 1, 1]})
+    ax = axes[0]
+    floor = 1e-14
+    idx = np.arange(1, 9)
+    ax.plot(idx - 0.08, np.log10(np.maximum(efull / efull.max(), floor)),
+            "o", color=BLUE, ms=8, label="Q4 2×2（全积分）")
+    ax.plot(idx + 0.08, np.log10(np.maximum(ered / ered.max(), floor)),
+            "x", color=RED, ms=9, mew=2.2, label="Q4 1×1（减缩）")
+    ax.axhline(-10, color=GRAY, ls=":", lw=1.0)
+    ax.text(0.55, -9.6, "数值零", fontsize=8.8, color=GRAY)
+    ax.annotate("3 个刚体模态", xy=(2, -12.5), xytext=(2.7, -6.0),
+                fontsize=9.2, color=BLUE,
+                arrowprops=dict(arrowstyle="-|>", color=BLUE, lw=1.1))
+    ax.annotate("2 个沙漏模态", xy=(4.6, -12.5), xytext=(5.0, -5.2),
+                fontsize=9.2, color=RED,
+                arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.1))
+    ax.set_xlim(0.4, 8.6)
+    ax.set_ylim(-14.5, 0.6)
+    ax.set_xlabel("模态序号", fontsize=10.5)
+    ax.set_ylabel(r"$\log_{10}(\lambda/\lambda_{\max})$", fontsize=10.5)
+    ax.set_title("(a) 单刚特征值谱", fontsize=12)
+    ax.legend(fontsize=8.8, loc="lower left")
+    ax.grid(alpha=0.25)
+
+    xy = np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float)
+    for k, (ax, mode, color, name) in enumerate([
+            (axes[1], modes[0], BLUE, "沙漏模态 1：x 方向交替"),
+            (axes[2], modes[1], RED, "沙漏模态 2：y 方向交替")]):
+        ax.set_aspect("equal")
+        ax.set_xlim(-0.35, 1.35)
+        ax.set_ylim(-0.35, 1.35)
+        ax.axis("off")
+        ax.add_patch(Rectangle((0, 0), 1, 1, fill=False, ls="--",
+                               ec=GRAY, lw=1.2))
+        ux = mode[0::2]
+        uy = mode[1::2]
+        scale = 0.30
+        ax.quiver(xy[:, 0], xy[:, 1], ux, uy, angles="xy",
+                  scale_units="xy", scale=1 / scale, color=color,
+                  width=0.012, zorder=5)
+        # 双线性变形后的边界
+        ts = np.linspace(0, 1, 40)
+        edges = [np.c_[ts, np.zeros_like(ts)],
+                 np.c_[np.ones_like(ts), ts],
+                 np.c_[1 - ts, np.ones_like(ts)],
+                 np.c_[np.zeros_like(ts), 1 - ts]]
+        for edge in edges:
+            xi = 2 * edge[:, 0] - 1
+            eta = 2 * edge[:, 1] - 1
+            N, _ = el.q4_shape(xi, eta)
+            dx = (scale * ux) @ N
+            dy = (scale * uy) @ N
+            ax.plot(edge[:, 0] + dx, edge[:, 1] + dy, color=color, lw=2.2)
+        ax.scatter(xy[:, 0], xy[:, 1], s=30, color=color, zorder=6)
+        ax.set_title("(%s) %s" % ("bc"[k], name), fontsize=11.2, color=color)
+
+    fig.suptitle("减缩积分：消掉了寄生剪切，也放进了零能模式",
+                 fontsize=14.5, y=1.02)
+    fig.tight_layout()
+    save(fig, "fig38-hourglass-modes.png")
+
+
+# ============================================================ 图 39 二维降维
+def fig39():
+    """平面应力、平面应变与轴对称的运动学约束。"""
+    fig, axes = plt.subplots(1, 3, figsize=(12.2, 4.5))
+    for ax in axes:
+        ax.set_aspect("equal")
+        ax.axis("off")
+
+    # (a) 平面应力
+    ax = axes[0]
+    ax.set_xlim(-0.15, 1.65)
+    ax.set_ylim(-0.15, 1.52)
+    d = np.array([0.18, 0.18])
+    front = np.array([[0.1, 0.1], [1.2, 0.1], [1.2, 0.95], [0.1, 0.95]])
+    back = front + d
+    ax.add_patch(Polygon(back, closed=True, fc="#FFCDD2", ec=RED, lw=1.3))
+    for p, q in zip(front, back):
+        ax.plot([p[0], q[0]], [p[1], q[1]], color=RED, lw=0.9)
+    ax.add_patch(Polygon(front, closed=True, fc="#FFEBEE", ec=RED, lw=1.8))
+    arrow(ax, (0.55, 0.52), (1.0, 0.52), GREEN, lw=1.6, ms=10)
+    arrow(ax, (1.0, 0.52), (0.55, 0.52), GREEN, lw=1.6, ms=10)
+    arrow(ax, (0.62, 0.30), (0.62, 0.78), BLUE, lw=1.6, ms=10)
+    arrow(ax, (0.62, 0.78), (0.62, 0.30), BLUE, lw=1.6, ms=10)
+    ax.annotate("", xy=(1.38, 0.28), xytext=(1.38, 0.10),
+                arrowprops=dict(arrowstyle="<->", color=GRAY, lw=1.0))
+    ax.text(1.42, 0.17, r"$t$", fontsize=10, color=GRAY)
+    ax.text(0.72, -0.05, r"$\sigma_z=0$", fontsize=11, color=RED,
+            ha="center")
+    ax.text(0.72, 1.26, r"$\varepsilon_z=-\nu(\sigma_x+\sigma_y)/E$",
+            fontsize=9.8, ha="center", color="#22303A")
+    ax.set_title("(a) 平面应力：薄片", fontsize=12.5, color=RED)
+
+    # (b) 平面应变
+    ax = axes[1]
+    ax.set_xlim(-0.15, 1.75)
+    ax.set_ylim(-0.15, 1.62)
+    d = np.array([0.42, 0.22])
+    front = np.array([[0.1, 0.18], [1.0, 0.18], [1.0, 1.0], [0.1, 1.0]])
+    back = front + d
+    ax.add_patch(Polygon(back, closed=True, fc="#FFCDD2", ec=RED, lw=1.3))
+    for p, q in zip(front, back):
+        ax.plot([p[0], q[0]], [p[1], q[1]], color=RED, lw=0.9)
+    ax.add_patch(Polygon(front, closed=True, fc="#FFEBEE", ec=RED, lw=1.8))
+    for x0 in [0.25, 0.55, 0.85]:
+        ax.plot([x0, x0 + d[0]], [1.0, 1.22], color=RED, lw=0.6, ls=":")
+    ax.text(0.55, 0.50, r"$\varepsilon_z=0$", fontsize=10.5, color=RED,
+            ha="center")
+    ax.annotate("", xy=(1.52, 0.20), xytext=(1.52, 0.70),
+                arrowprops=dict(arrowstyle="-|>", color=GRAY, lw=1.2))
+    ax.text(1.56, 0.42, r"$z$", fontsize=10, color=GRAY)
+    ax.text(0.62, 1.40, r"$\sigma_z=\nu(\sigma_x+\sigma_y)$",
+            fontsize=9.8, ha="center", color="#22303A")
+    ax.set_title("(b) 平面应变：长柱体", fontsize=12.5, color=RED)
+
+    # (c) 轴对称
+    ax = axes[2]
+    ax.set_xlim(-0.15, 1.5)
+    ax.set_ylim(-0.1, 1.3)
+    ax.plot([0, 0], [-0.05, 1.25], ls="-.", color=GRAY, lw=1.2)
+    ax.text(-0.06, 1.20, "轴", fontsize=9.5, color=GRAY, ha="right")
+    ax.add_patch(Rectangle((0.18, 0.12), 0.75, 0.95, fc="#FFEBEE",
+                           ec=RED, lw=1.8))
+    for z in [0.35, 0.65, 0.95]:
+        ax.annotate("", xy=(0.18, z), xytext=(0.02, z),
+                    arrowprops=dict(arrowstyle="-|>", color=GREEN, lw=1.2))
+    ax.text(0.08, 1.02, r"$u_r$", fontsize=10, color=GREEN)
+    ax.text(0.55, 0.58, "半个剖面\n绕轴转一圈", ha="center", fontsize=9.2,
+            color=RED)
+    ax.text(0.55, 0.00, r"$\varepsilon_\theta=u_r/r$", fontsize=10.5,
+            ha="center", color="#22303A")
+    ax.set_title("(c) 轴对称：回转体", fontsize=12.5, color=RED)
+
+    fig.suptitle("降维不是少画一个方向，而是给那个方向加约束",
+                 fontsize=14.5, y=1.02)
+    fig.tight_layout()
+    save(fig, "fig39-2d-reductions.png")
+
+
+# ============================================================ 图 40 选型流程
+def fig40():
+    """按几何比例与物理扩展选单元。"""
+    fig, ax = plt.subplots(figsize=(10.8, 8.4))
+    ax.set_xlim(0, 12)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+
+    def diamond(cx, cy, w, h, text):
+        pts = [(cx, cy + h / 2), (cx + w / 2, cy),
+               (cx, cy - h / 2), (cx - w / 2, cy)]
+        ax.add_patch(Polygon(pts, closed=True, fc="#FFF8E1",
+                             ec="#F9A825", lw=1.6))
+        ax.text(cx, cy, text, ha="center", va="center", fontsize=9.8)
+
+    def result(x, y, w, h, title, lines, color, fc):
+        ax.add_patch(FancyBboxPatch(
+            (x, y), w, h, boxstyle="round,pad=0.05,rounding_size=0.10",
+            fc=fc, ec=color, lw=1.5))
+        ax.text(x + w / 2, y + h - 0.22, title, ha="center", va="top",
+                fontsize=11.0, color=color, weight="bold")
+        for k, s in enumerate(lines):
+            ax.text(x + w / 2, y + h - 0.55 - 0.26 * k, s,
+                    ha="center", va="top", fontsize=9.0, color="#22303A")
+
+    ax.add_patch(FancyBboxPatch((3.0, 9.05), 6.0, 0.72,
+                                boxstyle="round,pad=0.06,rounding_size=0.12",
+                                fc="#E8F1FB", ec=BLUE, lw=1.6))
+    ax.text(6.0, 9.41, "选单元：先看几何比例，再看物理扩展",
+            ha="center", va="center", fontsize=12.5, color=BLUE,
+            weight="bold")
+
+    diamond(4.4, 7.85, 3.2, 1.05,
+            "一个方向很薄？\n$t<L/10$")
+    diamond(4.4, 5.95, 3.2, 1.05,
+            "截面小于长度 1/10？")
+    diamond(4.4, 4.05, 3.2, 1.05, "只传递轴力？")
+
+    result(7.4, 7.35, 4.3, 1.00, "壳：S4 / S4R / S8R",
+           ["6 自由度；厚度是截面输入", "中面网格，不必切厚度层"],
+           BLUE, "#E3F2FD")
+    result(7.4, 5.45, 4.3, 1.00, "梁：B31 / B32",
+           ["6 自由度；输入 A、I、J", "输出截面轴力、剪力、弯矩"],
+           BLUE, "#E3F2FD")
+    result(7.4, 3.55, 4.3, 1.00, "杆：T3D2 / T3D3",
+           ["3 平动；只受轴力", "不能受弯，不能受压失稳"],
+           "#00838F", "#E0F7FA")
+    result(2.4, 1.95, 7.2, 1.10, "三维实体：C3D8 / C3D8R / C3D10",
+           ["弯曲优先 C3D8I、C3D10；C3D8 全积分偏硬",
+            "复杂几何用 C3D10，规则六面体用 C3D8R + 足够层数"],
+           GREEN, "#E8F5E9")
+
+    arrow(ax, (6.0, 9.02), (4.4, 8.42), GRAY, lw=1.5, ms=11)
+    arrow(ax, (6.0, 7.32), (7.4, 7.85), GREEN, lw=1.6, ms=11)
+    ax.text(6.55, 7.76, "是", fontsize=10, color=GREEN)
+    arrow(ax, (4.4, 7.32), (4.4, 6.50), GRAY, lw=1.5, ms=11)
+    ax.text(4.52, 6.90, "否", fontsize=10, color=GRAY)
+    arrow(ax, (6.0, 5.42), (7.4, 5.95), GREEN, lw=1.6, ms=11)
+    ax.text(6.55, 5.86, "是", fontsize=10, color=GREEN)
+    arrow(ax, (4.4, 5.42), (4.4, 4.60), GRAY, lw=1.5, ms=11)
+    ax.text(4.52, 5.00, "否", fontsize=10, color=GRAY)
+    arrow(ax, (6.0, 3.52), (7.4, 4.05), GREEN, lw=1.6, ms=11)
+    ax.text(6.55, 3.96, "是", fontsize=10, color=GREEN)
+    arrow(ax, (4.4, 3.52), (4.4, 3.08), GRAY, lw=1.5, ms=11)
+    ax.text(4.52, 3.28, "否", fontsize=10, color=GRAY)
+
+    ax.add_patch(FancyBboxPatch((0.35, 0.25), 11.3, 1.20,
+                                boxstyle="round,pad=0.05,rounding_size=0.10",
+                                fc="#FFF3E0", ec="#EF6C00", lw=1.3))
+    ax.text(6.0, 1.25,
+            "能降维：CPS（平面应力）/ CPE（平面应变）/ CAX（轴对称）",
+            ha="center", va="center", fontsize=9.6, color="#22303A")
+    ax.text(6.0, 0.90,
+            "物理扩展：C3D8P、CPE4P（孔压）/ COH3D8、COH2D4（裂缝）",
+            ha="center", va="center", fontsize=9.6, color="#22303A")
+    ax.text(6.0, 0.55,
+            "XFEM（路径未知）/ CEL（大变形、盐构造）/ B31 或 PIPE（管线）",
+            ha="center", va="center", fontsize=9.6, color="#22303A")
+
+    fig.text(0.5, 0.975, "石油工程常见选型：从几何到单元名",
+             fontsize=15.0, ha="center", va="center")
+    save(fig, "fig40-element-selection.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -2284,3 +2844,10 @@ if __name__ == "__main__":
     fig31()
     fig32()
     fig33()
+    fig34()
+    fig35()
+    fig36()
+    fig37()
+    fig38()
+    fig39()
+    fig40()
