@@ -133,8 +133,7 @@ $$
 
 $$
 \begin{bmatrix}\partial N_i/\partial x & \partial N_i/\partial y\end{bmatrix}
-=
-\begin{bmatrix}\partial N_i/\partial\xi & \partial N_i/\partial\eta\end{bmatrix}\mathbf{J}^{-1}
+= \begin{bmatrix}\partial N_i/\partial\xi & \partial N_i/\partial\eta\end{bmatrix}\mathbf{J}^{-1}
 $$
 
 第三步，组装应变–位移矩阵。二维平面问题是
