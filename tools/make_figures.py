@@ -3184,6 +3184,255 @@ def fig45():
     save(fig, "fig45-fric-laws.png")
 
 
+# ============================================================ 图 46 注入—焖井—返排
+def fig46():
+    """沿井剖面三段式示意：注入、焖井、返排。
+
+    场量为定性示意（高斯包络），不是数值模拟结果；裂缝线宽表示缝宽。
+    """
+    from matplotlib.colors import LinearSegmentedColormap, Normalize
+    from matplotlib.colorbar import ColorbarBase
+
+    cmap_p = LinearSegmentedColormap.from_list(
+        "pressure", ["#F7FBFF", "#FFE082", "#FB8C00", "#B71C1C"])
+    cmap_s = LinearSegmentedColormap.from_list(
+        "oil", ["#0D47A1", "#64B5F6", "#FFFDE7", "#FFB300", "#C62828"])
+
+    x = np.linspace(0.0, 10.0, 520)
+    y = np.linspace(-1.6, 1.6, 260)
+    X, Y = np.meshgrid(x, y)
+    xf = np.array([2.2, 3.6, 5.0, 6.4, 7.8])
+    in_res = (Y >= -1.15) & (Y <= 1.15)
+
+    def pressure(stage):
+        if stage == 0:
+            amp, sx, sy = 1.00, 0.17, 0.55
+        elif stage == 1:
+            amp, sx, sy = 0.78, 0.40, 0.72
+        else:
+            amp, sx, sy = 0.46, 0.52, 0.82
+        P = np.full_like(X, 0.06)
+        for c in xf:
+            P += amp * np.exp(-((X - c) ** 2 / (2 * sx ** 2)
+                                + Y ** 2 / (2 * sy ** 2)))
+        if stage == 2:
+            P *= (1.0 - 0.45 * np.exp(-((X - 5.0) ** 2 / (2 * 2.2 ** 2)
+                                        + Y ** 2 / (2 * 0.55 ** 2))))
+        return np.where(in_res, P, np.nan)
+
+    def oil(stage):
+        if stage == 0:
+            amp, sx, sy = 0.50, 0.21, 0.58
+        elif stage == 1:
+            amp, sx, sy = 0.56, 0.48, 0.76
+        else:
+            amp, sx, sy = 0.48, 0.40, 0.68
+        S = np.full_like(X, 0.68)
+        for c in xf:
+            bank = amp * np.exp(-((X - c) ** 2 / (2 * sx ** 2)
+                                  + Y ** 2 / (2 * sy ** 2)))
+            if stage == 2:
+                bank *= (0.40 + 0.60 * (1.0 - np.exp(
+                    -Y ** 2 / (2 * 0.28 ** 2))))
+            S -= bank
+        return np.where(in_res, S, np.nan)
+
+    fig, axes = plt.subplots(2, 3, figsize=(12.8, 7.7))
+    titles = ["(a) 注入：造缝 + 滤失",
+              "(b) 焖井：扩散 + 渗吸",
+              "(c) 返排：先水后油"]
+    pw_text = ["$p_w\\uparrow$", "$p_w$ 缓降", "$p_w\\downarrow$"]
+    cap = [
+        "$Q_{in}>0$，$p_w>\\sigma_{h\\min}$：造缝并向前扩展；\n"
+        "部分液体滤失进基质，缝宽 $w$ 最大。",
+        "$Q=0$：缝内压力向基质扩散，毛细渗吸把水吸入基质、\n"
+        "把油推向缝面；缝宽略降。",
+        "$Q_{out}>0$：先产水、后产油；$p_w$ 下降、\n"
+        "有效应力升高，导流能力下降。",
+    ]
+
+    for row in range(2):
+        for col in range(3):
+            stage = col
+            ax = axes[row, col]
+            ax.set_xlim(-0.75, 10.35)
+            ax.set_ylim(-1.85, 1.55)
+            ax.axis("off")
+
+            ax.add_patch(Rectangle((0, 1.15), 10, 0.45,
+                                   fc="#ECEFF1", ec="none", zorder=0))
+            ax.add_patch(Rectangle((0, -1.60), 10, 0.45,
+                                   fc="#ECEFF1", ec="none", zorder=0))
+            ax.add_patch(Rectangle((0, -1.15), 10, 2.30,
+                                   fc="#FAF7F0", ec="none", zorder=0))
+
+            if row == 0:
+                F = pressure(stage)
+                im = ax.imshow(F, extent=(0, 10, -1.6, 1.6),
+                               origin="lower", cmap=cmap_p,
+                               vmin=0.0, vmax=1.15, aspect="auto",
+                               interpolation="bicubic", alpha=0.92,
+                               zorder=1)
+                ax.set_title(titles[col], fontsize=11.6, pad=8)
+            else:
+                F = oil(stage)
+                im = ax.imshow(F, extent=(0, 10, -1.6, 1.6),
+                               origin="lower", cmap=cmap_s,
+                               vmin=0.05, vmax=0.72, aspect="auto",
+                               interpolation="bicubic", alpha=0.92,
+                               zorder=1)
+
+            for yy in np.linspace(-1.0, 1.0, 7):
+                ax.plot([0, 10], [yy, yy], color="#D7CCC8", lw=0.45,
+                        alpha=0.55, zorder=2)
+            ax.plot([0, 10], [1.15, 1.15], color="#455A64", lw=1.0, zorder=3)
+            ax.plot([0, 10], [-1.15, -1.15], color="#455A64", lw=1.0, zorder=3)
+
+            lw = [3.0, 2.5, 2.0][stage]
+            for c in xf:
+                ax.plot([c, c], [-1.15, 1.15], color="white", lw=lw + 2.2,
+                        solid_capstyle="round", zorder=3.6)
+                ax.plot([c, c], [-1.15, 1.15], color="#4E342E", lw=lw,
+                        solid_capstyle="round", zorder=4)
+
+            ax.plot([0.55, 9.45], [0, 0], color="#263238", lw=3.2,
+                    solid_capstyle="round", zorder=5)
+            ax.plot([0.55, 9.45], [0, 0], color="#B0BEC5", lw=1.0,
+                    solid_capstyle="round", zorder=6)
+
+            ax.text(0.55, 0, "阀", ha="center", va="center", fontsize=8.4,
+                    color="#263238", zorder=8,
+                    bbox=dict(boxstyle="round,pad=0.24", fc="white",
+                              ec="#263238", lw=1.0))
+            if stage == 1:
+                ax.text(0.55, 0, "×", ha="center", va="center", fontsize=13,
+                        color=RED, zorder=9)
+
+            if row == 0:
+                if stage == 1:
+                    ax.text(0.55, -0.34, "井口阀：关", ha="center", va="top",
+                            fontsize=8.2, color=RED, zorder=8)
+                    ax.text(0.55, -0.60, "$Q=0$", ha="center", va="top",
+                            fontsize=8.4, color=RED, zorder=8)
+                else:
+                    ax.text(0.55, -0.34, "井口阀：开", ha="center", va="top",
+                            fontsize=8.2, color=GREEN, zorder=8)
+
+                ax.text(1.35, 0.40, pw_text[stage], ha="left", va="center",
+                        fontsize=9.0, color=RED, zorder=9,
+                        bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                  ec="none", alpha=0.82))
+                if stage == 0:
+                    ax.text(1.35, 0.64, "$p_w>\\sigma_{h\\min}$", ha="left",
+                            va="center", fontsize=8.2, color=RED, zorder=9,
+                            bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                      ec="none", alpha=0.82))
+                    arrow(ax, (-0.62, 0.55), (0.30, 0.10), BLUE, lw=2.2, ms=14)
+                    ax.text(-0.70, 0.92, "压裂泵\n$Q_{in}>0$", ha="left",
+                            va="center", fontsize=8.4, color=BLUE, zorder=8)
+                    for d in (-1, 1):
+                        arrow(ax, (5.0, 0.55), (5.0 + 0.58 * d, 0.86),
+                              RED, lw=1.2, ms=9, ls="--")
+                        arrow(ax, (5.0, -0.55), (5.0 + 0.58 * d, -0.86),
+                              RED, lw=1.2, ms=9, ls="--")
+                    for c in (3.6, 6.4):
+                        arrow(ax, (c, 0.62), (c + 0.50, 0.90), RED, lw=1.1,
+                              ms=8, ls="--")
+                        arrow(ax, (c, -0.62), (c + 0.50, -0.90), RED, lw=1.1,
+                              ms=8, ls="--")
+                    ax.text(5.0, 1.02, "滤失", ha="center", va="center",
+                            fontsize=8.4, color=RED, zorder=8,
+                            bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                      ec="none", alpha=0.82))
+                elif stage == 1:
+                    for c in (3.6, 5.0, 6.4):
+                        arrow(ax, (c, 0.50), (c + 0.62, 0.86), RED, lw=1.2,
+                              ms=9, ls="--")
+                        arrow(ax, (c, -0.50), (c + 0.62, -0.86), RED, lw=1.2,
+                              ms=9, ls="--")
+                    ax.text(5.0, 1.02, "压力扩散", ha="center", va="center",
+                            fontsize=8.4, color=RED, zorder=8,
+                            bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                      ec="none", alpha=0.82))
+                    arr = FancyArrowPatch((6.50, -0.55), (7.00, -0.82),
+                                          connectionstyle="arc3,rad=-0.28",
+                                          arrowstyle="-|>", mutation_scale=9,
+                                          color=BLUE, lw=1.3, zorder=7)
+                    ax.add_patch(arr)
+                    ax.text(7.08, -0.94, "毛细渗吸", ha="left", va="center",
+                            fontsize=8.2, color=BLUE, zorder=8,
+                            bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                      ec="none", alpha=0.82))
+                else:
+                    arrow(ax, (0.30, 0.10), (-0.62, 0.55), BLUE, lw=2.2,
+                          ms=14)
+                    ax.text(-0.70, 0.92, "返排\n$Q_{out}>0$", ha="left",
+                            va="center", fontsize=8.4, color=BLUE, zorder=8)
+                    for c in (3.6, 5.0, 6.4):
+                        arrow(ax, (c + 0.58, 0.86), (c, 0.55), "#EF6C00",
+                              lw=1.2, ms=9, ls="--")
+                        arrow(ax, (c + 0.58, -0.86), (c, -0.55), "#EF6C00",
+                              lw=1.2, ms=9, ls="--")
+                    ax.text(5.0, 1.02, "油向缝", ha="center", va="center",
+                            fontsize=8.4, color="#EF6C00", zorder=8,
+                            bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                      ec="none", alpha=0.82))
+
+            if row == 1:
+                notes = ["水侵带窄", "水侵带变宽（渗吸）",
+                         "近井水被采出，油向缝补充"]
+                ax.text(9.70, -0.92, notes[stage], ha="right", va="center",
+                        fontsize=8.3, color="#37474F", zorder=8,
+                        bbox=dict(boxstyle="round,pad=0.22", fc="white",
+                                  ec="#CFD8DC", lw=0.6, alpha=0.92))
+
+            if row == 0 and col == 0:
+                ax.text(9.75, 1.38, "盖层", ha="right", va="center",
+                        fontsize=7.8, color=GRAY, zorder=8)
+                ax.text(9.75, -1.38, "隔层", ha="right", va="center",
+                        fontsize=7.8, color=GRAY, zorder=8)
+                ax.text(4.3, 0.16, "水平井", ha="center", va="bottom",
+                        fontsize=7.8, color="#263238", zorder=8,
+                        bbox=dict(boxstyle="round,pad=0.16", fc="white",
+                                  ec="none", alpha=0.75))
+
+            if row == 1:
+                ax.text(0.5, -0.10, cap[stage], transform=ax.transAxes,
+                        ha="center", va="top", fontsize=8.3,
+                        linespacing=1.4, color="#37474F", clip_on=False,
+                        bbox=dict(boxstyle="round,pad=0.34", fc="#F5F7F8",
+                                  ec="#CFD8DC", lw=0.6))
+
+    fig.text(0.018, 0.692, "压力场\n（示意）", rotation=90, ha="center",
+             va="center", fontsize=10.2, color="#37474F", linespacing=1.5)
+    fig.text(0.018, 0.307, "含油饱和度\n（示意）", rotation=90, ha="center",
+             va="center", fontsize=10.2, color="#37474F", linespacing=1.5)
+
+    cax1 = fig.add_axes([0.925, 0.585, 0.013, 0.21])
+    ColorbarBase(cax1, cmap=cmap_p, norm=Normalize(0.0, 1.15),
+                 orientation="vertical", ticks=[0.0, 1.15])
+    cax1.set_yticklabels(["低", "高"])
+    cax1.tick_params(labelsize=8.0, length=2)
+    cax1.set_title("压力", fontsize=8.4, pad=4, color="#37474F")
+
+    cax2 = fig.add_axes([0.925, 0.205, 0.013, 0.21])
+    ColorbarBase(cax2, cmap=cmap_s, norm=Normalize(0.05, 0.72),
+                 orientation="vertical", ticks=[0.05, 0.72])
+    cax2.set_yticklabels(["低", "高"])
+    cax2.tick_params(labelsize=8.0, length=2)
+    cax2.set_title("含油饱和度", fontsize=8.4, pad=4, color="#37474F")
+
+    fig.suptitle("压裂液注入—焖井—返排：三段式里压力、饱和度与缝宽怎么变",
+                 fontsize=14.2, y=0.975)
+    fig.text(0.5, 0.935,
+             "沿井剖面示意：颜色只表示相对高低，不是数值模拟结果；"
+             "裂缝线宽表示缝宽（示意）",
+             ha="center", va="top", fontsize=9.2, color=GRAY)
+    fig.subplots_adjust(left=0.058, right=0.905, top=0.855, bottom=0.145,
+                        wspace=0.13, hspace=0.18)
+    save(fig, "fig46-injection-soak-flowback.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -3230,3 +3479,4 @@ if __name__ == "__main__":
     fig43()
     fig44()
     fig45()
+    fig46()

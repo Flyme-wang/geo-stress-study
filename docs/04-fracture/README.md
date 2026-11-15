@@ -25,6 +25,9 @@
 | 04-4 | 水力压裂力学 | 起裂压力、缝宽公式（PKN/Perkins–Kern）、滤失、净压力 |
 | 04-5 | 裂缝与天然裂缝交互 | 穿层准则、剪切激活、转向判据（本项目实验数据可作案例） |
 
+> 教学图件：图 46（[`assets/figures/fig46-injection-soak-flowback.png`](../../assets/figures/fig46-injection-soak-flowback.png)）
+> 给出注入—焖井—返排三段式的物理图像，可配合 04-4 水力压裂力学使用。
+
 ---
 
 ## 关键结论（先记住）

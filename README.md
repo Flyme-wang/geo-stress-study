@@ -214,6 +214,7 @@ python tools/make_figures.py
 | 图 43 | `assets/figures/fig43-fric-convergence.png` | 例二：0.155 的右端点采样与一阶收敛 |
 | 图 44 | `assets/figures/fig44-fric-heat.png` | 摩擦热流、累计热与两面分配 |
 | 图 45 | `assets/figures/fig45-fric-laws.png` | FRIC 在接触迭代中的位置；三种界面定律 |
+| 图 46 | `assets/figures/fig46-injection-soak-flowback.png` | 压裂液注入—焖井—返排三段式示意：压力扩散、渗吸与先水后油 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -258,6 +259,10 @@ python tools/make_figures.py
   原文约 2 万字、98 个独立公式、30 张插图；本库按 M7 四篇重组，补齐二维三维边界计数、
   单元平均偏差、网格收敛阶、扩散步长系数与低马赫步数代价，并新增 Sod 守恒审计。
   30 张原图仅在案例笔记中登记远程地址，未复制图片；本库图 24–图 33 为独立重绘。
+- 图 46（[`assets/figures/fig46-injection-soak-flowback.png`](assets/figures/fig46-injection-soak-flowback.png)）
+  为原创示意图，三段式构图参考公众号「弱谷见山巅」的《油藏数值模拟、历史拟合、
+  开发方案优化、一体化仿真》（2026-10-22）的配图。未复制原图；图中压力场与
+  含油饱和度场为定性示意，不是数值模拟结果。
 - 本库正文为独立撰写，推导与算例均重新完成；图件为自绘，不复制原文图像。
 
 ---
