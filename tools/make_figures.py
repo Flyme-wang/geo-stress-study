@@ -3206,18 +3206,18 @@ def fig46():
 
     def pressure(stage):
         if stage == 0:
-            amp, sx, sy = 1.00, 0.17, 0.55
+            amp, sx, sy = 1.08, 0.28, 0.55
         elif stage == 1:
-            amp, sx, sy = 0.78, 0.40, 0.72
+            amp, sx, sy = 0.60, 0.48, 0.82
         else:
-            amp, sx, sy = 0.46, 0.52, 0.82
-        P = np.full_like(X, 0.06)
+            amp, sx, sy = 0.24, 0.66, 0.94
+        P = np.full_like(X, 0.05)
         for c in xf:
             P += amp * np.exp(-((X - c) ** 2 / (2 * sx ** 2)
                                 + Y ** 2 / (2 * sy ** 2)))
         if stage == 2:
-            P *= (1.0 - 0.45 * np.exp(-((X - 5.0) ** 2 / (2 * 2.2 ** 2)
-                                        + Y ** 2 / (2 * 0.55 ** 2))))
+            P *= (1.0 - 0.62 * np.exp(-((X - 5.0) ** 2 / (2 * 2.4 ** 2)
+                                        + Y ** 2 / (2 * 0.60 ** 2))))
         return np.where(in_res, P, np.nan)
 
     def oil(stage):
@@ -3226,14 +3226,14 @@ def fig46():
         elif stage == 1:
             amp, sx, sy = 0.56, 0.48, 0.76
         else:
-            amp, sx, sy = 0.48, 0.40, 0.68
+            amp, sx, sy = 0.56, 0.44, 0.70
         S = np.full_like(X, 0.68)
         for c in xf:
             bank = amp * np.exp(-((X - c) ** 2 / (2 * sx ** 2)
                                   + Y ** 2 / (2 * sy ** 2)))
             if stage == 2:
-                bank *= (0.40 + 0.60 * (1.0 - np.exp(
-                    -Y ** 2 / (2 * 0.28 ** 2))))
+                bank *= (0.10 + 0.90 * (1.0 - np.exp(
+                    -Y ** 2 / (2 * 0.24 ** 2))))
             S -= bank
         return np.where(in_res, S, np.nan)
 
