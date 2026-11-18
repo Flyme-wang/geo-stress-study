@@ -68,15 +68,16 @@ graph LR
 | [`docs/03-constitutive/`](docs/03-constitutive/) | 本构与强度：弹性、塑性、Mohr–Coulomb、Hoek–Brown | 🚧 提纲 |
 | [`docs/04-fracture/`](docs/04-fracture/) | 断裂与破坏：Griffith、应力强度因子、水力压裂 | 🚧 提纲 |
 | [`docs/05-geomechanics/`](docs/05-geomechanics/) | 地质力学：原地应力、有效应力、断层类型 | 🚧 提纲 |
-| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL、接触子程序 | 🚧 提纲（编程基础、雅可比、变分近似、单元类型、FRIC 已完成） |
+| [`docs/06-numerics/`](docs/06-numerics/) | 数值实现：FEM、cohesive、XFEM、CEL、接触子程序 | 🚧 提纲（编程基础、雅可比、变分近似、单元类型、FRIC、完全拉格朗日已完成） |
 | [`docs/06-numerics/fem-programming/`](docs/06-numerics/fem-programming/) | 有限元编程基础：从 $Ku=F$ 到手写 Q4、组装、约束荷载与求解器 | ✅ 5 篇 + 导读 |
 | [`docs/06-numerics/jacobian-and-mapping.md`](docs/06-numerics/jacobian-and-mapping.md) | 雅可比矩阵：多变量映射的局部线性化、 $\det J$ 的几何、秩与奇异位形 | ✅ 1 篇 |
 | [`docs/06-numerics/variational-approximation.md`](docs/06-numerics/variational-approximation.md) | 变分近似：弱形式↔能量极小、Ritz 与 Galerkin、正交投影与最佳逼近 | ✅ 1 篇 |
 | [`docs/06-numerics/element-types.md`](docs/06-numerics/element-types.md) | 单元类型与降维：实体/壳/梁/杆、剪切锁死、沙漏、平面应力/应变/轴对称 | ✅ 1 篇 |
 | [`docs/06-numerics/fric-user-subroutine.md`](docs/06-numerics/fric-user-subroutine.md) | 用户子程序 FRIC：界面摩擦本构、线性黏性 vs 黏塑性、切线与摩擦热 | ✅ 1 篇 |
+| [`docs/06-numerics/total-lagrangian-cps3.md`](docs/06-numerics/total-lagrangian-cps3.md) | 完全拉格朗日格式：Green–Lagrange 应变、B 矩阵分解、一致切线与客观性检验 | ✅ 1 篇 |
 | [`docs/07-fluid/`](docs/07-fluid/) | 流体力学与 CFD：控制方程、状态与边界、面通量与时间推进、Sod 激波管 | ✅ 4 篇 + 导读 |
-| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 62 节点 |
-| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 5 篇 |
+| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 64 节点 |
+| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 6 篇 |
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
@@ -87,6 +88,8 @@ graph LR
 | [`tools/verify_element_notes.py`](tools/verify_element_notes.py) | 复算单元类型笔记的全部数值（挠度、锁死、零能模式、自由度账） | ✅ |
 | [`tools/fric_lib.py`](tools/fric_lib.py) | FRIC 线性黏性摩擦参考实现：滑移增量、温度依赖、切线、摩擦热、库仑对照 | ✅ |
 | [`tools/verify_fric_notes.py`](tools/verify_fric_notes.py) | 复算 FRIC 笔记的全部数值（路径/弦、三种采样、切线、热账本、量纲） | ✅ 84 项 |
+| [`tools/tl_cps3_lib.py`](tools/tl_cps3_lib.py) | TL CPS3 参考实现：Green–Lagrange 应变、B 矩阵、St. Venant–Kirchhoff 内力与一致切线、patch 组装 | ✅ |
+| [`tools/verify_tl_cps3.py`](tools/verify_tl_cps3.py) | 复算完全拉格朗日笔记的全部数值（B 矩阵、客观性、虚功、切线、Newton 收敛阶） | ✅ |
 | [`tools/fluid_lib.py`](tools/fluid_lib.py) | 可压缩 Euler 参考实现：守恒量换算、Rusanov 通量、Sod 精确解与一维有限体积 | ✅ |
 | [`tools/verify_fluid_notes.py`](tools/verify_fluid_notes.py) | 复算 M7 四篇笔记的全部数值（通量、星区、波位置、收敛阶、守恒审计） | ✅ |
 
@@ -121,6 +124,10 @@ graph LR
 线性黏性与黏塑性的区别、路径与弦、温度采样的一阶误差、切线与摩擦热，见
 [`docs/06-numerics/fric-user-subroutine.md`](docs/06-numerics/fric-user-subroutine.md)
 （图 41–图 45，可用 `py -3 tools/verify_fric_notes.py` 复算，84 项断言）。
+最后把"小变形"换成完全拉格朗日格式：位移梯度、Green–Lagrange 应变、B 矩阵的线性与
+非线性分解、材料刚度与几何刚度，并用刚体转动与 patch 检验验证，见
+[`docs/06-numerics/total-lagrangian-cps3.md`](docs/06-numerics/total-lagrangian-cps3.md)
+（图 47–图 50，可用 `py -3 tools/verify_tl_cps3.py` 复算）。
 
 **第五阶段｜从固体到流体（约 6 学时）**
 流体不是"另一种固体"：未知量从位移换成守恒量，离散从单元积分换成面上通量，
@@ -215,6 +222,10 @@ python tools/make_figures.py
 | 图 44 | `assets/figures/fig44-fric-heat.png` | 摩擦热流、累计热与两面分配 |
 | 图 45 | `assets/figures/fig45-fric-laws.png` | FRIC 在接触迭代中的位置；三种界面定律 |
 | 图 46 | `assets/figures/fig46-injection-soak-flowback.png` | 压裂液注入—焖井—返排三段式示意：压力扩散、渗吸与先水后油 |
+| 图 47 | `assets/figures/fig47-cps3-geometry.png` | CPS3 参考三角形、三节点形函数等值线与位移梯度矩阵 $\mathbf{G}$ |
+| 图 48 | `assets/figures/fig48-green-lagrange.png` | 参考构形到当前构形；刚体转动下 GL 与小应变；有限拉伸的 $s+s^2/2$ |
+| 图 49 | `assets/figures/fig49-B-matrix.png` | 一个变形状态下 $\mathbf{B}=\mathbf{B}\_L+\mathbf{B}\_{NL}$ 的热图分解 |
+| 图 50 | `assets/figures/fig50-tangent-newton.png` | Newton 残差史、切线有限差分误差与两单元 patch 的变形 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -263,6 +274,13 @@ python tools/make_figures.py
   为原创示意图，三段式构图参考公众号「弱谷见山巅」的《油藏数值模拟、历史拟合、
   开发方案优化、一体化仿真》（2026-10-22）的配图。未复制原图；图中压力场与
   含油饱和度场为定性示意，不是数值模拟结果。
+- 笔记 [`docs/06-numerics/total-lagrangian-cps3.md`](docs/06-numerics/total-lagrangian-cps3.md)
+  与案例笔记 [`cases/2026-11-16-total-lagrangian-cps3.md`](cases/2026-11-16-total-lagrangian-cps3.md)
+  整理自公众号「仿真札记」的《完全拉格朗日格式的求解流程（一）：公式推导与离散化》
+  （2026-11-16）。原文用 CPS3 走完从形函数到 Newton 切线的完整推导，本库逐式核对，
+  补齐客观性检验、虚功一致性、一致切线与仅材料切线的收敛阶对照，并记录
+  B 矩阵第三行重复计数的实现陷阱；6 张原图仅登记远程地址，未复制，
+  本库图 47–图 50 为独立重绘。
 - 本库正文为独立撰写，推导与算例均重新完成；图件为自绘，不复制原文图像。
 
 ---

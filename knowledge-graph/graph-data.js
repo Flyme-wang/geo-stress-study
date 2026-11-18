@@ -5,7 +5,7 @@ window.GRAPH = {
     "title": "geo-stress-study 力学知识图谱",
     "subtitle": "从一个点的应力，到地应力场、数值实现与流体流动",
     "version": "0.1.0",
-    "updated": "2026-11-14",
+    "updated": "2026-11-18",
     "convention": "拉为正；应力分量用指标记法 σ_ij（i 为面法向，j 为力方向）",
     "statusLegend": {
       "done": "笔记已完成，可直接阅读",
@@ -632,6 +632,26 @@ window.GRAPH = {
       "row": 6,
       "doc": "cases/2026-11-13-compressible-ns.md",
       "summary": "长文拆解：从控制方程到 Sod 校验的完整链路、30 张原图的远程登记与 10 张重绘、补算与课堂用法。"
+    },
+    {
+      "id": "M6-10",
+      "label": "完全拉格朗日格式（CPS3）",
+      "type": "topic",
+      "status": "done",
+      "col": 7,
+      "row": 10,
+      "doc": "docs/06-numerics/total-lagrangian-cps3.md",
+      "summary": "TL 在初始构形积分；CPS3 线性形函数使 θ=Gd 为常数；GL 应变 E=½(FᵀF−I)，30° 刚体转动为零、小应变 −0.134；B=B_L+B_NL，第三行两项易漏；平面应力 StVK 的 C 与工程剪应变配对；f_int=V0BᵀS；K=K_mat+K_geo，K_geo=V0GᵀMG；一致切线 6 次到 1e-17，仅材料切线 30 次停在 5e-9、Q=0.5 发散。"
+    },
+    {
+      "id": "C6",
+      "label": "案例：完全拉格朗日 CPS3",
+      "type": "case",
+      "status": "done",
+      "col": 9,
+      "row": 9,
+      "doc": "cases/2026-11-16-total-lagrangian-cps3.md",
+      "summary": "《完全拉格朗日格式的求解流程（一）》拆解：原文九段论证链逐项核对无数学错误；本库补 B 第三行重复计数陷阱、工程/张量剪应变配对、平面应力 E_ZZ、K_geo 分量核对、Newton 数值实验与 StVK 适用范围；6 张原图登记与 4 张重绘。"
     }
   ],
   "edges": [
@@ -1148,6 +1168,21 @@ window.GRAPH = {
     {
       "from": "C5",
       "to": "M6-09",
+      "kind": "case"
+    },
+    {
+      "from": "M6",
+      "to": "M6-10",
+      "kind": "contains"
+    },
+    {
+      "from": "M6-08",
+      "to": "M6-10",
+      "kind": "precedes"
+    },
+    {
+      "from": "C6",
+      "to": "M6-10",
       "kind": "case"
     }
   ]

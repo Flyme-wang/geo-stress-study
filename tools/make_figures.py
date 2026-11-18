@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import (Polygon, Wedge, FancyArrowPatch, Rectangle, Arc,
                                 FancyBboxPatch, Ellipse)
 import element_lib as el
+import tl_cps3_lib as tl
 
 # ---------------------------------------------------------------- 全局样式
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -3433,6 +3434,385 @@ def fig46():
     save(fig, "fig46-injection-soak-flowback.png")
 
 
+# ============================================================ 图 47 CPS3 参考构形
+
+def fig47():
+    fig, axes = plt.subplots(1, 3, figsize=(13.4, 4.6),
+                             gridspec_kw={"width_ratios": [1.05, 1.0, 1.32]})
+    coords = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 1.0]])
+
+    # ------------------------------------------------ (a) 参考三角形
+    ax = axes[0]
+    ax.add_patch(Polygon(coords, closed=True, fc="#E3F2FD", ec=BLUE,
+                         lw=1.6))
+    for i, (x, y) in enumerate(coords):
+        ax.plot([x], [y], "o", ms=7.5, mfc="white", mec=BLUE, mew=1.6,
+                zorder=8)
+    ax.text(0.06, -0.09, "1  (0, 0)", ha="left", va="top", fontsize=8.8)
+    ax.text(2.02, -0.09, "2  (X₂, 0)", ha="center", va="top", fontsize=8.8)
+    ax.text(-0.07, 1.00, "3  (0, h₀)", ha="right", va="center",
+            fontsize=8.8)
+    arrow(ax, (0.22, 0.04), (1.78, 0.04), "#64B5F6", lw=1.1, ms=9)
+    arrow(ax, (1.90, 0.10), (0.10, 0.90), "#64B5F6", lw=1.1, ms=9)
+    arrow(ax, (-0.04, 0.82), (-0.04, 0.18), "#64B5F6", lw=1.1, ms=9)
+    arrow(ax, (-0.16, -0.16), (0.62, -0.16), "#37474F", lw=1.2, ms=10)
+    arrow(ax, (-0.16, -0.16), (-0.16, 0.62), "#37474F", lw=1.2, ms=10)
+    ax.text(0.66, -0.18, "X", fontsize=9.4, color="#37474F")
+    ax.text(-0.24, 0.64, "Y", fontsize=9.4, color="#37474F")
+    ax.text(0.68, 0.36, "逆时针\nA₀ > 0", ha="center", va="center",
+            fontsize=9.0, color=BLUE, linespacing=1.4,
+            bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="#90CAF9",
+                      lw=0.8, alpha=0.92))
+    ax.text(0.5, -0.20, "A₀ = 1，厚度 h₀ 沿出平面方向（此处取 1）",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.5,
+            color=GRAY)
+    ax.set_xlim(-0.42, 2.18)
+    ax.set_ylim(-0.38, 1.15)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("(a) 参考三角形", fontsize=11.5)
+
+    # ------------------------------------------------ (b) 形函数
+    ax = axes[1]
+    ax.add_patch(Polygon(coords, closed=True, fc="#F1F8E9", ec=BLUE,
+                         lw=1.5))
+    for c in (0.25, 0.50, 0.75):
+        p0 = (0.0, 1.0 - c)
+        p1 = (2.0 * (1.0 - c), 0.0)
+        ax.plot([p0[0], p1[0]], [p0[1], p1[1]], color=GREEN, lw=1.5)
+        ax.text(p1[0] * 0.42, p0[1] * 0.58 + 0.03, f"{c:.2f}",
+                fontsize=8.4, color=GREEN, rotation=-26, ha="center",
+                bbox=dict(boxstyle="round,pad=0.10", fc="white", ec="none",
+                          alpha=0.82))
+    ax.plot([0.0], [0.0], "o", ms=8.5, color=GREEN, mfc=GREEN, zorder=8)
+    ax.text(0.10, -0.10, "N₁ = 1", fontsize=9.0, color=GREEN, va="top")
+    ax.annotate("N₁ = 0（对边）", xy=(1.05, 0.46), xytext=(0.58, 0.85),
+                fontsize=8.6, color=GRAY,
+                arrowprops=dict(arrowstyle="->", color=GRAY, lw=0.9))
+    ax.text(0.5, -0.20, "N₁+N₂+N₃ = 1，导数为常数\n"
+                        "（面积坐标是一次多项式）",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.5,
+            color=GRAY, linespacing=1.5)
+    ax.set_xlim(-0.18, 2.12)
+    ax.set_ylim(-0.30, 1.12)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("(b) 面积坐标形函数", fontsize=11.5)
+
+    # ------------------------------------------------ (c) G 矩阵
+    ax = axes[2]
+    geom = tl.tri_geometry(coords)
+    G = tl.gradient_matrix(geom)
+    ax.imshow(G, cmap="RdBu_r", vmin=-1.15, vmax=1.15, aspect="auto")
+    cols = ["u₁", "v₁", "u₂", "v₂", "u₃", "v₃"]
+    rows = ["$u_{,X}$", "$u_{,Y}$", "$v_{,X}$", "$v_{,Y}$"]
+    ax.set_xticks(range(6))
+    ax.set_xticklabels(cols, fontsize=9)
+    ax.set_yticks(range(4))
+    ax.set_yticklabels(rows, fontsize=10)
+    for i in range(4):
+        for j in range(6):
+            v = G[i, j]
+            ax.text(j, i, "0" if abs(v) < 1e-12 else f"{v:.1f}",
+                    ha="center", va="center", fontsize=9.2,
+                    color="white" if abs(v) > 0.65 else "#212121")
+    ax.set_xticks(np.arange(-0.5, 6, 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, 4, 1), minor=True)
+    ax.grid(which="minor", color="white", lw=1.2)
+    ax.tick_params(which="minor", length=0)
+    ax.set_title("(c) 梯度矩阵 G（4×6）", fontsize=11.5)
+    ax.text(0.5, -0.14, "θ = G d：G 只由参考几何决定，单元划好后不再变",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.5,
+            color=GRAY)
+
+    fig.suptitle("CPS3 的参考构形：线性形函数把 6 个节点自由度压成 4 个位移梯度",
+                 fontsize=13.2, y=0.985)
+    fig.text(0.5, 0.918,
+             "全拉格朗日格式的一切积分都在参考构形上完成；X、Y 是初始坐标，"
+             "不是当前坐标", ha="center", va="top", fontsize=9.0, color=GRAY)
+    fig.subplots_adjust(left=0.045, right=0.985, top=0.80, bottom=0.19,
+                        wspace=0.26)
+    save(fig, "fig47-cps3-geometry.png")
+
+
+# ============================================================ 图 48 GL 应变
+
+def fig48():
+    fig, axes = plt.subplots(1, 3, figsize=(13.4, 4.5))
+
+    # ------------------------------------------------ (a) 构形映射
+    ax = axes[0]
+    ref = np.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
+    F = np.array([[1.18, 0.30], [0.10, 0.92]])
+    cur = ref @ F.T
+    ax.add_patch(Polygon(ref, closed=True, fill=False, ec=GRAY, lw=1.3,
+                         ls="--"))
+    ax.add_patch(Polygon(cur, closed=True, fc="#E3F2FD", ec=BLUE,
+                         lw=1.7, alpha=0.90))
+    for p in ref:
+        ax.plot(*p, "o", ms=4, color=GRAY)
+    for p in cur:
+        ax.plot(*p, "o", ms=4, color=BLUE)
+    P = np.array([0.5, 0.5])
+    p = P @ F.T
+    ax.plot(*P, "o", ms=7, mfc="white", mec=GRAY, mew=1.5, zorder=9)
+    ax.plot(*p, "o", ms=7, mfc="white", mec=BLUE, mew=1.5, zorder=9)
+    arrow(ax, P, p, RED, lw=1.3, ms=10, ls="--")
+    ax.text(P[0] - 0.10, P[1] - 0.16, "P, X", fontsize=8.8, color=GRAY)
+    ax.text(p[0] + 0.04, p[1] - 0.14, "p, x", fontsize=8.8, color=BLUE)
+    ax.text(0.26, 1.16, "参考构形", fontsize=8.8, color=GRAY)
+    ax.text(1.06, 0.60, "当前构形", fontsize=8.8, color=BLUE)
+    ax.text(0.5, -0.10,
+            "无转动时 F = I + ∂u/∂X\nE = ½ (FᵀF − I)",
+            transform=ax.transAxes, ha="center", va="top", fontsize=9.2,
+            color="#37474F", linespacing=1.6)
+    ax.set_xlim(-0.08, 1.68)
+    ax.set_ylim(-0.10, 1.38)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("(a) 参考构形 → 当前构形", fontsize=11.5)
+
+    # ------------------------------------------------ (b) 刚体转动
+    ax = axes[1]
+    th = np.linspace(-60.0, 60.0, 241)
+    rad = np.radians(th)
+    gl = np.zeros_like(th)
+    small = np.cos(rad) - 1.0
+    ax.plot(th, gl, color=GREEN, lw=2.6, label="GL：E_XX ≡ 0")
+    ax.plot(th, small, color=RED, lw=2.2, label="小应变：cos θ − 1")
+    i30 = np.argmin(np.abs(th - 30.0))
+    ax.plot([th[i30]], [0.0], "o", ms=7, mfc="white", mec=GREEN, mew=1.8,
+            zorder=8)
+    ax.plot([th[i30]], [small[i30]], "o", ms=7, mfc="white", mec=RED,
+            mew=1.8, zorder=8)
+    ax.annotate("θ = 30°\nGL：0.000\n小应变：−0.134",
+                xy=(30.0, -0.12), xytext=(6.0, -0.55), fontsize=8.6,
+                color=RED, linespacing=1.45,
+                arrowprops=dict(arrowstyle="->", color=RED, lw=0.9),
+                bbox=dict(boxstyle="round,pad=0.28", fc="#FFEBEE",
+                          ec="#EF9A9A", lw=0.8))
+    ax.axhline(0.0, color="#B0BEC5", lw=0.8)
+    ax.set_xlim(-60, 60)
+    ax.set_ylim(-0.62, 0.18)
+    ax.set_xlabel("刚体转角 θ (°)")
+    ax.set_ylabel("表观正应变")
+    ax.set_title("(b) 刚体转动不产生 GL 应变", fontsize=11.5)
+    ax.grid(True, color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=8.4, loc="lower left")
+
+    # ------------------------------------------------ (c) 单轴拉伸
+    ax = axes[2]
+    s = np.linspace(0.0, 0.35, 241)
+    ax.fill_between(s, s, s + 0.5 * s ** 2, color="#FFF3E0",
+                    edgecolor="none")
+    ax.plot(s, s + 0.5 * s ** 2, color=GREEN, lw=2.4,
+            label="GL：s + s²/2")
+    ax.plot(s, s, color=BLUE, lw=1.8, ls="--", label="小应变：s")
+    s0 = 0.20
+    ax.plot([s0, s0], [s0, s0 + 0.5 * s0 ** 2], color=RED, lw=1.0, ls=":")
+    ax.plot([s0], [s0 + 0.5 * s0 ** 2], "o", ms=6.5, mfc="white",
+            mec=GREEN, mew=1.6, zorder=8)
+    ax.plot([s0], [s0], "o", ms=6.5, mfc="white", mec=BLUE, mew=1.6,
+            zorder=8)
+    ax.annotate("s = 0.2：0.220 vs 0.200（+10%）", xy=(s0, s0 + 0.02),
+                xytext=(0.155, 0.052), fontsize=8.5, color="#37474F",
+                arrowprops=dict(arrowstyle="->", color="#37474F", lw=0.8))
+    ax.set_xlim(0, 0.35)
+    ax.set_ylim(0, 0.42)
+    ax.set_xlabel("拉伸量 s = ΔL / L₀")
+    ax.set_ylabel("E_XX 或 ε_xx")
+    ax.set_title("(c) 有限拉伸保留二次项", fontsize=11.5)
+    ax.grid(True, color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=8.6, loc="upper left")
+
+    fig.suptitle("Green–Lagrange 应变：刚体转动零应变，有限拉伸保留二次项",
+                 fontsize=13.2, y=0.985)
+    fig.text(0.5, 0.918,
+             "客观性是几何非线性公式的第一道检验：转动不能“制造”应变，"
+             "小应变公式做不到", ha="center", va="top", fontsize=9.0,
+             color=GRAY)
+    fig.subplots_adjust(left=0.055, right=0.985, top=0.80, bottom=0.17,
+                        wspace=0.28)
+    save(fig, "fig48-green-lagrange.png")
+
+
+# ============================================================ 图 49 B 矩阵
+
+def fig49():
+    fig, axes = plt.subplots(1, 3, figsize=(13.4, 4.2))
+    coords = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 1.0]])
+    geom = tl.tri_geometry(coords)
+    d = np.array([0.18, -0.10, 0.06, 0.04, -0.05, 0.02])
+    bl = tl.b_linear(geom)
+    bn = tl.b_nonlinear(geom, d)
+    bt = tl.b_matrix(geom, d)
+    theta = tl.displacement_gradient(geom, d)
+    vmax = max(np.abs(bl).max(), np.abs(bn).max(), np.abs(bt).max())
+
+    cols = ["u₁", "v₁", "u₂", "v₂", "u₃", "v₃"]
+    rows = ["E_XX", "E_YY", "2E_XY"]
+    panels = [
+        (bl, "(a) B_L：只由参考几何决定", "#37474F"),
+        (bn, "(b) B_NL(d)：随 θ 更新", "#37474F"),
+        (bt, "(c) B = B_L + B_NL", "#37474F"),
+    ]
+    for ax, (M, title, tcol) in zip(axes, panels):
+        ax.imshow(M, cmap="RdBu_r", vmin=-vmax, vmax=vmax, aspect="auto")
+        ax.set_xticks(range(6))
+        ax.set_xticklabels(cols, fontsize=8.6)
+        ax.set_yticks(range(3))
+        ax.set_yticklabels(rows, fontsize=9.4)
+        for i in range(3):
+            for j in range(6):
+                v = M[i, j]
+                ax.text(j, i, "0" if abs(v) < 1e-12 else f"{v:.2f}",
+                        ha="center", va="center", fontsize=7.8,
+                        color="white" if abs(v) > 0.65 * vmax
+                        else "#212121")
+        ax.set_xticks(np.arange(-0.5, 6, 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, 3, 1), minor=True)
+        ax.grid(which="minor", color="white", lw=1.1)
+        ax.tick_params(which="minor", length=0)
+        ax.set_title(title, fontsize=11.2, color=tcol)
+
+    axes[1].text(0.5, -0.17,
+                 "θ = (−0.060, −0.230, 0.070, 0.120)ᵀ",
+                 transform=axes[1].transAxes, ha="center", va="top",
+                 fontsize=8.6, color=BLUE)
+    axes[0].text(0.5, -0.17,
+                 "与 CST 的应变矩阵逐项相同",
+                 transform=axes[0].transAxes, ha="center", va="top",
+                 fontsize=8.6, color=GRAY)
+    axes[2].text(0.5, -0.17,
+                 "Newton 每次迭代都要重装 B 与内力",
+                 transform=axes[2].transAxes, ha="center", va="top",
+                 fontsize=8.6, color=GRAY)
+
+    fig.suptitle("全几何矩阵 B = B_L + B_NL：线性部分固定，非线性部分随位移梯度变化",
+                 fontsize=13.0, y=0.982)
+    fig.text(0.5, 0.905,
+             "B_NL 的每一列都是 θ 的线性函数；把它漏掉，就退回小应变网格，"
+             "大变形下切线不再一致", ha="center", va="top", fontsize=8.9,
+             color=GRAY)
+    fig.subplots_adjust(left=0.055, right=0.985, top=0.78, bottom=0.20,
+                        wspace=0.26)
+    save(fig, "fig49-B-matrix.png")
+
+
+# ============================================================ 图 50 切线 / Newton
+
+def fig50():
+    fig, axes = plt.subplots(1, 3, figsize=(13.6, 4.6),
+                             gridspec_kw={"width_ratios": [1.12, 1.0, 1.0]})
+    full = tl.newton_patch(0.2, 1.0, 0.3, material_only=False)
+    mat = tl.newton_patch(0.2, 1.0, 0.3, material_only=True)
+    bad = tl.newton_patch(0.5, 1.0, 0.3, material_only=True)
+
+    # ------------------------------------------------ (a) 残差史
+    ax = axes[0]
+    ax.semilogy(np.arange(1, len(full["residuals"]) + 1),
+                full["residuals"], "o-", color=GREEN, lw=1.8, ms=5.5,
+                mfc="white", mew=1.3, label="一致切线：6 次收敛")
+    ax.semilogy(np.arange(1, len(mat["residuals"]) + 1),
+                mat["residuals"], "s-", color=BLUE, lw=1.5, ms=4.4,
+                label=f"仅材料切线：{mat['iterations']} 次未到 1e-12")
+    ax.semilogy(np.arange(1, len(bad["residuals"]) + 1),
+                bad["residuals"], "^-", color=RED, lw=1.4, ms=4.2,
+                label="Q = 0.5，仅材料切线：发散")
+    ax.set_xlim(1, 31)
+    ax.set_ylim(1e-18, 1e2)
+    ax.set_xlabel("Newton 迭代次数")
+    ax.set_ylabel("自由度残差范数 ‖R‖₂")
+    ax.set_title("(a) 残差史：二次收敛 vs 线性", fontsize=11.4)
+    ax.grid(True, which="major", color="#E0E0E0", lw=0.6)
+    ax.legend(fontsize=7.6, loc="lower left", framealpha=0.95)
+    ax.text(0.97, 0.34,
+            f"末值  {full['residuals'][-1]:.1e}",
+            transform=ax.transAxes, ha="right", va="top", fontsize=8.4,
+            color=GREEN)
+
+    # ------------------------------------------------ (b) FD 核对
+    ax = axes[1]
+    coords = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 1.0]])
+    geom = tl.tri_geometry(coords)
+    d0 = np.array([0.18, -0.10, 0.06, 0.04, -0.05, 0.02])
+    _, _, K = tl.tangent(geom, d0, 1.0, 0.3)
+    rng = np.random.default_rng(3)
+    dd = rng.normal(size=6)
+    dd /= np.linalg.norm(dd)
+    basis = K @ dd
+    epss = np.logspace(-9, -1, 19)
+    errs = []
+    for eps in epss:
+        fp = tl.internal_force(geom, d0 + eps * dd, 1.0, 0.3)[0]
+        fm = tl.internal_force(geom, d0 - eps * dd, 1.0, 0.3)[0]
+        fd = (fp - fm) / (2.0 * eps)
+        errs.append(np.linalg.norm(basis - fd) / np.linalg.norm(basis))
+    ax.loglog(epss, errs, "o-", color=BLUE, lw=1.6, ms=4.6,
+              mfc="white", mew=1.2)
+    i6 = np.argmin(np.abs(np.log10(epss) - (-6.0)))
+    ax.plot([epss[i6]], [errs[i6]], "o", ms=8, mfc=RED, mec=RED,
+            zorder=8)
+    ax.annotate(f"ε = 1e-6：{errs[i6]:.1e}", xy=(epss[i6], errs[i6]),
+                xytext=(1.5e-5, 3e-6), fontsize=8.5, color=RED,
+                arrowprops=dict(arrowstyle="->", color=RED, lw=0.9),
+                bbox=dict(boxstyle="round,pad=0.25", fc="#FFEBEE",
+                          ec="#EF9A9A", lw=0.8))
+    ax.set_xlabel("差分步长 ε")
+    ax.set_ylabel("相对误差 ‖K dd − FD‖ / ‖K dd‖")
+    ax.set_title("(b) 解析切线对中心差分", fontsize=11.4)
+    ax.grid(True, which="major", color="#E0E0E0", lw=0.6)
+    ax.set_ylim(1e-13, 1e0)
+
+    # ------------------------------------------------ (c) patch 变形
+    ax = axes[2]
+    coords, conn = tl.square_patch()
+    d = full["d"]
+    cur = coords + d.reshape(4, 2)
+    for tri in conn:
+        ids = list(tri)
+        ax.add_patch(Polygon(coords[ids], closed=True, fill=False,
+                             ec=GRAY, lw=1.1, ls="--"))
+        ax.add_patch(Polygon(cur[ids], closed=True, fc="#E3F2FD",
+                             ec=BLUE, lw=1.5, alpha=0.55))
+    for i, (x, y) in enumerate(cur):
+        ax.plot([x], [y], "o", ms=5.5, mfc="white", mec=BLUE, mew=1.4,
+                zorder=8)
+        ax.text(x + 0.025, y + 0.025, str(i + 1), fontsize=8.4, color=BLUE)
+    for y in (0.0, 1.0):
+        ax.plot([-0.015, -0.015], [y - 0.07, y + 0.07], color=GRAY, lw=2.0)
+        for dy in (-0.055, 0.0, 0.055):
+            ax.plot([-0.015, -0.075], [y + dy, y + dy - 0.045],
+                    color=GRAY, lw=0.8)
+    ax.text(-0.13, -0.155, "固定", fontsize=8.2, color=GRAY)
+    for i in (1, 2):
+        x, y = cur[i]
+        arrow(ax, (x + 0.03, y), (x + 0.24, y), BLUE, lw=1.5, ms=11)
+    ax.text(cur[2, 0] + 0.12, cur[1, 1] - 0.12, "Q = 0.2",
+            fontsize=8.6, color=BLUE)
+    ax.text(0.03, 0.90,
+            f"u₂ = {d[2]:.4f}\nv₂ = {d[3]:.4f}\nu₃ = {d[4]:.4f}\n"
+            f"v₃ = {d[5]:.4f}",
+            fontsize=7.8, va="top", color="#37474F", linespacing=1.5,
+            bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="#CFD8DC",
+                      lw=0.7, alpha=0.92))
+    ax.set_xlim(-0.16, 1.62)
+    ax.set_ylim(-0.18, 1.34)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("(c) 两单元 patch：参考（虚线）与变形", fontsize=11.4)
+
+    fig.suptitle("一致切线让残差平方下降：K = K_mat + K_geo，几何项不能漏",
+                 fontsize=13.0, y=0.982)
+    fig.text(0.5, 0.905,
+             "用纯材料切线时 B_NL 的贡献被漏掉，只能线性收敛；"
+             "载荷加大后直接发散", ha="center", va="top", fontsize=8.9,
+             color=GRAY)
+    fig.subplots_adjust(left=0.06, right=0.985, top=0.78, bottom=0.17,
+                        wspace=0.30)
+    save(fig, "fig50-tangent-newton.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -3480,3 +3860,7 @@ if __name__ == "__main__":
     fig44()
     fig45()
     fig46()
+    fig47()
+    fig48()
+    fig49()
+    fig50()
