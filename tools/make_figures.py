@@ -23,6 +23,7 @@ from matplotlib.patches import (Polygon, Wedge, FancyArrowPatch, Rectangle, Arc,
                                 FancyBboxPatch, Ellipse)
 import element_lib as el
 import tl_cps3_lib as tl
+import tensor_lib as ta
 
 # ---------------------------------------------------------------- 全局样式
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -3813,6 +3814,406 @@ def fig50():
     save(fig, "fig50-tangent-newton.png")
 
 
+# ============================================================ 图 51 Kronecker 符号
+def _heat(ax, M, title, cmap="RdBu_r", vmin=None, vmax=None,
+          fmt="{:.0f}", fs=10.5):
+    """在 ax 上画 3×3 分量热图，并在格心标注数值。"""
+    M = np.asarray(M, dtype=float)
+    if vmax is None:
+        vmax = max(float(np.max(np.abs(M))), 1e-12)
+    if vmin is None:
+        vmin = -vmax
+    ax.imshow(M, cmap=cmap, vmin=vmin, vmax=vmax, aspect="equal")
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            span = max(abs(vmax), abs(vmin), 1e-12)
+            dark = abs(M[i, j]) / span > 0.55
+            ax.text(j, i, fmt.format(M[i, j]), ha="center", va="center",
+                    fontsize=fs, color="white" if dark else "#263238")
+    ax.set_xticks(range(M.shape[1]))
+    ax.set_yticks(range(M.shape[0]))
+    ax.set_xticklabels(["j=1", "j=2", "j=3"], fontsize=8.2)
+    ax.set_yticklabels(["i=1", "i=2", "i=3"], fontsize=8.2)
+    ax.tick_params(length=0)
+    for s in ax.spines.values():
+        s.set_color("#B0BEC5")
+    ax.set_title(title, fontsize=11.2)
+    return ax
+
+
+def fig51():
+    fig, axes = plt.subplots(1, 3, figsize=(13.4, 4.55),
+                             gridspec_kw={"width_ratios": [0.95, 1.55, 0.95]})
+
+    # ------------------------------------------------ (a) δ 的分量矩阵
+    ax = axes[0]
+    D = np.array([[ta.delta(i, j) for j in range(1, 4)] for i in range(1, 4)])
+    _heat(ax, D, r"(a) $\delta_{ij}$：单位矩阵的分量", cmap="Blues",
+          vmin=0.0, vmax=1.0, fmt="{:.0f}", fs=11.5)
+    ax.text(0.5, -0.23, r"$\delta_{ii}=3$，$\delta_{ij}\delta_{ij}=3$",
+            transform=ax.transAxes, ha="center", va="top", fontsize=9.0,
+            color=GRAY)
+
+    # ------------------------------------------------ (b) 指标替换
+    ax = axes[1]
+    ax.set_xlim(0.0, 10.0)
+    ax.set_ylim(0.0, 6.35)
+    ax.axis("off")
+    ax.text(0.15, 6.02, r"(b) 固定指标 $i$，逐项检查求和式：", fontsize=9.6,
+            color="#37474F")
+    heads = [r"$\delta_{i1}a_1$", r"$\delta_{i2}a_2$", r"$\delta_{i3}a_3$"]
+    col_x = [2.55, 4.30, 6.05]
+    for x, h in zip(col_x, heads):
+        ax.text(x + 0.62, 5.48, h, ha="center", va="center", fontsize=9.4,
+                color="#546E7A")
+    rows_y = [4.52, 3.02, 1.52]
+    for i, y in enumerate(rows_y, start=1):
+        ax.text(0.28, y + 0.33, r"$i=%d$" % i, ha="left", va="center",
+                fontsize=9.3, color="#37474F")
+        for j, x in enumerate(col_x, start=1):
+            active = (i == j)
+            ax.add_patch(FancyBboxPatch(
+                (x, y), 1.24, 0.66,
+                boxstyle="round,pad=0.02,rounding_size=0.06",
+                fc="#E8F5E9" if active else "#FAFAFA",
+                ec=GREEN if active else "#CFD8DC",
+                lw=1.5 if active else 0.8, zorder=3))
+            ax.text(x + 0.62, y + 0.33, heads[j - 1], ha="center",
+                    va="center", fontsize=9.2,
+                    color=GREEN if active else "#90A4AE", zorder=4)
+        arrow(ax, (7.42, y + 0.33), (8.42, y + 0.33), GREEN, lw=1.6, ms=11)
+        ax.text(8.62, y + 0.33, r"$a_{%d}$" % i, ha="left", va="center",
+                fontsize=10.2, color=GREEN)
+    ax.text(0.15, 0.62,
+            r"只有 $i=j$ 的项保留：$\delta_{ij}a_j=a_i$（$i$ 不求和）",
+            ha="left", va="center", fontsize=9.3, color=GRAY,
+            bbox=dict(boxstyle="round,pad=0.30", fc="#F1F8E9",
+                      ec="#C5E1A5", lw=0.8))
+
+    # ------------------------------------------------ (c) 三种缩并
+    ax = axes[2]
+    labels = [r"$\delta_{ii}$", r"$\delta_{ij}\delta_{ij}$", r"$\delta_{11}$"]
+    vals = [3.0, 3.0, 1.0]
+    colors = [BLUE, BLUE, GRAY]
+    bars = ax.bar([0, 1, 2], vals, width=0.58, color=colors,
+                  edgecolor="white", linewidth=0.8)
+    for b, v in zip(bars, vals):
+        ax.text(b.get_x() + b.get_width() / 2, v + 0.10, f"{v:.0f}",
+                ha="center", va="bottom", fontsize=11.2, color="#263238")
+    ax.axhline(3.0, color="#90CAF9", lw=0.9, ls=(0, (4, 3)), zorder=1)
+    ax.set_xticks([0, 1, 2])
+    ax.set_xticklabels(labels, fontsize=8.8)
+    ax.set_ylim(0, 3.75)
+    ax.set_ylabel("数值", fontsize=9.0)
+    ax.tick_params(labelsize=8.4)
+    ax.set_title("(c) 重复指标求和与固定分量", fontsize=11.2)
+    ax.text(0.98, 0.55, "重复指标 ⇒ 3\n固定指标 ⇒ 1", transform=ax.transAxes,
+            ha="right", va="center", fontsize=8.8, color=GRAY,
+            linespacing=1.5)
+    for s in ("top", "right"):
+        ax.spines[s].set_visible(False)
+
+    fig.suptitle(r"Kronecker 符号：先看指标是否重复，再决定求和还是取分量",
+                 fontsize=13.0, y=0.985)
+    fig.subplots_adjust(left=0.055, right=0.985, top=0.82, bottom=0.16,
+                        wspace=0.30)
+    save(fig, "fig51-kronecker-index.png")
+
+
+# ============================================================ 图 52 张量积
+def fig52():
+    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.5),
+                             gridspec_kw={"width_ratios": [1.02, 1.12, 1.0]})
+    a = np.array([1.0, 2.0, 3.0])
+    b = np.array([4.0, 5.0, 6.0])
+    T = ta.tensor_product(a, b)
+
+    # ------------------------------------------------ (a) 外积矩阵
+    ax = axes[0]
+    _heat(ax, T, r"(a) $\mathbf{a}\otimes\mathbf{b}$：外积矩阵",
+          cmap="Blues", vmin=0.0, vmax=18.0, fmt="{:.0f}", fs=10.2)
+    ax.set_xlabel(r"$b_j$ 的分量", fontsize=8.8)
+    ax.set_ylabel(r"$a_i$ 的分量", fontsize=8.8)
+    ax.text(0.5, -0.24, r"$\mathbf{a}=[1,2,3]$，$\mathbf{b}=[4,5,6]$",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.8,
+            color=GRAY)
+
+    # ------------------------------------------------ (b) 先投影再伸缩
+    ax = axes[1]
+    ax.set_xlim(-0.12, 1.95)
+    ax.set_ylim(-0.12, 1.95)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    o = np.zeros(2)
+    av = np.array([0.52, 1.10])
+    bv = np.array([1.55, 0.35])
+    cv = np.array([0.95, 0.95])
+    bc = float(bv @ cv)
+    out = av * bc * 0.68
+    foot = bv * (bc / float(bv @ bv))
+    arrow(ax, o, av, BLUE, lw=2.2, ms=13)
+    arrow(ax, o, bv, GREEN, lw=2.2, ms=13)
+    arrow(ax, o, cv, GRAY, lw=1.5, ms=11, ls=(0, (4, 3)))
+    arrow(ax, o, out, RED, lw=1.8, ms=12, ls=(0, (5, 3)))
+    ax.plot([cv[0], foot[0]], [cv[1], foot[1]], color=GRAY, lw=1.0,
+            ls=(0, (3, 2)), zorder=4)
+    ax.plot([foot[0]], [foot[1]], "o", ms=4.2, color=GRAY, zorder=5)
+    u = bv / np.linalg.norm(bv)
+    n = np.array([-u[1], u[0]])
+    s = 0.055
+    ax.plot([foot[0], foot[0] + s * u[0], foot[0] + s * (u[0] + n[0]),
+             foot[0] + s * n[0], foot[0]],
+            [foot[1], foot[1] + s * u[1], foot[1] + s * (u[1] + n[1]),
+             foot[1] + s * n[1], foot[1]], color=GRAY, lw=0.8)
+    ax.text(av[0] - 0.04, av[1] + 0.06, r"$\mathbf{a}$", fontsize=11.2,
+            color=BLUE, ha="right")
+    ax.text(bv[0] + 0.04, bv[1] - 0.04, r"$\mathbf{b}$", fontsize=11.2,
+            color=GREEN)
+    ax.text(cv[0] + 0.05, cv[1] + 0.04, r"$\mathbf{c}$", fontsize=10.2,
+            color=GRAY)
+    ax.text(out[0] + 0.06, out[1] + 0.02,
+            r"$\mathbf{a}(\mathbf{b}\cdot\mathbf{c})$", fontsize=9.6,
+            color=RED, ha="left")
+    ax.text(0.70, 0.56, r"$\mathbf{b}\cdot\mathbf{c}$", fontsize=9.2,
+            color=GRAY, ha="center", va="center",
+            bbox=dict(boxstyle="round,pad=0.18", fc="white",
+                      ec="#CFD8DC", lw=0.6, alpha=0.9))
+    ax.text(0.02, -0.06, "先算标量 b·c，再沿 a 输出（长度按比例缩短）",
+            fontsize=8.2, color=GRAY, va="top")
+    ax.set_title(r"(b) $(\mathbf{a}\otimes\mathbf{b})\mathbf{c}"
+                 r"=\mathbf{a}(\mathbf{b}\cdot\mathbf{c})$", fontsize=10.8)
+
+    # ------------------------------------------------ (c) 不满足交换律
+    ax = axes[2]
+    D = T - ta.tensor_product(b, a)
+    _heat(ax, D, r"(c) $\mathbf{a}\otimes\mathbf{b}-\mathbf{b}\otimes\mathbf{a}$",
+          cmap="RdBu_r", vmin=-6.0, vmax=6.0, fmt="{:.0f}", fs=10.2)
+    ax.text(0.5, -0.24, "交换次序改变指标配对；max|差| = 6",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.7,
+            color=GRAY)
+
+    fig.suptitle("张量积把两个矢量变成一个线性映射：先读出 b 方向的分量，再沿 a 输出",
+                 fontsize=12.8, y=0.985)
+    fig.subplots_adjust(left=0.065, right=0.985, top=0.80, bottom=0.19,
+                        wspace=0.34)
+    save(fig, "fig52-tensor-product.png")
+
+
+# ============================================================ 图 53 基张量
+def fig53():
+    fig, axes = plt.subplots(1, 3, figsize=(13.6, 4.6),
+                             gridspec_kw={"width_ratios": [1.35, 1.18, 0.95]})
+
+    # ------------------------------------------------ (a) 九个基张量
+    ax = axes[0]
+    ax.set_xlim(-0.55, 3.55)
+    ax.set_ylim(-0.25, 3.62)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    cell = 0.235
+    step = 1.10
+    x0 = 0.12
+    y0 = 2.43
+    for i in range(3):
+        for j in range(3):
+            ox = x0 + j * step
+            oy = y0 - i * step
+            for r in range(3):
+                for c in range(3):
+                    active = (r == i and c == j)
+                    ax.add_patch(Rectangle(
+                        (ox + c * cell, oy + (2 - r) * cell), cell, cell,
+                        fc=BLUE if active else "#F5F7FA",
+                        ec="#B0BEC5", lw=0.55))
+                    if active:
+                        ax.text(ox + (c + 0.5) * cell,
+                                oy + (2.5 - r) * cell, "1",
+                                ha="center", va="center", fontsize=6.6,
+                                color="white")
+            ax.text(ox + 1.5 * cell, oy + 3 * cell + 0.06,
+                    r"$j=%d$" % (j + 1), ha="center", va="bottom",
+                    fontsize=7.6, color=GRAY)
+        ax.text(x0 - 0.14, y0 - i * step + 1.5 * cell, r"$i=%d$" % (i + 1),
+                ha="right", va="center", fontsize=7.6, color=GRAY)
+    ax.text(1.50, -0.13, "每个小矩阵只有一格为 1，位置就是 (i, j)",
+            ha="center", va="top", fontsize=8.4, color=GRAY)
+    ax.set_title(r"(a) 九个基张量 $\mathbf{e}_i\otimes\mathbf{e}_j$",
+                 fontsize=11.3)
+
+    # ------------------------------------------------ (b) e1⊗e2 作用于 v
+    ax = axes[1]
+    ax.set_xlim(0.0, 9.2)
+    ax.set_ylim(0.0, 6.2)
+    ax.axis("off")
+    ax.text(0.15, 5.80, "输入 v = [2, −3, 5]", fontsize=9.2,
+            color="#37474F")
+    vin = [2.0, -3.0, 5.0]
+    vx = [0.35, 1.55, 2.75]
+    for k, (x, v) in enumerate(zip(vx, vin)):
+        active = (k == 1)
+        ax.add_patch(FancyBboxPatch(
+            (x, 4.68), 0.92, 0.58,
+            boxstyle="round,pad=0.02,rounding_size=0.05",
+            fc="#FFF8E1" if active else "#FAFAFA",
+            ec="#F9A825" if active else "#CFD8DC",
+            lw=1.5 if active else 0.8))
+        ax.text(x + 0.46, 4.97, f"{v:g}", ha="center", va="center",
+                fontsize=10.2, color="#37474F")
+        ax.text(x + 0.46, 5.37, r"$v_{%d}$" % (k + 1), ha="center",
+                va="bottom", fontsize=8.2, color=GRAY)
+    ax.text(0.15, 3.98,
+            r"$(\mathbf{e}_1\otimes\mathbf{e}_2)\mathbf{v}"
+            r"=v_2\mathbf{e}_1=-3\mathbf{e}_1$",
+            fontsize=10.4, color=BLUE)
+    ax.text(0.15, 3.00, "输出", fontsize=9.2, color="#37474F")
+    vout = [-3.0, 0.0, 0.0]
+    for k, (x, v) in enumerate(zip(vx, vout)):
+        ax.add_patch(FancyBboxPatch(
+            (x, 2.10), 0.92, 0.58,
+            boxstyle="round,pad=0.02,rounding_size=0.05",
+            fc="#E8F5E9" if k == 0 else "#FAFAFA",
+            ec=GREEN if k == 0 else "#CFD8DC",
+            lw=1.5 if k == 0 else 0.8))
+        ax.text(x + 0.46, 2.39, f"{v:g}", ha="center", va="center",
+                fontsize=10.2, color=GREEN if k == 0 else "#37474F")
+    arrow(ax, (2.01, 4.58), (1.05, 2.80), "#F9A825", lw=1.4, ms=11,
+          ls=(0, (4, 3)))
+    ax.text(0.15, 1.42, "读出第 j = 2 个分量，沿 e₁ 输出；其余分量为零",
+            fontsize=8.5, color=GRAY)
+    M = ta.basis_tensor(1, 2)
+    ax.imshow(M, cmap="Blues", vmin=0, vmax=1, extent=(5.65, 8.35, 2.35, 5.05),
+              aspect="auto", zorder=2)
+    for r in range(3):
+        for c in range(3):
+            ax.text(5.65 + (c + 0.5) * 0.9, 5.05 - (r + 0.5) * 0.9,
+                    f"{M[r, c]:.0f}", ha="center", va="center",
+                    fontsize=7.4,
+                    color="white" if M[r, c] > 0.5 else "#37474F")
+    ax.text(7.0, 5.22, r"$\mathbf{e}_1\otimes\mathbf{e}_2$", ha="center",
+            va="bottom", fontsize=9.2, color=BLUE)
+    ax.text(7.0, 2.10, "只有 (1, 2) 元为 1", ha="center", va="top",
+            fontsize=8.2, color=GRAY)
+    ax.set_title("(b) 基张量读取一个分量并定向输出", fontsize=11.3)
+
+    # ------------------------------------------------ (c) 一般张量的分量运算
+    ax = axes[2]
+    A = np.array([[1.0, 4.0, 0.0], [2.0, 3.0, 0.0], [0.0, 0.0, 5.0]])
+    v = np.array([2.0, -3.0, 5.0])
+    u = ta.apply_tensor(A, v)
+    bars = ax.barh([0, 1, 2], u, color=[RED if x < 0 else BLUE for x in u],
+                   height=0.52, edgecolor="white", linewidth=0.8)
+    for y, val in zip([0, 1, 2], u):
+        ax.text(val + (0.8 if val >= 0 else -0.8), y, f"{val:g}",
+                ha="left" if val >= 0 else "right", va="center",
+                fontsize=10.0, color="#263238")
+    ax.axvline(0.0, color="#90A4AE", lw=0.8)
+    ax.set_yticks([0, 1, 2])
+    ax.set_yticklabels([r"$u_1$", r"$u_2$", r"$u_3$"], fontsize=9.5)
+    ax.set_xlim(-14, 29)
+    ax.set_xlabel("分量值", fontsize=8.8)
+    ax.set_title(r"(c) $u_i=A_{ij}v_j$", fontsize=11.3)
+    for s in ("top", "right"):
+        ax.spines[s].set_visible(False)
+
+    fig.suptitle("基底表示把张量运算还原为九项加权求和，与矩阵乘矢量的结果一致",
+                 fontsize=12.8, y=0.985)
+    fig.subplots_adjust(left=0.045, right=0.985, top=0.81, bottom=0.17,
+                        wspace=0.28)
+    save(fig, "fig53-basis-tensors.png")
+
+
+# ============================================================ 图 54 对称分解
+def fig54():
+    fig, axes = plt.subplots(1, 3, figsize=(13.2, 4.5))
+    A = ta.article_decomposition()
+    S = ta.symmetric_part(A)
+    W = ta.antisymmetric_part(A)
+
+    ax = axes[0]
+    _heat(ax, A, r"(a) 一般二阶张量 $\mathbf{A}$", cmap="RdBu_r",
+          vmin=-6.0, vmax=6.0, fmt="{:.0f}", fs=11.0)
+    for (i, j) in [(0, 1), (1, 0)]:
+        ax.add_patch(Rectangle((j - 0.5, i - 0.5), 1.0, 1.0, fill=False,
+                               ec=GREEN, lw=1.7, ls=(0, (3, 2)), zorder=5))
+    ax.text(0.5, -0.23, r"$A_{12}=4$，$A_{21}=2$", transform=ax.transAxes,
+            ha="center", va="top", fontsize=8.9, color=GRAY)
+
+    ax = axes[1]
+    _heat(ax, S, r"(b) 对称部分 $\mathbf{S}$", cmap="RdBu_r",
+          vmin=-6.0, vmax=6.0, fmt="{:.0f}", fs=11.0)
+    ax.text(0.5, -0.23, r"$S_{ij}=(A_{ij}+A_{ji})/2$",
+            transform=ax.transAxes, ha="center", va="top", fontsize=9.0,
+            color=GRAY)
+
+    ax = axes[2]
+    _heat(ax, W, r"(c) 反对称部分 $\mathbf{W}$", cmap="RdBu_r",
+          vmin=-6.0, vmax=6.0, fmt="{:.0f}", fs=11.0)
+    ax.text(0.5, -0.23, r"$W_{ij}=(A_{ij}-A_{ji})/2$，且 $S:W=0$",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.9,
+            color=GRAY)
+
+    fig.suptitle(r"任意二阶张量唯一分解：$\mathbf{A}=\mathbf{S}+\mathbf{W}$；对称与反对称部分在双点积下正交",
+                 fontsize=12.8, y=0.985)
+    fig.text(0.5, 0.905,
+             r"对称部分保留 $A_{ij}$ 与 $A_{ji}$ 的平均，反对称部分保留二者之差的一半",
+             ha="center", va="top", fontsize=9.0, color=GRAY)
+    fig.subplots_adjust(left=0.055, right=0.985, top=0.80, bottom=0.19,
+                        wspace=0.30)
+    save(fig, "fig54-symmetric-decomposition.png")
+
+
+# ============================================================ 图 55 双点积
+def fig55():
+    fig, axes = plt.subplots(1, 3, figsize=(13.2, 4.5),
+                             gridspec_kw={"width_ratios": [1.0, 1.0, 1.15]})
+    E = ta.basis_tensor(1, 2)
+
+    ax = axes[0]
+    _heat(ax, E * E, r"(a) 同位相乘 $A_{ij}B_{ij}$", cmap="Blues",
+          vmin=0.0, vmax=1.0, fmt="{:.0f}", fs=11.0)
+    ax.text(0.5, -0.23, r"$A=B=\mathbf{e}_1\otimes\mathbf{e}_2$；九项和为 1",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.7,
+            color=GRAY)
+
+    ax = axes[1]
+    _heat(ax, E * E.T, r"(b) 交换相乘 $A_{ij}B_{ji}$", cmap="Blues",
+          vmin=0.0, vmax=1.0, fmt="{:.0f}", fs=11.0)
+    ax.text(0.5, -0.23, "同一对矩阵，交换指标位置后九项和为 0",
+            transform=ax.transAxes, ha="center", va="top", fontsize=8.7,
+            color=GRAY)
+
+    ax = axes[2]
+    vals = [1.0, 0.0, 1.0]
+    labels = [r"$\mathbf{A}:\mathbf{B}$", r"$A_{ij}B_{ji}$",
+              r"$\|\mathbf{A}\|_{\mathrm{F}}$"]
+    bars = ax.bar([0, 1, 2], vals, width=0.56,
+                  color=[BLUE, RED, GRAY], edgecolor="white", linewidth=0.8)
+    for b, val in zip(bars, vals):
+        ax.text(b.get_x() + b.get_width() / 2, val + 0.06, f"{val:.0f}",
+                ha="center", va="bottom", fontsize=11.2, color="#263238")
+    ax.set_xticks([0, 1, 2])
+    ax.set_xticklabels(labels, fontsize=9.2)
+    ax.set_ylim(0, 1.32)
+    ax.set_ylabel("数值", fontsize=8.8)
+    ax.tick_params(labelsize=8.4)
+    ax.set_title("(c) 两种缩并不可混用", fontsize=11.2)
+    ax.text(0.03, 0.95,
+            r"$\mathbf{A}:\mathbf{B}=\operatorname{tr}(\mathbf{A}^T\mathbf{B})$" + "\n"
+            r"$A_{ij}B_{ji}=\operatorname{tr}(\mathbf{A}\mathbf{B})$",
+            transform=ax.transAxes, ha="left", va="top", fontsize=8.8,
+            color="#37474F", linespacing=1.8,
+            bbox=dict(boxstyle="round,pad=0.28", fc="white",
+                      ec="#CFD8DC", lw=0.7, alpha=0.95))
+    for s in ("top", "right"):
+        ax.spines[s].set_visible(False)
+
+    fig.suptitle(r"双点积先约定配对方式：同位配对得到 $\mathbf{A}:\mathbf{B}$，交换配对得到 $A_{ij}B_{ji}$",
+                 fontsize=12.8, y=0.985)
+    fig.subplots_adjust(left=0.06, right=0.985, top=0.81, bottom=0.19,
+                        wspace=0.32)
+    save(fig, "fig55-double-dot.png")
+
+
 if __name__ == "__main__":
     fig01()
     fig02()
@@ -3864,3 +4265,8 @@ if __name__ == "__main__":
     fig48()
     fig49()
     fig50()
+    fig51()
+    fig52()
+    fig53()
+    fig54()
+    fig55()

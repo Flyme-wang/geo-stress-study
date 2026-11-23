@@ -115,6 +115,10 @@ $$
 n_i n_i = 1,\qquad \frac{\partial n_i}{\partial n_j} = \delta_{ij}
 $$
 
+完整的指标规则（自由指标与哑指标、张量积、基底表示、对称/反对称分解、双点积）见
+[Kronecker 符号与二阶张量](kronecker-and-tensor-algebra.md)（图 51–图 55，可用
+`py -3 tools/verify_tensor_notes.py` 复算）。
+
 ---
 
 ## 7. 数学工具清单

@@ -3,7 +3,7 @@
     "title": "geo-stress-study 力学知识图谱",
     "subtitle": "从一个点的应力，到地应力场、数值实现与流体流动",
     "version": "0.1.0",
-    "updated": "2026-11-18",
+    "updated": "2026-11-23",
     "convention": "拉为正；应力分量用指标记法 σ_ij（i 为面法向，j 为力方向）",
     "statusLegend": {
       "done": "笔记已完成，可直接阅读",
@@ -60,6 +60,16 @@
       "row": 3,
       "doc": "docs/00-notation/symbols-and-conventions.md#7-数学工具清单",
       "summary": "后续反复用到：特征值问题、正交变换、拉格朗日乘子、能量法、量纲核对。"
+    },
+    {
+      "id": "M0-04",
+      "label": "Kronecker 符号与二阶张量",
+      "type": "topic",
+      "status": "done",
+      "col": 1,
+      "row": 4,
+      "doc": "docs/00-notation/kronecker-and-tensor-algebra.md",
+      "summary": "指标规则、张量积、九个基张量与基底表示、对称/反对称分解、双点积与 Frobenius 范数；全部结论有数值校验。"
     },
     {
       "id": "M1",
@@ -650,6 +660,16 @@
       "row": 9,
       "doc": "cases/2026-11-16-total-lagrangian-cps3.md",
       "summary": "《完全拉格朗日格式的求解流程（一）》拆解：原文九段论证链逐项核对无数学错误；本库补 B 第三行重复计数陷阱、工程/张量剪应变配对、平面应力 E_ZZ、K_geo 分量核对、Newton 数值实验与 StVK 适用范围；6 张原图登记与 4 张重绘。"
+    },
+    {
+      "id": "C7",
+      "label": "案例：Kronecker 符号与二阶张量",
+      "type": "case",
+      "status": "done",
+      "col": 9,
+      "row": 10,
+      "doc": "cases/2026-11-20-kronecker-tensor-algebra.md",
+      "summary": "拆解公众号「学以远志」的指标记法长文：补全丢失符号，补强矩阵与张量之别、双点积配对与正交不变性，并登记图件来源。"
     }
   ],
   "edges": [
@@ -1181,6 +1201,21 @@
     {
       "from": "C6",
       "to": "M6-10",
+      "kind": "case"
+    },
+    {
+      "from": "M0",
+      "to": "M0-04",
+      "kind": "contains"
+    },
+    {
+      "from": "M0-01",
+      "to": "M0-04",
+      "kind": "precedes"
+    },
+    {
+      "from": "C7",
+      "to": "M0-04",
       "kind": "case"
     }
   ]

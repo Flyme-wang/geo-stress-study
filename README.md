@@ -62,7 +62,8 @@ graph LR
 
 | 路径 | 内容 | 状态 |
 |---|---|---|
-| [`docs/00-notation/`](docs/00-notation/) | 符号、单位、拉正/压正约定 | ✅ |
+| [`docs/00-notation/`](docs/00-notation/) | 符号、单位、拉正/压正、指标记法与二阶张量 | ✅ 2 篇 |
+| [`docs/00-notation/kronecker-and-tensor-algebra.md`](docs/00-notation/kronecker-and-tensor-algebra.md) | Kronecker 符号与二阶张量：指标替换、张量积、基底表示、对称/反对称分解、双点积 | ✅ 1 篇 |
 | [`docs/01-stress/`](docs/01-stress/) | 应力状态：张量、变换、主应力、莫尔圆、等效应力 | ✅ 6 篇 |
 | [`docs/02-strain/`](docs/02-strain/) | 应变与几何：小应变张量、主应变、体积应变 | 🚧 提纲 |
 | [`docs/03-constitutive/`](docs/03-constitutive/) | 本构与强度：弹性、塑性、Mohr–Coulomb、Hoek–Brown | 🚧 提纲 |
@@ -76,8 +77,8 @@ graph LR
 | [`docs/06-numerics/fric-user-subroutine.md`](docs/06-numerics/fric-user-subroutine.md) | 用户子程序 FRIC：界面摩擦本构、线性黏性 vs 黏塑性、切线与摩擦热 | ✅ 1 篇 |
 | [`docs/06-numerics/total-lagrangian-cps3.md`](docs/06-numerics/total-lagrangian-cps3.md) | 完全拉格朗日格式：Green–Lagrange 应变、B 矩阵分解、一致切线与客观性检验 | ✅ 1 篇 |
 | [`docs/07-fluid/`](docs/07-fluid/) | 流体力学与 CFD：控制方程、状态与边界、面通量与时间推进、Sod 激波管 | ✅ 4 篇 + 导读 |
-| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 64 节点 |
-| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 6 篇 |
+| [`knowledge-graph/`](knowledge-graph/) | 知识图谱：可点击页面、Mermaid 图与机器可读节点表 | ✅ 66 节点 |
+| [`cases/`](cases/) | 文献/科普文章的拆解笔记（吸收来源） | ✅ 7 篇 |
 | [`assets/figures/`](assets/figures/) | 教学图件（脚本生成，勿手改） | ✅ |
 | [`tools/make_figures.py`](tools/make_figures.py) | 全部图件的生成脚本 | ✅ |
 | [`tools/build_graph_data.py`](tools/build_graph_data.py) | 校验 `graph.json` 并生成页面数据 | ✅ |
@@ -90,12 +91,20 @@ graph LR
 | [`tools/verify_fric_notes.py`](tools/verify_fric_notes.py) | 复算 FRIC 笔记的全部数值（路径/弦、三种采样、切线、热账本、量纲） | ✅ 84 项 |
 | [`tools/tl_cps3_lib.py`](tools/tl_cps3_lib.py) | TL CPS3 参考实现：Green–Lagrange 应变、B 矩阵、St. Venant–Kirchhoff 内力与一致切线、patch 组装 | ✅ |
 | [`tools/verify_tl_cps3.py`](tools/verify_tl_cps3.py) | 复算完全拉格朗日笔记的全部数值（B 矩阵、客观性、虚功、切线、Newton 收敛阶） | ✅ |
+| [`tools/tensor_lib.py`](tools/tensor_lib.py) | 张量代数参考实现：δ、张量积、基张量、对称分解、双点积、Frobenius 范数与旋转 | ✅ |
+| [`tools/verify_tensor_notes.py`](tools/verify_tensor_notes.py) | 复算 Kronecker 符号与二阶张量笔记的全部数值（指标替换、外积、分解、两种缩并、旋转不变性） | ✅ |
 | [`tools/fluid_lib.py`](tools/fluid_lib.py) | 可压缩 Euler 参考实现：守恒量换算、Rusanov 通量、Sod 精确解与一维有限体积 | ✅ |
 | [`tools/verify_fluid_notes.py`](tools/verify_fluid_notes.py) | 复算 M7 四篇笔记的全部数值（通量、星区、波位置、收敛阶、守恒审计） | ✅ |
 
 ---
 
 ## 4. 学习路线
+
+**第零阶段｜指标记法与二阶张量（约 2 学时）**
+先读 [`docs/00-notation/kronecker-and-tensor-algebra.md`](docs/00-notation/kronecker-and-tensor-algebra.md)：
+Kronecker 符号的筛选与计数、张量积、九个基张量、对称/反对称分解、迹与双点积。
+图 51–图 55 把每一步画出来；所有数值可用 `py -3 tools/verify_tensor_notes.py` 复算。
+这一阶段不要求先学应力，但要求会用指标区分“自由指标 / 哑指标”。
 
 **第一阶段｜把一个点的应力讲透（约 4 学时）**
 `00-notation` → `01-traction-and-stress-tensor` → `02-stress-transformation` → `03-principal-stress` → `04-mohr-circle` → `05-deviator-and-von-mises`
@@ -226,6 +235,11 @@ python tools/make_figures.py
 | 图 48 | `assets/figures/fig48-green-lagrange.png` | 参考构形到当前构形；刚体转动下 GL 与小应变；有限拉伸的 $s+s^2/2$ |
 | 图 49 | `assets/figures/fig49-B-matrix.png` | 一个变形状态下 $\mathbf{B}=\mathbf{B}\_L+\mathbf{B}\_{NL}$ 的热图分解 |
 | 图 50 | `assets/figures/fig50-tangent-newton.png` | Newton 残差史、切线有限差分误差与两单元 patch 的变形 |
+| 图 51 | `assets/figures/fig51-kronecker-index.png` | $\delta\_{ij}$ 的分量矩阵、指标替换与两种缩并 |
+| 图 52 | `assets/figures/fig52-tensor-product.png` | 张量积的外积矩阵、先投影再输出、非交换差矩阵 |
+| 图 53 | `assets/figures/fig53-basis-tensors.png` | 九个基张量、基张量的作用与一般张量的分量运算 |
+| 图 54 | `assets/figures/fig54-symmetric-decomposition.png` | 一般二阶张量的对称/反对称热图分解 |
+| 图 55 | `assets/figures/fig55-double-dot.png` | 双点积的两种配对与 Frobenius 范数 |
 
 原始文献插图（仅作对照，版权归原作者，见 [assets/reference/README.md](assets/reference/README.md)）保存在 `assets/reference/`。
 
@@ -281,6 +295,13 @@ python tools/make_figures.py
   补齐客观性检验、虚功一致性、一致切线与仅材料切线的收敛阶对照，并记录
   B 矩阵第三行重复计数的实现陷阱；6 张原图仅登记远程地址，未复制，
   本库图 47–图 50 为独立重绘。
+- 笔记 [`docs/00-notation/kronecker-and-tensor-algebra.md`](docs/00-notation/kronecker-and-tensor-algebra.md)
+  与案例笔记 [`cases/2026-11-20-kronecker-tensor-algebra.md`](cases/2026-11-20-kronecker-tensor-algebra.md)
+  整理自公众号「学以远志」的《连续介质力学（二）：Kronecker 符号与二阶张量运算》
+  （2026-11-20）。原文 11 节、4 道练习，公式以 173 张图片嵌入，无独立技术插图；
+  本库按 `alt` 中的 LaTeX 逐式转写，补全原文丢失的单字母符号，并补齐矩阵与张量之别、
+  双点积的两种配对、正交变换下的迹与 Frobenius 范数不变性。
+  原文公式图片仅登记文章地址，未复制；本库图 51–图 55 为独立重绘。
 - 本库正文为独立撰写，推导与算例均重新完成；图件为自绘，不复制原文图像。
 
 ---
